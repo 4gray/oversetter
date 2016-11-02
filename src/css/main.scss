@@ -1,0 +1,181 @@
+$a: #fff;
+
+html, body {
+	padding: 0;
+	margin: 0;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 0.9em;
+}
+
+#direction-switch {
+	width: 30px;
+    cursor: pointer;
+    padding: 3px 4px 2px 4px;
+    margin-right: 1px;
+    color: #666;
+}
+
+.textarea-original {
+	width: 480px;
+	height: 100px;
+	font-size: 1.1em;
+	resize: none;
+	box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+.btn-translate {
+	margin-top: 5px;
+	padding: 10px;
+	background: #FC3746;
+	color: #fff;
+	border: none;
+	text-transform: uppercase;
+	width: 100%;
+}
+
+textarea {
+	outline:none;
+    border: none;
+    padding: 10px;
+    height: 100px;
+}
+
+.btn-translate:disabled {
+	background: #333;
+	color: #666;
+}
+
+.btn-translate:hover {
+	background: #FC5357;
+}
+
+#translate-area {
+	background: #fff;
+    width: 100%;
+}
+
+.translation-preview {
+	color: #666;
+}
+
+.options-panel {
+	height: 40px;
+	line-height: 40px;
+    padding: 0 10px;
+	background-color: #fafafa;
+	background-image: linear-gradient(
+		#ededed 0,
+		#ededed 1px,
+		#e7e7e7 2px,
+		#d1d1d1 100%
+	);
+	border-bottom: 1px solid #afafaf;
+}
+
+#result-area {
+	width: 100%;
+	height: 100px;
+	background: #ECECEC;
+	overflow-y: auto;
+	font-size: 1.1em;
+	margin-top: -3px;
+}
+
+#result-area div {
+	padding: 10px;
+}
+
+.clear {
+	clear:both;
+}
+
+
+#footer {
+	width: 100%;
+	background: #eceaed;
+	border-top: 1px solid #c9c4ca;
+	background-image: linear-gradient(
+		#eceaed 0,
+		#d1cfd2 100%
+	);
+}
+
+.copyright {
+	padding: 0 10px;
+	height: 35px;
+	line-height: 35px;
+}
+
+
+.arrow-up {
+  width: 0px;
+  height: 0px;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid #ededed;
+  margin-left: 235px;
+}
+
+/* remove standard-styles */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border:none;
+  font-size: 1em;
+  width: 160px;
+  border-left: 1px solid #bbb;
+  border-right: 1px solid #bbb;
+  height: 40px;
+  padding: 2px 0px 2px 5px;
+  outline: none;
+  border-radius: 0;
+}
+
+/* styling */
+select {
+ 	background-color: transparent;
+    background-image: url(../img/select-arrow.png);
+    background-position: right;
+    background-repeat: no-repeat;
+	color: #333;
+}
+
+select#ower {
+    margin-left: 12px;
+}
+
+.settings-icon {
+	position: absolute;
+	right: 10px;
+	top: 27px;
+	font-size: 18px;
+	color: #666;
+	cursor: pointer;
+}
+
+#close-btn {
+	color: #666;
+	font-style: italic;
+	position: absolute;
+	bottom: 23px;
+	right: 10px;
+	cursor: pointer;
+}
+
+
+.save-settings-btn {
+	background: none;
+	border-radius: 2px;
+	border: none;
+	font-size: 14px;
+	padding-right: 10px;
+	border-right: 1px solid #ccc;
+	line-height: 30px;
+	outline: none;
+}
