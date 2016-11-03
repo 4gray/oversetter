@@ -20,3 +20,8 @@ npm run electron
 ```
 npm run package
 ```
+
+# ToDo: Up next
+
+See [Projects](https://github.com/4gray/oversetter/projects/1)-tab.
+Feel free to contribute!
