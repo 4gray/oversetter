@@ -1,8 +1,15 @@
 <p align="center">
-  <img src="https://github.com/4gray/oversetter/raw/master/screenshot.png" alt="App Preview">
+  <img src="https://github.com/4gray/oversetter/raw/master/icon.png" alt="App Icon">
 </p>
 
+
 Oversetter is an translation app, which allows you to translate content directly from your menu bar. Powered by [Angular 2](https://angular.io/) and [Electron](http://electron.atom.io/).
+
+# Screenshot
+
+<p align="center">
+  <img src="https://github.com/4gray/oversetter/raw/master/screenshot.png" alt="App Preview">
+</p>
 
 # How to use
 
