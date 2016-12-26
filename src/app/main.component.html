@@ -1,57 +1,36 @@
-<div class="arrow-up"></div>
-<div class="container" style="background: #fff">
-
-	<div id="translate-area" *ngIf="view !== 'settings'">
-		<form (ngSubmit)="translate(word)" (keyup.enter)="translate(word)">
-			<div class="options-panel">
-				<label>Translate from:</label>
-				<select name="fromLang" [ngModel]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control" id="ower" required>
-					<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
-				</select>
-
-				<span id="direction-switch" (click)="changeTranslationDir()"><i class="fa fa-exchange"></i></span>
-
-				<select name="toLang" [ngModel]="settings.toLang" (ngModelChange)="onSettingsChange($event, 'toLang')">
-					<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
-				</select>
-
-				<i class="fa fa-cog settings-icon" (click)="toggleSettings()"></i>
-				<!-- <img src="app/img/settings.png" width="16" (click)="toggleSettings()" class="settings-icon" /> -->
-			</div>
-			<!-- <label>Input text to translate:</label><br />  (keydown.control.Enter)="translateOnEnter($event, word)"-->
-
-			<textarea class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word"></textarea>
-
-			<!--<input [disabled]="!word" type="submit" value="Translate" class="btn-translate" />-->
-		</form>
-
-	</div>
-	<div id="result-area" *ngIf="view !== 'settings'">
-
-		<div *ngIf="!translation" class="translation-preview">Click <strong>Enter</strong> to translate</div>
-		<div *ngIf="translation" class="translation">{{translation.text[0]}}</div>
-	</div>
-
-	<div *ngIf="view === 'settings'">
+<div id="translate-area">
+	<form (ngSubmit)="translate(word)" (keyup.enter)="translate(word)">
 		<div class="options-panel">
-			<label style="padding-top:5px">Enter your API-Key</label>
-			<i class="fa fa-cog settings-icon" (click)="toggleSettings()"></i>
-		</div>
-		<textarea class="textarea-original" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
-	</div>
-	<div id="result-area" *ngIf="view === 'settings'">
-		<div class="translation">To use this application you need to <a href="https://tech.yandex.com/translate/" target="_blank">register</a> free API-Key from Yandex Translate.</div>
-		<div class="translation">
+			<label>Translate from:</label>
+			<select name="fromLang" [ngModel]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control" id="from-lang" required>
+				<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
+			</select>
 
-		</div>
-	</div>
+			<span id="direction-switch" (click)="changeTranslationDir()"><i class="fa fa-exchange"></i></span>
 
-	<div id="footer">
-		<div class="copyright" *ngIf="view !== 'settings'">
-			Translated by <a href="http://translate.yandex.ru/" target="_blank">«Yandex Translator»</a>
+			<select name="toLang" [ngModel]="settings.toLang" (ngModelChange)="onSettingsChange($event, 'toLang')">
+				<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
+			</select>
+
+			<i class="fa fa-cog settings-icon" [routerLink]="['/settings']"></i>
 		</div>
-		<div class="copyright" *ngIf="view === 'settings'">
-			<button [disabled]="!apiKey" (click)="onSettingsChange(apiKey, 'apiKey');toggleSettings()" class="save-settings-btn"><i class="fa fa-save"></i> Save</button>
-		</div>
+
+		<textarea class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word"></textarea>
+
+		<!--<input [disabled]="!word" type="submit" value="Translate" class="btn-translate" />-->
+	</form>
+
+</div>
+
+<div id="result-area">
+	<!--<div id="translation-toolbar"><i class="fa fa-star"></i></div>-->
+	<div *ngIf="!translation" class="translation-preview">Click <strong>Enter</strong> to translate</div>
+	<div *ngIf="translation" class="translation">{{translation.text[0]}}</div>
+</div>
+
+
+<div id="footer">
+	<div class="copyright">
+		Powered by <a href="http://translate.yandex.ru/" target="_blank">«Yandex Translator»</a>
 	</div>
 </div>

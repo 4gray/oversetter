@@ -1,11 +1,11 @@
 import {Component, Pipe, PipeTransform} from '@angular/core';
+import {RouterModule, Routes, Router} from '@angular/router';
 import {TranslateService} from './translate.service';
 import {Translation} from './translation';
 import {AppSettings} from './appsettings';
-
+import {SettingsComponent}   from './settings.component';
 
 @Component({
-	selector: 'my-app',
 	providers: [TranslateService],
 	templateUrl: 'main.component.html'
 })
@@ -17,7 +17,7 @@ export class MainComponent {
 	public settings:JSON[] = [];
 	public view:string = 'main';
 
-	constructor(private translateService:TranslateService) {
+	constructor(private translateService:TranslateService, private router:Router) {
 
 		// store last used translation direction in localstorage
 		if (localStorage.getItem('fromLang'))
@@ -32,7 +32,7 @@ export class MainComponent {
 		console.log(AppSettings.API_KEY);
 
 		if (AppSettings.API_KEY == '') {
-			this.view = 'settings';
+			this.router.navigate(['/settings']);
 		}
 		else {
 			this.requestLanguageList();
@@ -46,10 +46,13 @@ export class MainComponent {
 				this.langs = response['langs'];
 			},
 			response => {
-
-				if (response.status === 0)
-					console.error("No internet connection");
-				// error handling; wrong API-Key, no internet connection
+				if (response.status === 0){
+					console.error("No internet connection or API key is wrong");
+					this.router.navigate(['/settings']);
+				}
+				// TODO: Error handling;
+				// 1. wrong API-Key
+				// 2. no internet connection
 			}
 		);
 	}
@@ -62,22 +65,7 @@ export class MainComponent {
 
 	onSettingsChange(value:string, option:string) {
 		localStorage.setItem(option, value);
-	    this.settings[option] = value;
-
-	    if (option === 'apiKey') {
-	    	AppSettings.API_KEY = value;
-	    	console.log(AppSettings.API_KEY);
-	    	this.translateService.setApiKey();
-	    	this.requestLanguageList();
-	    }
-	}
-
-	toggleSettings() {
-
-		if (this.view === 'settings')
-			this.view = '';
-		else
-			this.view = 'settings';
+		this.settings[option] = value;
 	}
 
 	translate(word:string) {

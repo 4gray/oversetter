@@ -7,9 +7,12 @@ html, body {
 	font-size: 0.9em;
 }
 
+.container {
+	background: #fff;
+}
+
 #direction-switch {
 	width: 30px;
-    cursor: pointer;
     padding: 3px 4px 2px 4px;
     margin-right: 1px;
     color: #666;
@@ -146,7 +149,7 @@ select {
 	color: #333;
 }
 
-select#ower {
+select#from-lang {
     margin-left: 12px;
 }
 
@@ -156,7 +159,6 @@ select#ower {
 	top: 27px;
 	font-size: 18px;
 	color: #666;
-	cursor: pointer;
 }
 
 #close-btn {
@@ -165,7 +167,6 @@ select#ower {
 	position: absolute;
 	bottom: 23px;
 	right: 10px;
-	cursor: pointer;
 }
 
 
@@ -178,4 +179,26 @@ select#ower {
 	border-right: 1px solid #ccc;
 	line-height: 30px;
 	outline: none;
+}
+
+/*
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+*/
+
+#translation-toolbar {
+	display:none;
+}
+
+#result-area:hover > #translation-toolbar {
+	display: block;
+	position: absolute;
+    right: 20px;
+    background: #999;
+    color: #fff;
 }

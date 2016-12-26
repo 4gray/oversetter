@@ -1,0 +1,19 @@
+<div>
+	<div class="options-panel">
+		<label style="padding-top:5px">Enter your API-Key</label>
+		<i class="fa fa-cog settings-icon" *ngIf="apiKey" [routerLink]="['/main']"></i>
+	</div>
+	<textarea class="textarea-original" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
+</div>
+<div id="result-area">
+	<div class="translation">To use this application you need to <a href="https://tech.yandex.com/translate/" target="_blank">register</a> free API-Key from Yandex Translate.</div>
+	<div class="translation">
+
+	</div>
+</div>
+
+<div id="footer">
+	<div class="copyright">
+		<button [disabled]="!apiKey" (click)="saveApiKey(apiKey, 'apiKey');" class="save-settings-btn"><i class="fa fa-save"></i> Save</button>
+	</div>
+</div>
