@@ -10,7 +10,7 @@
     "postinstall": "typings install",
     "prepare": "cp -a electron/. dist",
     "electron": "npm run prepare && electron dist",
-    "package": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js dist App --platform=darwin --arch=all --out=app --overwrite",
+    "package": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js dist Oversetter --platform=darwin --arch=all --out=app --overwrite --icon=icon.icns",
     "dist": "build -mwl --x64 --ia32"
   },
   "licenses": [
