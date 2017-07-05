@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Oversetter - translation app based on Angular, Electron and Yanex Translate</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="container d-flex justify-content-between">
+            <a href="#" class="navbar-brand">oversetter</a>
+        </div>
+    </div>
+
+    <section class="jumbotron text-center">
+        <div class="container">
+            <img src="assets/icon.png" class="oversetter-icon" width="168" height="168" />
+            <h1 class="jumbotron-heading">Oversetter</h1>
+            <p class="lead text-muted">Oversetter is a simple <b>translation app</b>, which allows you to translate content directly from your menubar.
+            </p>
+
+            <div class="btn-group mt-3 mb-1">
+                <div class="btn btn-lg btn-outline-primary download-btn"><i class="fa fa-download"></i><span> Download</span></div>
+                <a class="btn btn-lg btn-outline-secondary" href="https://github.com/4gray/oversetter"><i class="fa fa-github"></i><span> GitHub</span></a>
+            </div>
+            <div class="container github-btns">
+                <a class="github-button" href="https://github.com/4gray/oversetter" data-icon="octicon-star" data-show-count="true" data-size="large"
+                    aria-label="Star 4gray/oversetter on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/4gray/oversetter/fork" data-icon="octicon-repo-forked" data-size="large"
+                    aria-label="Fork 4gray/oversetter on GitHub">Fork</a>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="description text-center">
+        <div class="container">
+            <h3>
+                <i class="fa fa-info"></i> Description
+                <small class="text-muted">About application</small>
+            </h3>
+
+            <p class="text-muted">Oversetter is open-source application based on <a href="https://angular.io/" target="_blank">Angular</a> and
+                <a href="https://electron.atom.io/">Electron</a>. It uses free API of <a href="https://translate.yandex.com">Yandex Translate</a>                for text translation. That means you need to <a href="https://tech.yandex.com/translate/">register</a> a
+                free API key to use this app. <small>(built-in dev-key is provided on the settings page for test case)</small><br
+                /></p>
+
+            <div class="row text-muted">
+                <div class="col">
+                    <img src="assets/screenshot-2.png" />
+                    <p style="margin-top: -50px">Application settings page</p>
+                </div>
+            </div>
+            <br />
+            <img src="assets/electron.svg" alt="Electron" width="48" /> <img src="assets/angular.svg" alt="Angular" width="48"
+            /> <img src="assets/yandex-translate.png" alt="Yandex Translate" width="48" />
+
+        </div>
+    </div>
+
+    <div class="downloads text-center">
+        <div class="container">
+            <h3>
+                <i class="fa fa-download"></i> Downloads
+                <small class="text-muted">Mac, Windows, Linux</small>
+            </h3>
+
+            <div class="row text-muted">
+                <div class="col">
+                    <img src="assets/screenshot-1.png" />
+                </div>
+            </div>
+            <p class="text-muted">Project code is available on the github page, feel free to contribute in any way. <br />Oversetter is available
+                for:
+            </p>
+            <p>
+                <a href="#" class="btn btn-primary"><i class="fa fa-apple"></i> Mac</a>
+                <a href="#" class="btn btn-primary"><i class="fa fa-windows"></i> Windows</a>
+                <a href="#" class="btn btn-primary"><i class="fa fa-linux"></i>Linux</a>
+            </p>
+        </div>
+    </div>
+
+    <footer class="text-muted">
+        <div class="container">
+            <p class="float-right">
+                <a href="#"><i class="fa fa-long-arrow-up"></i> Back to top</a>
+            </p>
+            <p>&copy; 2017 4gray</p>
+        </div>
+    </footer>
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".download-btn").click(function () {
+                $("html, body").animate({
+                    scrollTop: $('.downloads').offset().top + "px"
+                }, {
+                        duration: 500,
+                        easing: "swing"
+                    });
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

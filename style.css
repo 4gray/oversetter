@@ -1,0 +1,58 @@
+body {}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.oversetter-icon {
+    margin-bottom: 2rem;
+}
+
+.download-btn {
+  cursor: pointer;
+}
+
+.jumbotron {
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+  margin-bottom: 0;
+  background-color: #fff;
+}
+
+.jumbotron p:last-child {
+  margin-bottom: 0;
+}
+
+.jumbotron-heading {
+  font-weight: 300;
+}
+
+.jumbotron .container {
+  max-width: 40rem;
+}
+
+.github-btns {
+  padding-top: 1rem;
+}
+
+.description {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  background-color: #f7f7f7;
+}
+
+.downloads {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  background-color: #222;
+  color: #FBFAFB;
+}
+
+footer {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
