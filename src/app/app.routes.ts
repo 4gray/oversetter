@@ -6,11 +6,11 @@ import { SettingsComponent }   from './settings.component';
 export const ROUTE_CONFIG: Routes = [
     {
         path: '',
-        redirectTo: 'main',
+        redirectTo: 'home',
         pathMatch: 'full'
     },
     {
-        path: 'main',
+        path: 'home',
         component: MainComponent
     },
     {

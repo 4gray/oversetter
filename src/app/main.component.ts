@@ -13,7 +13,6 @@ import {SettingsComponent}   from './settings.component';
 export class MainComponent {
 	public translation:Translation;
 	public langs:String[] = [];
-	public apiKey:string = '';
 	public settings:JSON[] = [];
 	public view:string = 'main';
 
@@ -24,14 +23,8 @@ export class MainComponent {
 			this.settings['fromLang'] = localStorage.getItem('fromLang');
 		if (localStorage.getItem('toLang'))
 			this.settings['toLang'] = localStorage.getItem('toLang');
-		 if (localStorage.getItem('apiKey')) {
-			this.apiKey = localStorage.getItem('apiKey');
-			AppSettings.API_KEY = localStorage.getItem('apiKey');
-		}
 
-		console.log(AppSettings.API_KEY);
-
-		if (AppSettings.API_KEY == '') {
+		if (AppSettings.API_KEY === '' || undefined) {
 			this.router.navigate(['/settings']);
 		}
 		else {

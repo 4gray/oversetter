@@ -13,27 +13,30 @@ import {AppSettings} from './appsettings';
 export class SettingsComponent {
 	public translation:Translation;
 	public langs:String[] = [];
-	public apiKey:string = '';
 	public settings:JSON[] = [];
 	public view:string = 'main';
 
-	constructor(private translateService:TranslateService, private router:Router) {
-		 if (localStorage.getItem('apiKey')) {
-			this.apiKey = localStorage.getItem('apiKey');
-			AppSettings.API_KEY = localStorage.getItem('apiKey');
-		}
-	}
+	/**
+	 * 
+	 * @param translateService translation service object
+	 * @param router router object
+	 */
+	constructor(private translateService:TranslateService, private router:Router) {}
 
+	/**
+	 * 
+	 * @param value option value
+	 * @param option name of the option 
+	 */
 	saveApiKey(value:string, option:string) {
 		localStorage.setItem(option, value);
-		this.settings[option] = value;
+		AppSettings.API_KEY = value;
+		
+		this.requestLanguageList();
 
-		if (option === 'apiKey') {
-			AppSettings.API_KEY = value;
-			console.log(AppSettings.API_KEY);
-			this.translateService.setApiKey();
-			this.requestLanguageList();
-		}
+		let myNotification = new Notification('Oversetter', {
+			body: 'Settings were saved'
+		})
 	}
 
 	requestLanguageList() {
@@ -41,7 +44,7 @@ export class SettingsComponent {
 		l$.subscribe(
 			response => {
 				this.langs = response['langs'];
-				this.router.navigate(['/main']);
+				this.router.navigate(['/home']);
 			},
 			response => {
 				if (response.status === 0)

@@ -5,6 +5,7 @@ html, body {
 	margin: 0;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 0.9em;
+	-webkit-user-select: none;
 }
 
 .container {
@@ -24,6 +25,7 @@ html, body {
 	font-size: 1.1em;
 	resize: none;
 	box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
+	-webkit-user-select: all;
 }
 
 form {
@@ -87,6 +89,8 @@ textarea {
 	overflow-y: auto;
 	font-size: 1.1em;
 	margin-top: -3px;
+    word-wrap: break-word;
+    -webkit-user-select: text;
 }
 
 #result-area div {

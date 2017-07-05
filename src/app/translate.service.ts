@@ -9,20 +9,24 @@ import {Translation} from './translation';
 @Injectable()
 export class TranslateService {
 
-	private apiKey:string = AppSettings.API_KEY;
+	constructor(private http: Http) { }
 
-	//private key = 'trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf';
-	private translateUrl:string;
-	private languagesUrl:string;
-
-	constructor(private http: Http) {
-		this.setApiKey();
-	}
-
+	/**
+	 * Create translation request
+	 * @param word 
+	 * @param fromLang 
+	 * @param toLang 
+	 */
     createRequest(word: string, fromLang: string, toLang: string) {
-		return this.translateUrl + '&text='+encodeURIComponent(word)+'&lang='+fromLang+'-'+toLang;
+		return this.getTranslateUrl() + '&text='+encodeURIComponent(word) + '&lang=' + fromLang + '-' + toLang;
     }
 
+	/**
+	 * Return result of translation
+	 * @param word Word or sentence to translate
+	 * @param fromLang  Origin language
+	 * @param toLang Result language
+	 */
 	getTranslation(word: string, fromLang: string, toLang: string): Observable<Translation> {
 		let requestUrl = this.createRequest(word, fromLang, toLang);
 		return this.http.get(requestUrl)
@@ -32,15 +36,26 @@ export class TranslateService {
 		});
 	}
 
+	/**
+	 * Return json list with available languages from yandex api
+	 */
 	getLanguagesList():Observable<String[]> {
-		return this.http.get(this.languagesUrl)
+		return this.http.get(this.getLanguagesUrl())
 						.map(res => res.json());
 	}
 
-	setApiKey() {
-		this.apiKey = AppSettings.API_KEY;
-		this.translateUrl = 'https://translate.yandex.net/api/v1.5/tr.json/translate?key='+this.apiKey;
-		this.languagesUrl = 'https://translate.yandex.net/api/v1.5/tr.json/getLangs?key='+this.apiKey+'&ui=en';
+	/**
+	 * Return URL for language request from Yandex Translate API
+	 */
+	getLanguagesUrl() {
+		return 'https://translate.yandex.net/api/v1.5/tr.json/getLangs?key='+ AppSettings.API_KEY +'&ui=en';
+	}
+
+	/**
+	 * Return base part of URL for translation request
+	 */
+	getTranslateUrl() {
+		return 'https://translate.yandex.net/api/v1.5/tr.json/translate?key='+ AppSettings.API_KEY;
 	}
 
 }
