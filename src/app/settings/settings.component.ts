@@ -40,9 +40,9 @@ export class SettingsComponent {
 		l$.subscribe(
 			response => {
 				this.router.navigate(['/home']);
-				let myNotification = new Notification('Oversetter', {
-					body: 'Settings were saved'
-				});
+				// let myNotification = new Notification('Oversetter', {
+				// 	body: 'Settings were saved'
+				// });
 			},
 			err => this.errorMessage = err
 		);
