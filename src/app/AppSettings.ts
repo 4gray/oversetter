@@ -1,32 +1,25 @@
 /**
  * Settings class contains getters and setters for all application options
- * Uses localstorage as storage
+ * Uses localstorage as store for api key and last used translation directions
  */
 export class AppSettings {
 	private static apiKey = localStorage.getItem('apiKey');
-	private static fromLang = localStorage.getItem('fromLang');
-	private static toLang = localStorage.getItem('toLang');
+	private static langsList: Object;
 
-	public static get API_KEY(): string { 
-		return this.apiKey; 
-	}
-	public static set API_KEY(key:string) { 
-		this.apiKey = key; 
+	public static get API_KEY(): string {
+		return this.apiKey;
 	}
 
-	/*
-	public static get FROM_LANG(): string { 
-		return this.fromLang; 
-	}
-	public static set FROM_LANG(lang:string) { 
-		this.fromLang = lang; 
+	public static set API_KEY(key: string) {
+		this.apiKey = key;
 	}
 
-	public static get TO_LANG(): string { 
-		return this.fromLang; 
+	public static get LANGS(): Object {
+		return this.langsList;
 	}
-	public static set TO_LANG(lang:string) { 
-		this.fromLang = lang; 
+
+	public static set LANGS(list: Object) {
+		this.langsList = list;
 	}
-	*/
+
 }

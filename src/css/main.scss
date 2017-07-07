@@ -165,6 +165,14 @@ select#from-lang {
 	color: #666;
 }
 
+.back-icon {
+	font-size: 29px;
+	color: #666;
+	margin-right: 10px;
+	position: absolute;
+	top: 20px;
+}
+
 #close-btn {
 	color: #666;
 	font-style: italic;
@@ -185,16 +193,6 @@ select#from-lang {
 	outline: none;
 }
 
-/*
-:not(input):not(textarea),
-:not(input):not(textarea)::after,
-:not(input):not(textarea)::before {
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-}
-*/
-
 #translation-toolbar {
 	display:none;
 }
@@ -205,4 +203,9 @@ select#from-lang {
     right: 20px;
     background: #999;
     color: #fff;
+}
+
+.settings-text-bottom {
+	color: red; 
+	padding-left:10px
 }
