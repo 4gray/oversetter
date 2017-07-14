@@ -3,7 +3,7 @@
 </p>
 
 
-Oversetter is an translation app, which allows you to translate content directly from your menu bar. Oversetter is open-source application based on [Angular](https://angular.io/) and [Electron](http://electron.atom.io/). It uses free API of [Yandex Translate](https://tech.yandex.com/translate/) for text translation. That means you need to register a free API key to use this app.
+Oversetter is an translation app, which allows you to translate content directly from your menu bar. Oversetter is open-source application based on [Angular](https://angular.io/) and [Electron](http://electron.atom.io/). It uses free API of [Yandex Translate](https://tech.yandex.com/translate/) for text translation. 
 
 # Screenshot
 
