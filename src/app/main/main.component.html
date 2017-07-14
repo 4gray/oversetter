@@ -2,7 +2,8 @@
 	<form (ngSubmit)="translate(word)" (keyup.enter)="translate(word)">
 		<div class="options-panel">
 			<label>Translate from:</label>
-			<select name="fromLang" [ngModel]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control" id="from-lang" required>
+			<select name="fromLang" [ngModel]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control"
+			 id="from-lang" required>
 				<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
 			</select>
 
@@ -15,7 +16,7 @@
 			<i class="fa fa-cog settings-icon" [routerLink]="['/settings']"></i>
 		</div>
 
-		<textarea class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word"></textarea>
+		<textarea class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word" autofocus></textarea>
 
 		<!--<input [disabled]="!word" type="submit" value="Translate" class="btn-translate" />-->
 	</form>
