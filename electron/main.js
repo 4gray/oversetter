@@ -1,49 +1,61 @@
 'use strict';
 
-const {app, BrowserWindow, ipcMain, Tray, nativeImage, shell, Menu} = require('electron');
+const { app, Menu, globalShortcut } = require('electron');
 const menubar = require('menubar');
 
-let tray = null;
+const keyboardShortcuts = {
+	open: 'CommandOrControl+Alt+T'
+}
 
-// This method is called once Electron is ready to run our code
-// It is effectively the main method of our Electron app
-app.on('ready', () => {
+const mb = menubar({
+	index: 'file://' + __dirname + '/index.html',
+	width: 500,
+	height: 325,
+	resizable: false,
+	preloadWindow: true,
+	transparent: true,
+	frame: false,
+	showDockIcon: false
+});
 
-	const mb = menubar({
-		index: 'file://' + __dirname + '/index.html',
-		width: 500,
-		height: 325,
-		resizable: false,
-		preloadWindow: true,
-		transparent: true,
-		show: false,
-		frame: false,
-		showDockIcon: false
-	});
+mb.on('ready', () => {
 
-	//mb.window.openDevTools();
-
-	// Create the Application's main menu
-	var template = [{
-		label: "Application",
+	// create the application's main menu
+	const template = [{
+		label: "Menu",
 		submenu: [
-			{ label: "About Application", role: "orderFrontStandardAboutPanel" },
-			{ type: "separator" },
-			{ label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
-		]}, {
-		label: "Edit",
-		submenu: [
-			{ label: "Undo", accelerator: "CmdOrCtrl+Z", role: "undo" },
-			{ label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", role: "redo" },
-			{ type: "separator" },
+			{ label: "Hide", accelerator: "Esc", click: () => mb.window.hide() },
 			{ label: "Cut", accelerator: "CmdOrCtrl+X", role: "cut" },
 			{ label: "Copy", accelerator: "CmdOrCtrl+C", role: "copy" },
 			{ label: "Paste", accelerator: "CmdOrCtrl+V", role: "paste" },
-			{ label: "Select All", accelerator: "CmdOrCtrl+A", role: "selectall" }
-		]}
+			{ label: "Select All", accelerator: "CmdOrCtrl+A", role: "selectall" },
+			{
+				label: 'Toggle Developer Tools',
+				accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+				click(item, focusedWindow) {
+					if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+				}
+			},
+			{
+				label: "Quit",
+				accelerator: "Command+Q",
+				click: () => app.quit()
+			}
+		]
+	}
 	];
 
 	Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
+	// register show window shortcut listener
+	globalShortcut.register(keyboardShortcuts.open, () => {
+		mb.window.isVisible() ? mb.window.hide() : mb.showWindow();
+	});
+
 });
 
+
+app.on('will-quit', () => {
+	// unregister all shortcuts
+	globalShortcut.unregisterAll();
+})
