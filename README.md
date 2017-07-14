@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/4gray/oversetter/raw/master/icon.png" alt="App Icon">
+  <img src="https://github.com/4gray/oversetter/raw/master/icon.png" alt="App Icon" width="256">
 </p>
 
 
@@ -10,6 +10,10 @@ Oversetter is an translation app, which allows you to translate content directly
 <p align="center">
   <img src="https://4gray.github.io/oversetter/assets/screenshot-1.png" alt="App Preview">
 </p>
+
+# Download
+
+You can download the latest version of the application for [macOS](https://github.com/4gray/oversetter/releases). (Need to test Oversetter for Windows and Linux)
 
 # How to use
 
