@@ -1,7 +1,8 @@
 'use strict';
 
-const { app, Menu, globalShortcut } = require('electron');
+const { app, Menu, globalShortcut, ipcMain } = require('electron');
 const menubar = require('menubar');
+const AutoLaunch = require('auto-launch');
 
 const keyboardShortcuts = {
 	open: 'CommandOrControl+Alt+T'
@@ -52,8 +53,26 @@ mb.on('ready', () => {
 		mb.window.isVisible() ? mb.window.hide() : mb.showWindow();
 	});
 
+	ipcMain.on('autolaunch', (event, arg) => {
+		console.log('Autolaunch enabled: ' + arg);
+		arg ? appLauncher.enable() : appLauncher.disable();
+	});
+
 });
 
+let appLauncher = new AutoLaunch({
+	name: 'Oversetter',
+	mac: {
+		useLaunchAgent: true,
+	}
+});
+
+appLauncher.isEnabled()
+	.then(isEnabled => {
+		if (isEnabled) return;
+		appLauncher.enable();
+	})
+	.catch(err => console.error(err));
 
 app.on('will-quit', () => {
 	// unregister all shortcuts

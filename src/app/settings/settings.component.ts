@@ -1,5 +1,6 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { Router } from '@angular/router';
+import { ElectronService } from 'ngx-electron';
 import { TranslateService } from '../translate.service';
 import { AppSettings } from '../appsettings';
 
@@ -11,14 +12,27 @@ import { AppSettings } from '../appsettings';
 export class SettingsComponent {
 	public apiKey: String;
 	public errorMessage: String = '';
+	public autolaunch: Boolean;
 
 	/**
 	 * Constructor function - set API key from the localstorage
 	 * @param translateService translation service object
 	 * @param router router object
 	 */
-	constructor(private translateService: TranslateService, private router: Router) {
+	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService) {
 		this.apiKey = AppSettings.API_KEY;
+		if (localStorage.getItem('autolaunch'))
+			this.autolaunch = (localStorage.getItem('autolaunch') === 'true');
+		else
+			this.autolaunch = false; // default is false
+	}
+
+	/**
+	 * Save auto launch options
+	 */
+	setAutoLaunch() {
+		localStorage.setItem('autolaunch', String(this.autolaunch));
+		this.electronService.ipcRenderer.send('autolaunch', this.autolaunch);
 	}
 
 	/**
@@ -30,6 +44,7 @@ export class SettingsComponent {
 		localStorage.setItem(option, value);
 		AppSettings.API_KEY = value;
 		this.validateApiKey();
+		this.setAutoLaunch();
 	}
 
 	/**

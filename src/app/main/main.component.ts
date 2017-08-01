@@ -1,5 +1,6 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
 import { RouterModule, Routes, Router } from '@angular/router';
+import { ElectronService } from 'ngx-electron';
 import { TranslateService } from '../translate.service';
 import { Translation } from '../translation';
 import { AppSettings } from '../appsettings';
@@ -15,7 +16,7 @@ export class MainComponent {
 	public settings: JSON[] = [];
 	public view: string = 'main';
 
-	constructor(private translateService: TranslateService, private router: Router) {
+	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService) {
 
 		// store last used translation direction in localstorage
 		if (localStorage.getItem('fromLang'))
