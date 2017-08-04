@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/4gray/oversetter/raw/master/icon.png" alt="App Icon" width="256">
+  <img src="https://github.com/4gray/oversetter/blob/master/assets/icon.png" alt="App Icon" width="256">
 </p>
 
 
