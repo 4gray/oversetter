@@ -1,7 +1,10 @@
 {
   "name": "Oversetter",
-  "version": "0.1",
+  "version": "0.1.0",
+  "productName": "Oversetter",
+  "website": "https://4gray.github.io/oversetter/",
   "author": "4gray",
+  "icon": "assets/icon.png",
   "main": "dist/main.js",
   "description": "Oversetter is an translation app, which allows you to translate content directly from your menu bar",
   "scripts": {
@@ -11,8 +14,10 @@
     "prepare": "cp -a electron/. dist",
     "electron": "npm run prepare && electron .",
     "debug": "npm run build && npm run prepare && electron .",
-    "package": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js . Oversetter --platform=darwin --arch=all --out=app --overwrite --icon=icon.icns",
-    "package:win": "npm run build && npm run prepare && electron-packager . Oversetter --platform=win32 --arch=ia32 --out=app --asar=true --prune=true --overwrite --icon=icon.png",
+    "package": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js . Oversetter --platform=darwin --arch=all --out=app --overwrite --icon=assets/icon.icns",
+    "package:win32": "npm run build && npm run prepare && electron-packager . Oversetter --platform=win32 --arch=ia32 --out=app --asar=true --prune=true --overwrite --icon=assets/icon.ico",
+    "package:linux": "npm run build && npm run prepare && electron-packager . Oversetter --platform=linux --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon.png",
+    "package:all": "npm run build && npm run prepare && electron-packager . Oversetter --platform=all  --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon",
     "dist": "build -mwl --x64 --ia32",
     "tslint": "tslint"
   },
