@@ -63,5 +63,12 @@ export class SettingsComponent {
 		);
 	}
 
+	/**
+	 * Close application
+	 */
+	closeApp() {
+		this.electronService.remote.app.quit();
+	}
+
 
 }

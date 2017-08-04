@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgxElectronModule } from 'ngx-electron';
 import { MainComponent } from './main/main.component';
 import { SettingsComponent } from './settings/settings.component';
-import { HomeComponent } from './home.component';
+import { HomeComponent } from './home/home.component';
 import { HttpModule } from '@angular/http';
 import { KeysPipe } from './keys.pipe';
 import { routing } from './app.routes';

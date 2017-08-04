@@ -6,17 +6,18 @@ const AutoLaunch = require('auto-launch');
 
 const keyboardShortcuts = {
 	open: 'CommandOrControl+Alt+T'
-}
+};
 
 const mb = menubar({
 	index: 'file://' + __dirname + '/index.html',
 	width: 500,
-	height: 325,
+	height: 312,
 	resizable: false,
 	preloadWindow: true,
 	transparent: true,
 	frame: false,
-	showDockIcon: false
+	showDockIcon: false,
+	show: false
 });
 
 mb.on('ready', () => {
@@ -77,4 +78,4 @@ appLauncher.isEnabled()
 app.on('will-quit', () => {
 	// unregister all shortcuts
 	globalShortcut.unregisterAll();
-})
+});
