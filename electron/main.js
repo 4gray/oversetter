@@ -5,13 +5,14 @@ const menubar = require('menubar');
 const AutoLaunch = require('auto-launch');
 
 const keyboardShortcuts = {
-	open: 'CommandOrControl+Alt+T'
+	open: 'CommandOrControl+Alt+T',
+	translateClipboard: 'CommandOrControl+Alt+R'
 };
 
 const mb = menubar({
 	index: 'file://' + __dirname + '/index.html',
 	width: 500,
-	height: 312,
+	height: 315,
 	resizable: false,
 	preloadWindow: true,
 	transparent: true,
@@ -21,6 +22,8 @@ const mb = menubar({
 });
 
 mb.on('ready', () => {
+	if (process.env.NODE_ENV === 'dev')
+		mb.window.openDevTools();
 
 	// create the application's main menu
 	const template = [{
@@ -51,7 +54,13 @@ mb.on('ready', () => {
 
 	// register show window shortcut listener
 	globalShortcut.register(keyboardShortcuts.open, () => {
-		mb.window.isVisible() ? mb.window.hide() : mb.showWindow();
+		mb.window.webContents.send('translate');
+		showApp();
+	});
+
+	globalShortcut.register(keyboardShortcuts.translateClipboard, () => {
+		mb.window.webContents.send('translate-clipboard');
+		showApp();
 	});
 
 	ipcMain.on('autolaunch', (event, arg) => {
@@ -61,12 +70,25 @@ mb.on('ready', () => {
 
 });
 
+mb.on('after-show', () => {
+	mb.window.focus();
+});
+
 let appLauncher = new AutoLaunch({
 	name: 'Oversetter',
 	mac: {
 		useLaunchAgent: true,
 	}
 });
+
+function showApp() {
+	if (mb.window.isVisible())
+		mb.hideWindow();
+	else {
+		mb.showWindow();
+		mb.window.focus();
+	}
+}
 
 appLauncher.isEnabled()
 	.then(isEnabled => {

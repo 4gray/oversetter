@@ -1,4 +1,4 @@
-import { Component, Pipe, PipeTransform } from '@angular/core';
+import { Component, Pipe, PipeTransform, NgZone } from '@angular/core';
 import { RouterModule, Routes, Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { TranslateService } from '../translate.service';
@@ -15,8 +15,27 @@ export class MainComponent {
 	public langs: String[] = [];
 	public settings: JSON[] = [];
 	public view: string = 'main';
+	public word: string = '';
 
-	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService) {
+	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private ngZone: NgZone) {
+
+		// translate content from clipboard
+		this.electronService.ipcRenderer.on('translate-clipboard', () => {
+			this.ngZone.run(() => {
+				let clipboardText = this.electronService.clipboard.readText();
+				this.word = clipboardText;
+				this.translate(this.word);
+			});
+		});
+
+		// clear translate area
+		this.electronService.ipcRenderer.on('translate', () => {
+			this.ngZone.run(() => {
+				this.word = '';
+				if (this.translation)
+					this.translation = null;
+			});
+		});
 
 		// store last used translation direction in localstorage
 		if (localStorage.getItem('fromLang'))
@@ -29,6 +48,7 @@ export class MainComponent {
 		else
 			this.requestLanguageList();
 	}
+
 
 	/**
 	 * Get list with all available languages from the API

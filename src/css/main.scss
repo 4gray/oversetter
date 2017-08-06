@@ -6,11 +6,11 @@ html, body {
 	user-select: none;
 	-webkit-user-select: none;
 	font-family: 'Open Sans', sans-serif;
+	font-size: 12px;
 }
 
 .container {
 	background: #fff;
-	font-size: 0.9em;
 }
 
 #direction-switch {
@@ -27,7 +27,7 @@ html, body {
 	box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
 	user-select: all;
 	-webkit-user-select: all;
-	font-size: 1em;
+	font-size: 12px;
 }
 
 form {
@@ -49,7 +49,8 @@ textarea {
 	outline:none;
     border: none;
     padding: 10px;
-    height: 100px;
+	height: 100px;
+	font-size: 12px;
 }
 
 .btn-translate:disabled {
@@ -64,7 +65,6 @@ textarea {
 #translate-area {
 	background: #fff;
 	width: 100%;
-    font-size: 1em;
 }
 
 .translation-preview {
@@ -90,11 +90,11 @@ textarea {
 	height: 100px;
 	background: #ECECEC;
 	overflow-y: auto;
-	font-size: 1em;
 	margin-top: -3px;
 	word-wrap: break-word;
 	user-select: text;
-    -webkit-user-select: text;
+	-webkit-user-select: text;
+	font-size: 12px;
 }
 
 #result-area div, #settings-area div {
@@ -114,7 +114,7 @@ textarea {
 		#eceaed 0,
 		#d1cfd2 100%
 	);
-	font-size: 0.8em;
+	font-size: 11px;
 }
 
 .copyright {
@@ -138,7 +138,6 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   border: none;
-  font-size: 1em;
   width: 150px;
   border-left: 1px solid #bbb;
   border-right: 1px solid #bbb;
@@ -155,6 +154,7 @@ select {
     background-position: right;
     background-repeat: no-repeat;
 	color: #333;
+	font-size: 12px;
 }
 
 select#from-lang {
@@ -183,7 +183,7 @@ select#from-lang {
 	color: #666;
 	font-style: italic;
 	float: right;
-	font-size: 18px;
+	font-size: 14px;
 }
 
 .save-settings-btn {
@@ -220,7 +220,7 @@ select#from-lang {
 #api-key {
 	width: 480px;
 	height: 50px;
-	font-size: 1em;
+	font-size: 12px;
 	resize: none;
 	box-shadow: 0 2px 8px 0 rgba(0,0,0,0.2);
 	user-select: all;
@@ -232,7 +232,7 @@ select#from-lang {
     height: 150px;
     background: #ECECEC;
     overflow-y: auto;
-    font-size: 1em;
+    font-size: 12px;
     margin-top: -3px;
 	word-wrap: break-word;
 	user-select: text;
