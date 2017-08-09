@@ -14,10 +14,16 @@ const keyboardShortcuts = {
 	translateClipboard: 'CommandOrControl+Alt+R'
 };
 
+let appHeight = 315;
+
+if (process.platform !== 'darwin') {
+	appHeight = 298;
+}
+
 const mb = menubar({
 	index: 'file://' + __dirname + '/index.html',
 	width: 500,
-	height: 315,
+	height: appHeight,
 	resizable: false,
 	preloadWindow: true,
 	transparent: true,
@@ -29,6 +35,12 @@ const mb = menubar({
 mb.on('ready', () => {
 	if (process.env.NODE_ENV === 'dev')
 		mb.window.openDevTools();
+
+	if (process.platform === 'linux') {
+		mb.tray.setToolTip('Translate');
+		mb.window.setResizable(false); // workaround for linux
+	}
+
 
 	// create the application's main menu
 	const template = [{
