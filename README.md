@@ -19,7 +19,7 @@ Oversetter is an translation app, which allows you to translate content directly
 
 # Download
 
-You can download the latest version of the application for [macOS](https://github.com/4gray/oversetter/releases). (Need to test Oversetter for Windows and Linux)
+You can download the latest version of the application for [macOS](https://github.com/4gray/oversetter/releases), [Windows](https://github.com/4gray/oversetter/releases) and [Linux](https://github.com/4gray/oversetter/releases).
 
 # How to use
 
