@@ -30,7 +30,6 @@
   "dependencies": {
     "auto-launch": "^5.0.1",
     "menubar": "^5.2.3",
-    "ngx-electron": "^1.0.3",
     "semver": "^5.4.1",
     "superagent": "^3.5.2"
   },
@@ -72,6 +71,7 @@
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.3",
+    "ngx-electron": "^1.0.3",
     "node-sass": "^4.5.2",
     "null-loader": "^0.1.1",
     "phantomjs-prebuilt": "^2.1.7",
