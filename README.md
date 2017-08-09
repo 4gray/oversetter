@@ -24,20 +24,25 @@ You can download the latest version of the application for [macOS](https://githu
 # How to use
 
 1. [Register](https://tech.yandex.com/translate/) free Yandex Translate API-Key (or use built-in dev-key for the first time).
-2. Run application:
+2. Install dependencies, build and run application with electron:
 
 ```
 npm install
 npm run build
-npm run electron
+NODE_ENV=dev npm run electron
 ```
 
 # App Packaging
 
 ```
-npm run package
+npm run package:osx
+npm run package:win32
+npm run package:linux
 ```
-
+or
+```
+npm run package:all
+```
 # ToDo: Up next
 
 See [Projects](https://github.com/4gray/oversetter/projects/1)-tab.
