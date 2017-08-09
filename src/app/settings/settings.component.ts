@@ -1,4 +1,4 @@
-import { Component, Pipe, PipeTransform } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { TranslateService } from '../translate.service';
@@ -21,10 +21,12 @@ export class SettingsComponent {
 	 */
 	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService) {
 		this.apiKey = AppSettings.API_KEY;
-		if (localStorage.getItem('autolaunch'))
+		if (localStorage.getItem('autolaunch')) {
 			this.autolaunch = (localStorage.getItem('autolaunch') === 'true');
-		else
+		}
+		else {
 			this.autolaunch = false; // default is false
+		}
 	}
 
 	/**

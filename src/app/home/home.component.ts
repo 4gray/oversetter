@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
@@ -12,9 +11,11 @@ export class HomeComponent {
 	public showArrow: Boolean;
 
 	constructor(private electronService: ElectronService) {
-		if (this.electronService.process.platform !== 'darwin')
+		if (this.electronService.process.platform !== 'darwin') {
 			this.showArrow = false;
-		else
+		}
+		else {
 			this.showArrow = true;
+		}
 	}
 }
