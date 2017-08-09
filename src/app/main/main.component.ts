@@ -1,5 +1,5 @@
-import { Component, Pipe, PipeTransform, NgZone } from '@angular/core';
-import { RouterModule, Routes, Router } from '@angular/router';
+import { Component, NgZone } from '@angular/core';
+import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { TranslateService } from '../translate.service';
 import { Translation } from '../translation';
@@ -16,6 +16,7 @@ export class MainComponent {
 	public settings: JSON[] = [];
 	public view: string = 'main';
 	public word: string = '';
+	public updateAvailable: boolean = false;
 
 	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private ngZone: NgZone) {
 
@@ -32,21 +33,31 @@ export class MainComponent {
 		this.electronService.ipcRenderer.on('translate', () => {
 			this.ngZone.run(() => {
 				this.word = '';
-				if (this.translation)
+				if (this.translation) {
 					this.translation = null;
+				}
+			});
+		});
+
+		this.electronService.ipcRenderer.on('update-available', () => {
+			this.ngZone.run(() => {
+				this.updateAvailable = true;
 			});
 		});
 
 		// store last used translation direction in localstorage
-		if (localStorage.getItem('fromLang'))
+		if (localStorage.getItem('fromLang')) {
 			this.settings['fromLang'] = localStorage.getItem('fromLang');
-		if (localStorage.getItem('toLang'))
+		}
+		if (localStorage.getItem('toLang')) {
 			this.settings['toLang'] = localStorage.getItem('toLang');
-
-		if (AppSettings.API_KEY === '' || AppSettings.API_KEY === null)
+		}
+		if (AppSettings.API_KEY === '' || AppSettings.API_KEY === null) {
 			this.router.navigate(['/settings']);
-		else
+		}
+		else {
 			this.requestLanguageList();
+		}
 	}
 
 

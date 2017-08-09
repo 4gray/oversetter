@@ -3,6 +3,12 @@
 const { app, Menu, globalShortcut, ipcMain } = require('electron');
 const menubar = require('menubar');
 const AutoLaunch = require('auto-launch');
+const semver = require('semver');
+const superagent = require('superagent');
+
+const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
+const currentVersion = app.getVersion();
+let updateCheck = false;
 
 const keyboardShortcuts = {
 	open: 'CommandOrControl+Alt+T',
@@ -58,6 +64,7 @@ mb.on('ready', () => {
 		showApp();
 	});
 
+	// register global shortcut for clipboard text trranslation
 	globalShortcut.register(keyboardShortcuts.translateClipboard, () => {
 		mb.window.webContents.send('translate-clipboard');
 		showApp();
@@ -72,6 +79,9 @@ mb.on('ready', () => {
 
 mb.on('after-show', () => {
 	mb.window.focus();
+
+	if (!updateCheck)
+		checkForUpdate();
 });
 
 let appLauncher = new AutoLaunch({
@@ -88,6 +98,19 @@ function showApp() {
 		mb.showWindow();
 		mb.window.focus();
 	}
+}
+
+function checkForUpdate() {
+	updateCheck = true;
+	// check for the new version
+	superagent.get(packageJson).end((error, response) => {
+		const actualVersion = "0.2.0"; //JSON.parse(response.text).version;
+		console.log('Actual app version: ' + actualVersion + '. Current app version: ' + currentVersion);
+		if (semver.gt(actualVersion, currentVersion)) {
+			mb.window.webContents.send('update-available');
+			console.log('New version is available!');
+		}
+	});
 }
 
 appLauncher.isEnabled()
