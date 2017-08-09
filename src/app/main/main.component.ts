@@ -12,11 +12,12 @@ import { AppSettings } from '../appsettings';
 
 export class MainComponent {
 	public translation: Translation;
-	public langs: String[] = [];
+	public langs: Object = {};
 	public settings: JSON[] = [];
 	public view: string = 'main';
 	public word: string = '';
 	public updateAvailable: boolean = false;
+	public detectedLanguage: string = '';
 
 	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private ngZone: NgZone) {
 
@@ -25,7 +26,7 @@ export class MainComponent {
 			this.ngZone.run(() => {
 				let clipboardText = this.electronService.clipboard.readText();
 				this.word = clipboardText;
-				this.translate(this.word);
+				this.translate(this.word, this.settings['fromLang'], this.settings['toLang']);
 			});
 		});
 
@@ -39,6 +40,7 @@ export class MainComponent {
 			});
 		});
 
+		// show update text if new version of the application is available
 		this.electronService.ipcRenderer.on('update-available', () => {
 			this.ngZone.run(() => {
 				this.updateAvailable = true;
@@ -49,8 +51,15 @@ export class MainComponent {
 		if (localStorage.getItem('fromLang')) {
 			this.settings['fromLang'] = localStorage.getItem('fromLang');
 		}
+		else {
+			this.settings['fromLang'] = 'ad';
+		}
+
 		if (localStorage.getItem('toLang')) {
 			this.settings['toLang'] = localStorage.getItem('toLang');
+		}
+		else {
+			this.settings['toLang'] = 'en';
 		}
 		if (AppSettings.API_KEY === '' || AppSettings.API_KEY === null) {
 			this.router.navigate(['/settings']);
@@ -95,15 +104,35 @@ export class MainComponent {
 	 * Translate text
 	 * @param word string to translate
 	 */
-	translate(word: string) {
+	translate(word: string, fromLang: string, toLang: string) {
 		var temp = word.replace(/\n/g, " "); // check for new line characters
 		if (!/^ *$/.test(temp)) {
-			this.translateService.getTranslation(word, this.settings['fromLang'], this.settings['toLang'])
-				.subscribe(
-				(translation: Translation) => this.translation = translation,
-				error => console.error(`Error:  ${error}`),
-				() => console.log(`Translation: ${this.translation.text}`)
-				);
+			if (fromLang === 'ad') {
+				this.translateService
+					.detectLanguage(word, fromLang, toLang)
+					.subscribe(
+					(language: string) => {
+						this.translate(word, language, toLang);
+						this.detectedLanguage = ' (' + language + ' -> ' + toLang + ')';
+					},
+					error => console.error(`Error:  ${error}`)
+					);
+			}
+			else {
+				if (this.settings['fromLang'] !== 'ad') {
+					this.detectedLanguage = '';
+				}
+				this.translateService
+					.getTranslation(word, fromLang, toLang)
+					.subscribe(
+					(translation: Translation) => {
+						this.translation = translation;
+						this.translation.text += this.detectedLanguage;
+					},
+					error => console.error(`Error:  ${error}`),
+					() => console.log(`Translation: ${this.translation.text}`)
+					);
+			}
 		}
 		else {
 			this.translation = null;

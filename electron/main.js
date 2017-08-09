@@ -8,7 +8,6 @@ const superagent = require('superagent');
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
 const currentVersion = app.getVersion();
-let updateCheck = false;
 
 const keyboardShortcuts = {
 	open: 'CommandOrControl+Alt+T',
@@ -79,9 +78,7 @@ mb.on('ready', () => {
 
 mb.on('after-show', () => {
 	mb.window.focus();
-
-	if (!updateCheck)
-		checkForUpdate();
+	checkForUpdate();
 });
 
 let appLauncher = new AutoLaunch({
@@ -91,6 +88,9 @@ let appLauncher = new AutoLaunch({
 	}
 });
 
+/**
+ * Show application window
+ */
 function showApp() {
 	if (mb.window.isVisible())
 		mb.hideWindow();
@@ -100,11 +100,12 @@ function showApp() {
 	}
 }
 
+/**
+ * Check for the new version
+ */
 function checkForUpdate() {
-	updateCheck = true;
-	// check for the new version
 	superagent.get(packageJson).end((error, response) => {
-		const actualVersion = "0.2.0"; //JSON.parse(response.text).version;
+		const actualVersion = JSON.parse(response.text).version;
 		console.log('Actual app version: ' + actualVersion + '. Current app version: ' + currentVersion);
 		if (semver.gt(actualVersion, currentVersion)) {
 			mb.window.webContents.send('update-available');

@@ -1,9 +1,10 @@
 <div id="translate-area">
-	<form (ngSubmit)="translate(word)" (keyup.enter)="translate(word)">
+	<form (ngSubmit)="translate(word, settings.fromLang, settings.toLang)" (keyup.enter)="translate(word, settings.fromLang, settings.toLang)">
 		<div class="options-panel">
 			<label>Translate from:</label>
 			<select name="fromLang" [ngModel]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control"
 			 id="from-lang" required>
+			  	<option value="ad">Auto-detect</option>
 				<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
 			</select>
 
@@ -26,13 +27,21 @@
 <div id="result-area">
 	<!--<div id="translation-toolbar"><i class="fa fa-star"></i></div>-->
 	<div *ngIf="!translation" class="translation-preview">Click <strong>Enter</strong> to translate</div>
-	<div *ngIf="translation" class="translation">{{translation.text[0]}}</div>
+	<div *ngIf="translation" class="translation">{{translation.text}}</div>
 </div>
 
 
 <div id="footer">
 	<div class="copyright">
 		<div class="yandex-text">Powered by <a href (click)="electronService.shell.openExternal('http://translate.yandex.ru/')">«Yandex Translator»</a></div>
-		<div class="update-text" *ngIf="updateAvailable"><a href (click)="electronService.shell.openExternal('https://github.com/4gray/oversetter/releases')">New app version is available</a></div>
+		<div id="close-btn" (click)="electronService.remote.app.quit()">
+			<i class="fa fa-power-off"></i>
+		</div>
+		<div id="close-btn" (click)="electronService.shell.openExternal('https://4gray.github.io/oversetter/')">
+			<i class="fa fa-github"></i>
+		</div>
+		<div class="update-text" *ngIf="updateAvailable">
+			<a href (click)="electronService.shell.openExternal('https://github.com/4gray/oversetter/releases')">New app version is available</a>
+		</div>
 	</div>
 </div>

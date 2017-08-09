@@ -16,8 +16,13 @@ export class TranslateService {
 	 * @param fromLang 
 	 * @param toLang 
 	 */
-	createRequest(word: string, fromLang: string, toLang: string) {
-		return this.getTranslateUrl() + '&text=' + encodeURIComponent(word) + '&lang=' + fromLang + '-' + toLang;
+	createRequest(word: string, fromLang: string = undefined, toLang: string = undefined) {
+		if (fromLang === 'ad') { // auto-detect is selected
+			return this.getAutoDetectLanguageUrl() + '&text=' + encodeURIComponent(word);
+		}
+		else {
+			return this.getTranslateUrl() + '&text=' + encodeURIComponent(word) + '&lang=' + fromLang + '-' + toLang;
+		}
 	}
 
 	/**
@@ -27,11 +32,24 @@ export class TranslateService {
 	 * @param toLang Result language
 	 */
 	getTranslation(word: string, fromLang: string, toLang: string): Observable<Translation> {
+
 		let requestUrl = this.createRequest(word, fromLang, toLang);
 		return this.http.get(requestUrl)
-			.map((response) => response.json())
+			.map(response => response.json())
 			.map((response: Translation) => {
 				return new Translation(response.code, response.lang, response.text);
+			})
+			.catch(this.handleError);
+
+	}
+
+	detectLanguage(word, fromLang, toLang) {
+		let requestUrl = this.createRequest(word, fromLang);
+		return this.http.get(requestUrl)
+			.map(response => response.json())
+			.map(response => {
+				console.log(`Detected language: ${response.lang}`);
+				return response.lang;
 			})
 			.catch(this.handleError);
 	}
@@ -57,6 +75,10 @@ export class TranslateService {
 	 */
 	getTranslateUrl() {
 		return 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' + AppSettings.API_KEY;
+	}
+
+	getAutoDetectLanguageUrl() {
+		return 'https://translate.yandex.net/api/v1.5/tr.json/detect?key=' + AppSettings.API_KEY;
 	}
 
 	/**
