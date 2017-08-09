@@ -14,7 +14,7 @@
     "prepare": "cp -a electron/. dist",
     "electron": "npm run prepare && electron .",
     "debug": "npm run build && npm run prepare && electron .",
-    "package": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js . Oversetter --platform=darwin --arch=all --out=app --overwrite --icon=assets/icon.icns",
+    "package:osx": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js . Oversetter --platform=darwin --arch=all --out=app --overwrite --icon=assets/icon.icns",
     "package:win32": "npm run build && npm run prepare && electron-packager . Oversetter --platform=win32 --arch=ia32 --out=app --asar=true --prune=true --overwrite --icon=assets/icon.ico",
     "package:linux": "npm run build && npm run prepare && electron-packager . Oversetter --platform=linux --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon.png",
     "package:all": "npm run build && npm run prepare && electron-packager . Oversetter --platform=all  --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon",
