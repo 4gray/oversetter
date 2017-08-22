@@ -13,6 +13,7 @@ export class SettingsComponent {
 	public apiKey: String;
 	public errorMessage: String = '';
 	public autolaunch: Boolean;
+	public activeTab: number = 1;
 
 	/**
 	 * Constructor function - set API key from the localstorage
@@ -70,6 +71,14 @@ export class SettingsComponent {
 	 */
 	closeApp() {
 		this.electronService.remote.app.quit();
+	}
+
+	/**
+	 * Change active tab in the settings layout
+	 * @param tab id of the tab
+	 */
+	changeSettingsTab(tab: number) {
+		this.activeTab = tab;
 	}
 
 

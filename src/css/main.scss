@@ -247,3 +247,37 @@ select#from-lang {
 .update-text {
 	float: right;
 }
+
+.settings-tab {
+	float: left;
+}
+
+#tabs {
+    width: 197px;
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #999;
+    height: 20px;
+    position: relative;
+    margin-left: 140px;
+    top: 10px;
+    line-height: 20px;
+    text-align: center;
+    color: #444;
+}
+
+.settings-tab {
+    cursor: pointer;
+    padding: 0 5px 0 5px;
+    width: 55px;
+}
+
+#tabs > .settings-tab:nth-child(even) {
+	float: left;
+	border-left: 1px solid #999;
+	border-right: 1px solid #999;
+}
+
+.active-tab {
+	background: #999;
+}

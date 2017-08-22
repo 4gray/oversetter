@@ -1,5 +1,5 @@
 {
-  "name": "Oversetter",
+  "name": "oversetter",
   "version": "0.2.0",
   "productName": "Oversetter",
   "website": "https://4gray.github.io/oversetter/",
@@ -7,6 +7,37 @@
   "icon": "assets/icon.png",
   "main": "dist/main.js",
   "description": "Oversetter is an translation app, which allows you to translate content directly from your menu bar",
+  "keywords": [
+    "electron",
+    "menubar",
+    "yandex",
+    "translate",
+    "translator",
+    "language",
+    "text"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4gray/oversetter.git",
+    "docs": "https://github.com/4gray/oversetter/blob/master/README.md"
+  },
+  "bugs": {
+    "url": "https://github.com/4gray/oversetter/issues"
+  },
+  "build": {
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      ".",
+      "node_modules/",
+      "package.json",
+      "dist/main.js"
+    ],
+    "mac": {
+      "icon": "assets/icon.icns"
+    }
+  },
   "scripts": {
     "start": "webpack-dev-server --inline --progress --port 8080",
     "test": "karma start",
@@ -58,7 +89,7 @@
     "css-loader": "^0.28.0",
     "devtron": "^1.4.0",
     "electron": "^1.6.11",
-    "electron-builder": "^19.11.1",
+    "electron-builder": "^19.19.1",
     "electron-packager": "^8.7.0",
     "extract-text-webpack-plugin": "2.1.0",
     "file-loader": "^0.11.1",

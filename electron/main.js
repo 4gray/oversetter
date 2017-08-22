@@ -5,6 +5,7 @@ const menubar = require('menubar');
 const AutoLaunch = require('auto-launch');
 const semver = require('semver');
 const superagent = require('superagent');
+const path = require('path');
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
 const currentVersion = app.getVersion();
@@ -15,12 +16,17 @@ const keyboardShortcuts = {
 };
 
 let appHeight = 315;
+let dockIcon = false;
 
 if (process.platform !== 'darwin') {
 	appHeight = 298;
 }
+else if (process.platform === 'win32') {
+	dockIcon = true;
+}
 
 const mb = menubar({
+	icon: path.join(__dirname, '/../LightIconTemplate.png'),
 	index: 'file://' + __dirname + '/index.html',
 	width: 500,
 	height: appHeight,
@@ -28,11 +34,12 @@ const mb = menubar({
 	preloadWindow: true,
 	transparent: true,
 	frame: false,
-	showDockIcon: false,
+	showDockIcon: dockIcon,
 	show: false
 });
 
 mb.on('ready', () => {
+
 	if (process.env.NODE_ENV === 'dev')
 		mb.window.openDevTools();
 
@@ -86,6 +93,22 @@ mb.on('ready', () => {
 		arg ? appLauncher.enable() : appLauncher.disable();
 	});
 
+});
+
+/**
+ * Menu dialog on the right click
+ */
+mb.on('after-create-window', function () {
+	const contextMenu = Menu.buildFromTemplate([
+		{ label: 'About Oversetter', click: () => { /* TODO */ } },
+		{ label: 'Preferences', click: () => { /* TODO */ } },
+		{ label: 'Restart App', click: () => { mb.app.quit(); mb.app.relaunch(); } },
+		{ type: 'separator' },
+		{ label: 'Quit', click: () => { mb.app.quit(); } }
+	])
+	mb.tray.on('right-click', () => {
+		mb.tray.popUpContextMenu(contextMenu);
+	})
 });
 
 mb.on('after-show', () => {
