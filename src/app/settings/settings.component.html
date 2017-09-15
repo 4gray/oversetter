@@ -15,23 +15,28 @@
 </div>
 
 <div class="settings-tab-content" *ngIf="activeTab===2" style="height:221px; background: #ececec">
-    <ul class="settings-container">
-        <li class="checkbox-option">
-            <label for="start-at-login"><input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start at login</label></li>
-        <li class="checkbox-option">
-            <label for="show-dock-icon"><input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show dock icon</label>
-        </li>
-        <li class="checkbox-option">
-            <label for="always-on-top"><input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop"> Always on top</label>
-        </li>
-    </ul>
+    <div class="settings-container">
+        <ul>
+            <li class="checkbox-option">
+                <label for="start-at-login"><input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start at login</label></li>
+            <li class="checkbox-option">
+                <label for="show-dock-icon"><input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show dock icon</label>
+            </li>
+            <li class="checkbox-option">
+                <label for="always-on-top"><input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop"> Always on top</label>
+            </li>
+        </ul>
+        <small>New settings will only take effect after a restart!</small>
+    </div>
 </div>
 
 <div class="settings-tab-content" *ngIf="activeTab===3" style="height:221px;background: #ececec">
-    <ul class="settings-container">
-        <li class="text">Use <b>Cmd/Ctrl + Alt + T</b> to show application window</li>
-        <li class="text">Use <b>Cmd/Ctrl + Alt + R</b> to translate text from clipboard</li>
-    </ul>
+    <div class="settings-container">
+        <ul>
+            <li class="text">Use <b>Cmd/Ctrl + Alt + T</b> to show application window</li>
+            <li class="text">Use <b>Cmd/Ctrl + Alt + R</b> to translate text from clipboard</li>
+        </ul>
+    </div>
 </div>
 
 <div id="footer">

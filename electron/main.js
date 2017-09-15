@@ -6,6 +6,7 @@ const AutoLaunch = require('auto-launch');
 const semver = require('semver');
 const superagent = require('superagent');
 const path = require('path');
+const settings = require('electron-settings');
 const About = require('./about');
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
@@ -18,12 +19,12 @@ const keyboardShortcuts = {
 };
 
 let appHeight = 315;
-let dockIcon = false;
+let dockIcon = getShowDockIconValue();
+let alwaysOnTop = getAlwaysOnTopValue();
+let autolaunch = getAutoLaunchValue();
 
 if (process.platform !== 'darwin') {
     appHeight = 298;
-} else if (process.platform === 'win32') {
-    dockIcon = true;
 }
 
 const mb = menubar({
@@ -36,7 +37,8 @@ const mb = menubar({
     transparent: true,
     frame: false,
     showDockIcon: dockIcon,
-    show: false
+    show: false,
+    alwaysOnTop: alwaysOnTop
 });
 
 mb.on('ready', () => {
@@ -89,8 +91,19 @@ mb.on('ready', () => {
 
     ipcMain.on('autolaunch', (event, arg) => {
         console.log('Autolaunch enabled: ' + arg);
-        arg ? appLauncher.enable() : appLauncher.disable();
+        settings.set('autolaunch', arg);
     });
+
+    ipcMain.on('alwaysOnTop', (event, arg) => {
+        console.log('AlwaysOnTop enabled: ' + arg);
+        settings.set('alwaysOnTop', arg);
+    });
+
+    ipcMain.on('showDockIcon', (event, arg) => {
+        console.log('ShowDockIcon enabled: ' + arg);
+        settings.set('showDockIcon', arg);
+    });
+
 
 });
 
@@ -134,6 +147,18 @@ let appLauncher = new AutoLaunch({
     }
 });
 
+
+if (autolaunch)
+    appLauncher.enable();
+else
+    appLauncher.disable();
+
+
+app.on('will-quit', () => {
+    // unregister all shortcuts
+    globalShortcut.unregisterAll();
+});
+
 /**
  * Show application window
  */
@@ -160,14 +185,23 @@ function checkForUpdate() {
     });
 }
 
-appLauncher.isEnabled()
-    .then(isEnabled => {
-        if (isEnabled) return;
-        appLauncher.enable();
-    })
-    .catch(err => console.error(err));
+function getAlwaysOnTopValue() {
+    if (settings.has('alwaysOnTop'))
+        return settings.get('alwaysOnTop');
+    else
+        return false;
+}
 
-app.on('will-quit', () => {
-    // unregister all shortcuts
-    globalShortcut.unregisterAll();
-});
+function getShowDockIconValue() {
+    if (settings.has('showDockIcon'))
+        return settings.get('showDockIcon');
+    else
+        return false
+}
+
+function getAutoLaunchValue() {
+    if (settings.has('autolaunch'))
+        return settings.get('autolaunch');
+    else
+        return false;
+}
