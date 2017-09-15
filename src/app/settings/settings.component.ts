@@ -12,8 +12,10 @@ import { AppSettings } from '../appsettings';
 export class SettingsComponent {
 	public apiKey: String;
 	public errorMessage: String = '';
-	public autolaunch: Boolean;
 	public activeTab: number = 1;
+	public autolaunch: boolean = false;
+	public alwaysOnTop: boolean = false;
+	public showDockIcon: boolean = false;
 
 	/**
 	 * Constructor function - set API key from the localstorage
@@ -21,12 +23,18 @@ export class SettingsComponent {
 	 * @param router router object
 	 */
 	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService) {
+		console.log('settings instance created');
 		this.apiKey = AppSettings.API_KEY;
 		if (localStorage.getItem('autolaunch')) {
 			this.autolaunch = (localStorage.getItem('autolaunch') === 'true');
 		}
-		else {
-			this.autolaunch = false; // default is false
+
+		if (localStorage.getItem('alwaysOnTop')) {
+			this.alwaysOnTop = (localStorage.getItem('alwaysOnTop') === 'true');
+		}
+
+		if (localStorage.getItem('showDockIcon')) {
+			this.showDockIcon = (localStorage.getItem('showDockIcon') === 'true');
 		}
 	}
 
@@ -39,6 +47,22 @@ export class SettingsComponent {
 	}
 
 	/**
+	 * Save always as top option
+	 */
+	setAlwaysOnTop() {
+		localStorage.setItem('alwaysOnTop', String(this.alwaysOnTop));
+		this.electronService.ipcRenderer.send('alwaysOnTop', this.alwaysOnTop); // TODO: implement in the main process
+	}
+
+	/**
+	 * Save show dock icon option
+	 */
+	setShowDockIcon() {
+		localStorage.setItem('showDockIcon', String(this.showDockIcon));
+		this.electronService.ipcRenderer.send('showDockIcon', this.showDockIcon); // TODO: implement in the main process
+	}
+
+	/**
 	 * Save Yandex Translate API key to the localstorage
 	 * @param value option value ('apiKey')
 	 * @param option name of the option 
@@ -48,6 +72,8 @@ export class SettingsComponent {
 		AppSettings.API_KEY = value;
 		this.validateApiKey();
 		this.setAutoLaunch();
+		this.setAlwaysOnTop();
+		this.setShowDockIcon();
 	}
 
 	/**

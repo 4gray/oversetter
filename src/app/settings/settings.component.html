@@ -1,43 +1,48 @@
 <div class="options-panel">
-	<i class="fa fa-angle-left back-icon" (click)="validateApiKey()"></i>
-	<!--<label>Enter your API-Key</label>-->
-	<div id="tabs">
-		<div (click)="changeSettingsTab(1)" [ngClass]="{'settings-tab': true, 'active-tab': activeTab===1}">API</div>
-		<div (click)="changeSettingsTab(2)" [ngClass]="{'settings-tab': true, 'active-tab': activeTab===2}">Global</div>
-		<div (click)="changeSettingsTab(3)" [ngClass]="{'settings-tab': true, 'active-tab': activeTab===3}">Shortcuts</div>
-	</div>
-	<!--<i class="fa fa-cog settings-icon" *ngIf="apiKey" [routerLink]="['/home']"></i>-->
+    <i class="fa fa-angle-left back-icon" (click)="validateApiKey()"></i>
+    <div id="tabs">
+        <div (click)="changeSettingsTab(1)" [ngClass]="{'settings-tab': true, 'active-tab': activeTab===1}">API</div>
+        <div (click)="changeSettingsTab(2)" [ngClass]="{'settings-tab': true, 'active-tab': activeTab===2}">Global</div>
+        <div (click)="changeSettingsTab(3)" [ngClass]="{'settings-tab': true, 'active-tab': activeTab===3}">Shortcuts</div>
+    </div>
 </div>
 
-<div id="settings-tab-1" *ngIf="activeTab===1" [ngClass]="{'active-tab': activeTab===1}">
-	<textarea id="api-key" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
-	<div id="settings-area">
-
-		<div class="translation">To use this application you need to <a href (click)="electronService.shell.openExternal('https://tech.yandex.com/translate/')">register</a>			free API-Key from Yandex Translate. For test you can use this dev-key: <i>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</i></div>
-		<div class="translation">
-			<label><input type="checkbox" value="" [(ngModel)]="autolaunch"> Start at login</label>
-			<label><input type="checkbox" value="" [(ngModel)]="showDockIcon"> Show dock icon</label>
-			<label><input type="checkbox" value="" [(ngModel)]="alwaysOnTop"> Always on top</label>
-
-			<!-- TODO: shortcuts -->
-		</div>
-	</div>
+<div class="settings-tab-content" *ngIf="activeTab===1">
+    <textarea id="api-key" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
+    <div id="settings-area">
+        <div class="translation">To use this application you need to <a href="#" (click)="electronService.shell.openExternal('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex Translate. For test you can use this dev-key: <i>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</i></div>
+    </div>
 </div>
 
-<div id="settings-tab-2" *ngIf="activeTab===2" style="height:221px;">
-	Tab 2 content here
+<div class="settings-tab-content" *ngIf="activeTab===2" style="height:221px; background: #ececec">
+    <ul class="settings-container">
+        <li class="checkbox-option">
+            <label for="start-at-login"><input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start at login</label></li>
+        <li class="checkbox-option">
+            <label for="show-dock-icon"><input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show dock icon</label>
+        </li>
+        <li class="checkbox-option">
+            <label for="always-on-top"><input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop"> Always on top</label>
+        </li>
+    </ul>
 </div>
 
-<div id="settings-tab-3" *ngIf="activeTab===3" style="height:221px;">
-	Tab 3 content here
+<div class="settings-tab-content" *ngIf="activeTab===3" style="height:221px;background: #ececec">
+    <ul class="settings-container">
+        <li class="text">Use <b>Cmd/Ctrl + Alt + T</b> to show application window</li>
+        <li class="text">Use <b>Cmd/Ctrl + Alt + R</b> to translate text from clipboard</li>
+    </ul>
 </div>
 
 <div id="footer">
-	<div class="copyright">
-		<button [disabled]="!apiKey" (click)="saveApiKey(apiKey, 'apiKey')" class="save-settings-btn"><i class="fa fa-save"></i> Save</button>
-		<div class="settings-text-bottom">{{errorMessage}}</div>
-		<div id="close-btn" (click)="closeApp()">
-			<i class="fa fa-power-off"></i>
-		</div>
-	</div>
+    <div class="copyright">
+        <button [disabled]="!apiKey" (click)="saveApiKey(apiKey, 'apiKey')" class="save-settings-btn"><i class="fa fa-save"></i> Save</button>
+        <div class="settings-text-bottom">{{errorMessage}}</div>
+        <div id="close-btn" (click)="electronService.remote.app.quit()">
+            <i class="fa fa-power-off"></i>
+        </div>
+        <div id="close-btn" (click)="electronService.shell.openExternal('https://4gray.github.io/oversetter/')">
+            <i class="fa fa-github"></i>
+        </div>
+    </div>
 </div>

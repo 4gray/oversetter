@@ -1,125 +1,123 @@
 {
-  "name": "oversetter",
-  "version": "0.2.0",
-  "productName": "Oversetter",
-  "website": "https://4gray.github.io/oversetter/",
-  "author": "4gray",
-  "icon": "assets/icon.png",
-  "main": "dist/main.js",
-  "description": "Oversetter is an translation app, which allows you to translate content directly from your menu bar",
-  "keywords": [
-    "electron",
-    "menubar",
-    "yandex",
-    "translate",
-    "translator",
-    "language",
-    "text"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/4gray/oversetter.git",
-    "docs": "https://github.com/4gray/oversetter/blob/master/README.md"
-  },
-  "bugs": {
-    "url": "https://github.com/4gray/oversetter/issues"
-  },
-  "build": {
-    "directories": {
-      "output": "build"
-    },
-    "files": [
-      ".",
-      "node_modules/",
-      "package.json",
-      "dist/main.js"
+    "name": "oversetter",
+    "version": "0.2.0",
+    "productName": "Oversetter",
+    "website": "https://4gray.github.io/oversetter/",
+    "author": "4gray",
+    "icon": "assets/icon.png",
+    "main": "dist/main.js",
+    "description": "Oversetter is an translation app, which allows you to translate content directly from your menu bar",
+    "keywords": [
+        "electron",
+        "menubar",
+        "yandex",
+        "translate",
+        "translator",
+        "language",
+        "text"
     ],
-    "mac": {
-      "icon": "assets/icon.icns"
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/4gray/oversetter.git",
+        "docs": "https://github.com/4gray/oversetter/blob/master/README.md"
+    },
+    "bugs": {
+        "url": "https://github.com/4gray/oversetter/issues"
+    },
+    "build": {
+        "directories": {
+            "output": "build"
+        },
+        "files": [
+            ".",
+            "node_modules/",
+            "package.json",
+            "dist/main.js"
+        ],
+        "mac": {
+            "icon": "assets/icon.icns"
+        }
+    },
+    "scripts": {
+        "start": "webpack-dev-server --inline --progress --port 8080",
+        "test": "karma start",
+        "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
+        "prepare": "cp -a electron/. dist",
+        "electron": "npm run prepare && electron .",
+        "debug": "npm run build && npm run prepare && electron .",
+        "package:osx": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js . Oversetter --platform=darwin --arch=all --out=app --overwrite --icon=assets/icon.icns",
+        "package:win32": "npm run build && npm run prepare && electron-packager . Oversetter --platform=win32 --arch=ia32 --out=app --asar=true --prune=true --overwrite --icon=assets/icon.ico",
+        "package:linux": "npm run build && npm run prepare && electron-packager . Oversetter --platform=linux --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon.png",
+        "package:all": "npm run build && npm run prepare && electron-packager . Oversetter --platform=all  --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon",
+        "dist": "build -mwl --x64 --ia32",
+        "tslint": "tslint"
+    },
+    "licenses": [{
+        "type": "MIT",
+        "url": "https://github.com/angular/angular.io/blob/master/LICENSE"
+    }],
+    "dependencies": {
+        "auto-launch": "^5.0.1",
+        "menubar": "^5.2.3",
+        "semver": "^5.4.1",
+        "superagent": "^3.5.2"
+    },
+    "devDependencies": {
+        "@angular/animations": "~4.1.2",
+        "@angular/common": "~4.1.2",
+        "@angular/compiler": "~4.1.2",
+        "@angular/core": "~4.1.2",
+        "@angular/forms": "~4.1.2",
+        "@angular/http": "~4.1.2",
+        "@angular/platform-browser": "~4.1.2",
+        "@angular/platform-browser-dynamic": "~4.1.2",
+        "@angular/platform-server": "~4.1.2",
+        "@angular/router": "~4.1.2",
+        "@angularclass/hmr": "~1.2.2",
+        "@angularclass/hmr-loader": "~3.0.2",
+        "@types/hammerjs": "^2.0.34",
+        "@types/jasmine": "2.5.45",
+        "@types/node": "^7.0.13",
+        "@types/source-map": "^0.5.0",
+        "@types/uglify-js": "^2.6.28",
+        "@types/webpack": "^2.2.15",
+        "angular2-template-loader": "^0.4.0",
+        "awesome-typescript-loader": "~3.1.2",
+        "core-js": "^2.4.1",
+        "css-loader": "^0.28.0",
+        "devtron": "^1.4.0",
+        "electron": "^1.6.11",
+        "electron-builder": "^19.19.1",
+        "electron-packager": "^8.7.0",
+        "extract-text-webpack-plugin": "2.1.0",
+        "file-loader": "^0.11.1",
+        "html-loader": "^0.4.3",
+        "html-webpack-plugin": "^2.28.0",
+        "imports-loader": "^0.7.1",
+        "jasmine-core": "^2.4.1",
+        "karma": "^1.2.0",
+        "karma-jasmine": "^1.0.2",
+        "karma-phantomjs-launcher": "^1.0.2",
+        "karma-sourcemap-loader": "^0.3.7",
+        "karma-webpack": "^2.0.3",
+        "ngx-electron": "^1.0.3",
+        "node-sass": "^4.5.2",
+        "null-loader": "^0.1.1",
+        "phantomjs-prebuilt": "^2.1.7",
+        "raw-loader": "^0.5.1",
+        "rimraf": "^2.6.1",
+        "rxjs": "~5.0.2",
+        "sass-loader": "^4.0.2",
+        "style-loader": "^0.13.1",
+        "ts-node": "^3.0.2",
+        "tslib": "^1.6.1",
+        "tslint": "~4.5.1",
+        "tslint-loader": "^3.5.2",
+        "typescript": "~2.2.2",
+        "webpack": "~2.6.1",
+        "webpack-dev-server": "~2.4.2",
+        "webpack-electron-packager": "^1.0.0",
+        "webpack-merge": "~4.1.0",
+        "zone.js": "0.8.5"
     }
-  },
-  "scripts": {
-    "start": "webpack-dev-server --inline --progress --port 8080",
-    "test": "karma start",
-    "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
-    "prepare": "cp -a electron/. dist",
-    "electron": "npm run prepare && electron .",
-    "debug": "npm run build && npm run prepare && electron .",
-    "package:osx": "npm run build && npm run prepare && ./node_modules/electron-packager/cli.js . Oversetter --platform=darwin --arch=all --out=app --overwrite --icon=assets/icon.icns",
-    "package:win32": "npm run build && npm run prepare && electron-packager . Oversetter --platform=win32 --arch=ia32 --out=app --asar=true --prune=true --overwrite --icon=assets/icon.ico",
-    "package:linux": "npm run build && npm run prepare && electron-packager . Oversetter --platform=linux --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon.png",
-    "package:all": "npm run build && npm run prepare && electron-packager . Oversetter --platform=all  --arch=all --out=app --asar=true --prune=true --overwrite --icon=assets/icon",
-    "dist": "build -mwl --x64 --ia32",
-    "tslint": "tslint"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/angular/angular.io/blob/master/LICENSE"
-    }
-  ],
-  "dependencies": {
-    "auto-launch": "^5.0.1",
-    "menubar": "^5.2.3",
-    "semver": "^5.4.1",
-    "superagent": "^3.5.2"
-  },
-  "devDependencies": {
-    "@angular/animations": "~4.1.2",
-    "@angular/common": "~4.1.2",
-    "@angular/compiler": "~4.1.2",
-    "@angular/core": "~4.1.2",
-    "@angular/forms": "~4.1.2",
-    "@angular/http": "~4.1.2",
-    "@angular/platform-browser": "~4.1.2",
-    "@angular/platform-browser-dynamic": "~4.1.2",
-    "@angular/platform-server": "~4.1.2",
-    "@angular/router": "~4.1.2",
-    "@angularclass/hmr": "~1.2.2",
-    "@angularclass/hmr-loader": "~3.0.2",
-    "@types/hammerjs": "^2.0.34",
-    "@types/jasmine": "2.5.45",
-    "@types/node": "^7.0.13",
-    "@types/source-map": "^0.5.0",
-    "@types/uglify-js": "^2.6.28",
-    "@types/webpack": "^2.2.15",
-    "angular2-template-loader": "^0.4.0",
-    "awesome-typescript-loader": "~3.1.2",
-    "core-js": "^2.4.1",
-    "css-loader": "^0.28.0",
-    "devtron": "^1.4.0",
-    "electron": "^1.6.11",
-    "electron-builder": "^19.19.1",
-    "electron-packager": "^8.7.0",
-    "extract-text-webpack-plugin": "2.1.0",
-    "file-loader": "^0.11.1",
-    "html-loader": "^0.4.3",
-    "html-webpack-plugin": "^2.28.0",
-    "imports-loader": "^0.7.1",
-    "jasmine-core": "^2.4.1",
-    "karma": "^1.2.0",
-    "karma-jasmine": "^1.0.2",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^2.0.3",
-    "ngx-electron": "^1.0.3",
-    "node-sass": "^4.5.2",
-    "null-loader": "^0.1.1",
-    "phantomjs-prebuilt": "^2.1.7",
-    "raw-loader": "^0.5.1",
-    "rimraf": "^2.6.1",
-    "rxjs": "~5.0.2",
-    "sass-loader": "^4.0.2",
-    "style-loader": "^0.13.1",
-    "ts-node": "^3.0.2",
-    "tslib": "^1.6.1",
-    "tslint": "~4.5.1",
-    "tslint-loader": "^3.5.2",
-    "typescript": "~2.2.2",
-    "webpack": "~2.6.1",
-    "webpack-dev-server": "~2.4.2",
-    "webpack-electron-packager": "^1.0.0",
-    "webpack-merge": "~4.1.0",
-    "zone.js": "0.8.5"
-  }
 }

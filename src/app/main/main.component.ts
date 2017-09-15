@@ -20,10 +20,16 @@ export class MainComponent {
 	public detectedLanguage: string = '';
 
 	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private ngZone: NgZone) {
+		let window = electronService.remote.getCurrentWindow();
+
+		if(window['dialog'] === 'about') {
+			this.router.navigate(['/about']);
+		}
 
 		// translate content from clipboard
 		this.electronService.ipcRenderer.on('translate-clipboard', () => {
 			this.ngZone.run(() => {
+				this.router.navigate(['/home']);
 				let clipboardText = this.electronService.clipboard.readText();
 				this.word = clipboardText;
 				this.translate(this.word, this.settings['fromLang'], this.settings['toLang']);
@@ -33,6 +39,7 @@ export class MainComponent {
 		// clear translate area
 		this.electronService.ipcRenderer.on('translate', () => {
 			this.ngZone.run(() => {
+				this.router.navigate(['/home']);
 				this.word = '';
 				if (this.translation) {
 					this.translation = null;
@@ -44,6 +51,13 @@ export class MainComponent {
 		this.electronService.ipcRenderer.on('update-available', () => {
 			this.ngZone.run(() => {
 				this.updateAvailable = true;
+			});
+		});
+
+		// show app settings
+		this.electronService.ipcRenderer.on('show-settings', () => {
+			this.ngZone.run(() => {
+				this.router.navigate(['/settings']);
 			});
 		});
 

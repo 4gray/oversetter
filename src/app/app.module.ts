@@ -6,13 +6,14 @@ import { NgxElectronModule } from 'ngx-electron';
 import { MainComponent } from './main/main.component';
 import { SettingsComponent } from './settings/settings.component';
 import { HomeComponent } from './home/home.component';
+import { AboutComponent } from './about/about.component';
 import { HttpModule } from '@angular/http';
 import { KeysPipe } from './keys.pipe';
 import { routing } from './app.routes';
 
 @NgModule({
     imports: [BrowserModule, HttpModule, FormsModule, NgxElectronModule, routing],
-    declarations: [HomeComponent, MainComponent, SettingsComponent, KeysPipe],
+    declarations: [HomeComponent, MainComponent, SettingsComponent, AboutComponent, KeysPipe],
     bootstrap: [HomeComponent],
     providers: [
         {
