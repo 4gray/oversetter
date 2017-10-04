@@ -13,8 +13,8 @@ import { AppSettings } from '../appsettings';
 export class MainComponent {
 	public translation: Translation;
 	public langs: Object = {};
-	public settings: JSON[] = [];
-	public view: string = 'main';
+	public settings: Object = {};
+	//public view: string = 'main';
 	public word: string = '';
 	public updateAvailable: boolean = false;
 	public detectedLanguage: string = '';
@@ -61,20 +61,9 @@ export class MainComponent {
 			});
 		});
 
-		// store last used translation direction in localstorage
-		if (localStorage.getItem('fromLang')) {
-			this.settings['fromLang'] = localStorage.getItem('fromLang');
-		}
-		else {
-			this.settings['fromLang'] = 'ad';
-		}
+		this.settings['fromLang'] = localStorage.getItem('fromLang') || 'ad';
+		this.settings['toLang'] = localStorage.getItem('toLang') || 'en';
 
-		if (localStorage.getItem('toLang')) {
-			this.settings['toLang'] = localStorage.getItem('toLang');
-		}
-		else {
-			this.settings['toLang'] = 'en';
-		}
 		if (AppSettings.API_KEY === '' || AppSettings.API_KEY === null) {
 			this.router.navigate(['/settings']);
 		}
@@ -90,7 +79,15 @@ export class MainComponent {
 	requestLanguageList() {
 		const l$ = this.translateService.getLanguagesList();
 		l$.subscribe(
-			response => this.langs = response['langs'],
+			response => { 
+				if (localStorage.getItem('languages') === 'select-languages') {
+					this.langs = JSON.parse(localStorage.getItem('preferedLanguageList'));
+				}
+				else {
+					this.langs = response['langs'];
+				}
+				AppSettings.LANGS = response['langs']; // TODO: save fetched languages in localstorage
+			},
 			error => console.error(error)
 		);
 	}
@@ -99,7 +96,7 @@ export class MainComponent {
 	 * Change translation direction
 	 */
 	changeTranslationDir() {
-		var temp = this.settings['fromLang'];
+		let temp = this.settings['fromLang'];
 		this.settings['fromLang'] = this.settings['toLang'];
 		this.settings['toLang'] = temp;
 	}
@@ -119,7 +116,7 @@ export class MainComponent {
 	 * @param word string to translate
 	 */
 	translate(word: string, fromLang: string, toLang: string) {
-		var temp = word.replace(/\n/g, " "); // check for new line characters
+		let temp = word.replace(/\n/g, " "); // check for new line characters
 		if (!/^ *$/.test(temp)) {
 			if (fromLang === 'ad') {
 				this.translateService

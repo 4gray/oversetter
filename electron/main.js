@@ -51,7 +51,7 @@ mb.on('ready', () => {
         mb.window.setResizable(false); // workaround for linux
     }
 
-    // create the application's main menu
+    // create the application's main menu // TODO: refactor
     const template = [{
         label: "Menu",
         submenu: [
@@ -126,7 +126,7 @@ mb.on('after-create-window', function() {
                 mb.app.quit();
                 mb.app.relaunch();
             }
-        },
+        }, // TODO: add check for updates option
         { type: 'separator' },
         { label: 'Quit', click: () => { mb.app.quit(); } }
     ]);
@@ -176,6 +176,7 @@ function showApp() {
  */
 function checkForUpdate() {
     superagent.get(packageJson).end((error, response) => {
+        if (error) return;
         const actualVersion = JSON.parse(response.text).version; // TODO: case without internet connection
         console.log('Actual app version: ' + actualVersion + '. Current app version: ' + currentVersion);
         if (semver.gt(actualVersion, currentVersion)) {

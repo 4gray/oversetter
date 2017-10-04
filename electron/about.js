@@ -4,9 +4,7 @@ const Electron = require('electron');
 
 class About {
 
-    constructor() {
-        console.log('About instance were created');
-    }
+    constructor() {}
 
     showWindow() {
         // Prevent creating of new window

@@ -80,6 +80,10 @@ textarea {
     border-bottom: 1px solid #afafaf;
 }
 
+.options-panel>#tabs {
+    padding: 0 !important;
+}
+
 #result-area {
     width: 100%;
     height: 100px;
@@ -127,7 +131,7 @@ textarea {
 
 /* remove standard-styles */
 
-select {
+.options-panel select {
     -webkit-appearance: none;
     -moz-appearance: none;
     border: none;
@@ -138,12 +142,13 @@ select {
     padding: 2px 0px 2px 5px;
     outline: none;
     border-radius: 0;
+    border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
 }
 
 
 /* styling */
 
-select {
+.options-panel select {
     background-color: transparent;
     background-image: url(../img/select-arrow.png);
     background-position: right;
@@ -168,10 +173,11 @@ select#from-lang {
 .back-icon {
     font-size: 29px;
     color: #666;
-    margin-right: 10px;
-    margin-top: 5px;
+    margin-right: 5px;
     float: left;
     width: 20px;
+    border-right: 1px solid #ccc;
+    line-height: 35px;
 }
 
 #close-btn {
@@ -192,6 +198,8 @@ select#from-lang {
     line-height: 30px;
     outline: none;
     float: left;
+    cursor: pointer;
+    color: #666;
 }
 
 #translation-toolbar {
@@ -210,27 +218,26 @@ select#from-lang {
     color: red;
     padding-left: 10px;
     float: left;
-    width: 380px;
+    width: 330px;
 }
 
 #api-key {
     width: 480px;
-    height: 50px;
+    height: 100px;
     font-size: 12px;
     resize: none;
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-    user-select: all;
-    -webkit-user-select: all;
+    box-shadow: 0px -3px 4px 0 rgba(0, 0, 0, 0.2);
+    margin: 0 0 0 -10px;
 }
 
 #settings-area {
     width: 100%;
-    height: 150px;
     background: #ECECEC;
     overflow-y: auto;
     font-size: 12px;
     margin-top: -3px;
     word-wrap: break-word;
+    height: 94px;
     user-select: text;
     -webkit-user-select: text;
 }
@@ -243,39 +250,39 @@ select#from-lang {
     float: right;
 }
 
-.settings-tab {
-    float: left;
-}
-
 #tabs {
-    width: 197px;
-    background: #fff;
-    border-radius: 4px;
-    border: 1px solid #999;
-    height: 20px;
+    height: 40px;
     position: relative;
-    margin-left: 140px;
-    top: 10px;
-    line-height: 20px;
+    line-height: 40px;
     text-align: center;
     color: #444;
+    margin-left: -10px;
 }
 
-.settings-tab {
+#tabs>div {
     cursor: pointer;
     padding: 0 5px 0 5px;
-    width: 55px;
+    width: 80px;
+    float: left;
+    border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
+    border-right: 1px solid #999;
+    color: #666;
 }
 
-#tabs>.settings-tab:nth-child(even) {
-    float: left;
-    border-left: 1px solid #999;
+#tabs>div:first-child {
     border-right: 1px solid #999;
 }
 
 .active-tab {
-    background: #999;
-    color: #fff;
+    color: #111 !important;
+    background: #ececec;
+    font-weight: bold;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.settings-tab-content {
+    height: 221px;
+    background: #ececec;
 }
 
 .settings-container {
@@ -287,15 +294,16 @@ select#from-lang {
     margin: 0;
 }
 
+li.text {
+    margin-left: 22px;
+}
+
 .checkbox-option {
     padding: 2px;
 }
 
-i.fa:hover {
-    color: #000;
-    cursor: pointer;
-}
-
+i.fa:hover,
+.save-settings-btn:hover,
 select#from-lang:hover,
 select#to-lang:hover {
     color: #000;
@@ -338,4 +346,75 @@ select#to-lang:hover {
 
 .about-footer {
     margin-top: 20px;
+}
+
+#all-languages-list {
+    width: 220px;
+    height: 165px;
+    margin-left: -10px;
+    border-left: none;
+    padding-left: 10px;
+    outline: none;
+    border-bottom: 0;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    float: left;
+}
+
+#selected-languages-list {
+    width: 220px;
+    height: 165px;
+    margin-right: -12px;
+    border-right: 0;
+    border-bottom: 0;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    float: right;
+}
+
+#add-language {
+    background: #ccc;
+    width: 40px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #555;
+    float: left;
+    margin: 11px;
+}
+
+#remove-language {
+    background: #ccc;
+    width: 40px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: left;
+    margin: 11px;
+}
+
+.settings-note {
+    margin-top: 35px;
+    font-size: 11px;
+}
+
+.settings-title {
+    padding: 5px;
+    font-weight: bold;
+}
+
+.settings-checkboxes {
+    border: 0;
+    padding: 0 0 8px 0;
+    margin: 0;
+}
+
+.btn {
+    border: 0;
+    padding: 0;
+    outline: none;
 }

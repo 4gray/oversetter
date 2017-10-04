@@ -12,10 +12,12 @@ import { AppSettings } from '../appsettings';
 export class SettingsComponent {
 	public apiKey: String;
 	public errorMessage: String = '';
-	public activeTab: number = 1;
 	public autolaunch: boolean = false;
 	public alwaysOnTop: boolean = false;
 	public showDockIcon: boolean = false;
+	public langList: Object = {};
+	public preferedLangList: Object = {};
+	public languages: String = 'all-languages';
 
 	/**
 	 * Constructor function - set API key from the localstorage
@@ -23,9 +25,8 @@ export class SettingsComponent {
 	 * @param router router object
 	 */
 	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService) {
-		console.log('settings instance created');
 		this.apiKey = AppSettings.API_KEY;
-		if (localStorage.getItem('autolaunch')) {
+		if (localStorage.getItem('autolaunch')) { // TODO: refactor
 			this.autolaunch = (localStorage.getItem('autolaunch') === 'true');
 		}
 
@@ -36,6 +37,22 @@ export class SettingsComponent {
 		if (localStorage.getItem('showDockIcon')) {
 			this.showDockIcon = (localStorage.getItem('showDockIcon') === 'true');
 		}
+
+		if (localStorage.getItem('languages')) {
+			this.showDockIcon = (localStorage.getItem('languages') === 'true');
+		}
+
+		if (localStorage.getItem('languages')) {
+			this.languages = localStorage.getItem('languages');
+			console.log(JSON.parse(localStorage.getItem('preferedLanguageList')));
+			this.preferedLangList = JSON.parse(localStorage.getItem('preferedLanguageList'));
+		}
+		else {
+			// set default
+			this.preferedLangList = {'en': 'English'};
+		}
+
+		this.langList = AppSettings.LANGS;
 	}
 
 	/**
@@ -63,6 +80,14 @@ export class SettingsComponent {
 	}
 
 	/**
+	 * Save list with prefered languages
+	 */
+	setPreferedLanguageList() {
+		localStorage.setItem('languages', String(this.languages));
+		localStorage.setItem('preferedLanguageList', JSON.stringify(this.preferedLangList));
+	}
+
+	/**
 	 * Save Yandex Translate API key to the localstorage
 	 * @param value option value ('apiKey')
 	 * @param option name of the option 
@@ -71,9 +96,10 @@ export class SettingsComponent {
 		localStorage.setItem(option, value);
 		AppSettings.API_KEY = value;
 		this.validateApiKey();
-		this.setAutoLaunch();
+		this.setAutoLaunch(); // TODO: combine to one IPCrenderer-request
 		this.setAlwaysOnTop();
 		this.setShowDockIcon();
+		this.setPreferedLanguageList();
 	}
 
 	/**
@@ -100,12 +126,47 @@ export class SettingsComponent {
 	}
 
 	/**
-	 * Change active tab in the settings layout
-	 * @param tab id of the tab
+	 * Add one or multiple language(-s) to the prefered language list
+	 * @param language string or array with language list as strings
 	 */
-	changeSettingsTab(tab: number) {
-		this.activeTab = tab;
+	addLanguage(language) {
+		if (!language) { return; }
+		
+		if(typeof language === 'string') {
+			this.preferedLangList[language] = this.langList[language];
+		}
+		else {
+			for (let i = 0; i < language.length; i++) {
+				this.preferedLangList[language[i]] = this.langList[language[i]];
+			}
+		}
 	}
 
+	/**
+	 * Remove one or multiple selected language(-s) from prefered language list
+	 * @param language selected one or multiple languages (array or string)
+	 */
+	removeLanguage(language) {
+		if (!language || Object.keys(this.preferedLangList).length <= 1) { return; }
+
+		if(typeof language === 'string') {
+			delete this.preferedLangList[language];
+		}
+		else {
+			for (let i = 0; i < language.length; i++) {
+				this.removeLanguage(language[i]);
+			}
+		}
+		
+	}
+
+	languageState() {
+		if (this.languages === 'all-languages') {
+			return true;
+		}
+		else {
+			return false;
+		}
+	  }
 
 }

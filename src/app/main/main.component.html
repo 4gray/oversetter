@@ -2,15 +2,15 @@
     <form (ngSubmit)="translate(word, settings.fromLang, settings.toLang)" (keyup.enter)="translate(word, settings.fromLang, settings.toLang)">
         <div class="options-panel">
             <label>Translate from:</label>
-            <select name="fromLang" [ngModel]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control" id="from-lang" required>
+            <select name="fromLang" [(ngModel)]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control" id="from-lang" required>
 			  	<option value="ad">Auto-detect</option>
-				<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
+				<option *ngFor="let lang of langs | keys" [value]="lang.key">{{lang.value}}</option>
 			</select>
 
             <span id="direction-switch" (click)="changeTranslationDir()"><i class="fa fa-exchange"></i></span>
 
-            <select name="toLang" [ngModel]="settings.toLang" (ngModelChange)="onSettingsChange($event, 'toLang')" id="to-lang">
-				<option *ngFor="let lang of langs | keys" [ngValue]="lang.key">{{lang.value}}</option>
+            <select name="toLang" [(ngModel)]="settings.toLang" (ngModelChange)="onSettingsChange($event, 'toLang')" id="to-lang">
+				<option *ngFor="let lang of langs | keys" [value]="lang.key">{{lang.value}}</option>
 			</select>
 
             <i class="fa fa-cog settings-icon" [routerLink]="['/settings']"></i>

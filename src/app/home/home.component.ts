@@ -6,7 +6,6 @@ import { ElectronService } from 'ngx-electron';
 	templateUrl: 'home.component.html'
 })
 
-// Component class
 export class HomeComponent {
 	public showArrow: Boolean;
 
