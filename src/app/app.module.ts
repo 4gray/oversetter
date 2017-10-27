@@ -9,13 +9,14 @@ import { TabComponent } from './settings/tab.component';
 import { TabsComponent } from './settings/tabs.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
+import { OfflineComponent } from './offline/offline.component';
 import { HttpModule } from '@angular/http';
 import { KeysPipe } from './keys.pipe';
 import { routing } from './app.routes';
 
 @NgModule({
     imports: [BrowserModule, HttpModule, FormsModule, NgxElectronModule, routing],
-    declarations: [HomeComponent, MainComponent, SettingsComponent, AboutComponent, TabsComponent, TabComponent, KeysPipe],
+    declarations: [HomeComponent, MainComponent, SettingsComponent, AboutComponent, OfflineComponent, TabsComponent, TabComponent, KeysPipe],
     bootstrap: [HomeComponent],
     providers: [
         {
