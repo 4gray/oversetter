@@ -13,7 +13,7 @@ export class HomeComponent {
 	constructor(private electronService: ElectronService, private router: Router) {
 		const platform = this.electronService.process.platform;
 		let browserWindow = this.electronService.remote.getCurrentWindow();
-		if (platform !== 'darwin' || browserWindow['dialog'] === 'about') {
+		if (platform !== 'darwin' || browserWindow['dialog'] === 'about' || browserWindow['dialog'] === 'dictionary') {
 			this.showArrow = false;
 		}
 		else {

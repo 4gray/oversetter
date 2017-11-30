@@ -22,7 +22,7 @@
 </div>
 
 <div id="result-area">
-    <!--<div id="translation-toolbar"><i class="fa fa-star"></i></div>-->
+    <div id="translation-toolbar" (click)="saveToDictionary()" *ngIf="translation"><i class="fa fa-star-o" *ngIf="!wordFavorited"></i><i *ngIf="wordFavorited" class="fa fa-star"></i></div>
     <div *ngIf="!translation" class="translation-preview">Click <strong>Enter</strong> to translate</div>
     <div *ngIf="translation" class="translation">{{translation.text}}</div>
 </div>

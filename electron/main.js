@@ -8,10 +8,12 @@ const superagent = require('superagent');
 const path = require('path');
 const settings = require('electron-settings');
 const About = require('./about');
+const Dictionary = require('./dictionary');
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
 const currentVersion = app.getVersion();
 let aboutWindow = new About();
+let dictionary = new Dictionary();
 
 const keyboardShortcuts = {
     open: 'CommandOrControl+Alt+T',
@@ -113,6 +115,7 @@ mb.on('ready', () => {
 mb.on('after-create-window', function() {
     const contextMenu = Menu.buildFromTemplate([
         { label: 'About Oversetter', click: () => aboutWindow.showWindow() },
+        { label: 'Open dictionary', click: () => dictionary.showWindow() },
         {
             label: 'Preferences',
             click: () => {

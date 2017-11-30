@@ -1,0 +1,16 @@
+<div id="vocabulary-panel">
+    <div class="update-vocabulary"><i class="fa fa-refresh" (click)="updateDictionary()"></i></div>
+    <span class="panel-line"></span>
+    <div class="remove-phrase" *ngIf="(selectedItem | json) != ({} | json)"><i class="fa fa-trash" (click)="removeItem()"></i></div>
+</div>
+<div id="vocabulary-list">
+    <ul>
+        <li *ngFor="let item of vocabulary; let i = index" (click)="setSelectedItem(item, i)" [class.active]="i == selectedRow">{{item.text}}</li>
+    </ul>
+</div>
+<div id="vocabulary-translation">
+    <div *ngIf="(selectedItem | json) == ({} | json)">Welcome to your offline dictionary.</div>
+    <div id="source-text">{{selectedItem.text}}</div>
+    <!-- <div>{{selectedItem.fromLang}}</div> -->
+    <div id="translated-text">{{selectedItem.translation}}</div>
+</div>

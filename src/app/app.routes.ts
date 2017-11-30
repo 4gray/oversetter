@@ -4,6 +4,8 @@ import { MainComponent } from './main/main.component';
 import { AboutComponent } from './about/about.component';
 import { OfflineComponent } from "./offline/offline.component";
 import { SettingsComponent } from './settings/settings.component';
+import { DictionaryComponent } from './dictionary/dictionary.component';
+
 export const ROUTE_CONFIG: Routes = [
     {
         path: '',
@@ -25,6 +27,10 @@ export const ROUTE_CONFIG: Routes = [
     {
         path: 'offline',
         component: OfflineComponent
+    },
+    {
+        path: 'dictionary',
+        component: DictionaryComponent
     }
 ];
 

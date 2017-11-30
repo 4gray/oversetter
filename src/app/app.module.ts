@@ -13,10 +13,21 @@ import { OfflineComponent } from './offline/offline.component';
 import { HttpModule } from '@angular/http';
 import { KeysPipe } from './keys.pipe';
 import { routing } from './app.routes';
+import { DictionaryComponent } from './dictionary/dictionary.component';
 
 @NgModule({
     imports: [BrowserModule, HttpModule, FormsModule, NgxElectronModule, routing],
-    declarations: [HomeComponent, MainComponent, SettingsComponent, AboutComponent, OfflineComponent, TabsComponent, TabComponent, KeysPipe],
+    declarations: [
+        HomeComponent, 
+        MainComponent, 
+        SettingsComponent, 
+        AboutComponent, 
+        OfflineComponent, 
+        DictionaryComponent, 
+        TabsComponent, 
+        TabComponent, 
+        KeysPipe
+    ],
     bootstrap: [HomeComponent],
     providers: [
         {

@@ -18,12 +18,16 @@ export class MainComponent {
 	public word: string = '';
 	public updateAvailable: boolean = false;
 	public detectedLanguage: string = '';
+	public wordFavorited: boolean = false;
 
 	constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private ngZone: NgZone) {
 		let window = electronService.remote.getCurrentWindow();
 
 		if(window['dialog'] === 'about') {
 			this.router.navigate(['/about']);
+		}
+		else if(window['dialog'] === 'dictionary') {
+			this.router.navigate(['/dictionary']);
 		}
 
 		// translate content from clipboard
@@ -139,6 +143,7 @@ export class MainComponent {
 					(translation: Translation) => {
 						this.translation = translation;
 						this.translation.text += this.detectedLanguage;
+						this.wordFavorited = false;
 					},
 					error => console.error(`Error:  ${error}`),
 					() => console.log(`Translation: ${this.translation.text}`)
@@ -148,6 +153,18 @@ export class MainComponent {
 		else {
 			this.translation = null;
 		}
+	}
+
+	saveToDictionary() {
+		this.settings['vocabulary'] = JSON.parse(localStorage.getItem('vocabulary')) || [];
+		this.settings['vocabulary'].push({
+			text: this.word,
+			translation: this.translation.text,
+			fromLang: this.settings['fromLang'],
+			toLang: this.settings['toLang']
+		});	
+		this.wordFavorited = true;
+		localStorage.setItem('vocabulary', JSON.stringify(this.settings['vocabulary']));
 	}
 
 }

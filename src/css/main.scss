@@ -204,14 +204,27 @@ select#from-lang {
 
 #translation-toolbar {
     display: none;
+    cursor: pointer;
 }
 
 #result-area:hover>#translation-toolbar {
     display: block;
     position: absolute;
     right: 20px;
-    background: #999;
     color: #fff;
+    height: 30px;
+    border-right: 20px solid #b3b3b3;
+    border-left: 20px solid #b3b3b3;
+    border-bottom: 10px solid transparent;
+    width: 0px;
+    padding: 0;
+}
+
+#translation-toolbar>i {
+    position: absolute;
+    left: -7px;
+    top: 8px;
+    font-size: 16px;
 }
 
 .settings-text-bottom {
@@ -433,4 +446,95 @@ select#to-lang:hover {
         font-size: 70px;
         margin-top: 20px;
     }
+}
+
+kbd {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.1em 0.5em;
+    margin: 0 0.2em;
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
+    background-color: #f7f7f7;
+}
+
+#vocabulary-list {
+    width: 200px;
+    overflow: scroll;
+    height: 100%;
+    position: fixed;
+    background: #ECECEC;
+    border-right: 1px solid #d2d2d2;
+    z-index: 1000;
+    ul {
+        color: #111;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        padding: 5px 10px;
+        cursor: pointer;
+        max-height: 30px;
+        overflow: hidden;
+        line-height: 30px;
+    }
+    li:hover {
+        background: #ccc;
+    }
+    .active {
+        background-color: #d2d2d2;
+        font-weight: bold;
+    }
+}
+
+#vocabulary-panel {
+    background: #ececec;
+    border-bottom: 1px solid #d2d2d2;
+    height: 20px;
+    line-height: 20px;
+    padding: 10px;
+    -webkit-app-region: drag;
+    .panel-line {
+        height: 100%;
+        width: 1px;
+        background: #d2d2d2;
+        display: block;
+        position: absolute;
+        left: 200px;
+        top: 0;
+    }
+}
+
+#vocabulary-translation {
+    padding: 10px;
+    color: #111;
+    position: fixed;
+    background: #fff;
+    height: 100%;
+    display: block;
+    width: 100%;
+    #source-text {
+        font-weight: bold;
+    }
+    #translated-text {
+        margin-top: 10px;
+    }
+    div {
+        padding-left: 200px;
+        margin-right: 20px;
+    }
+}
+
+.remove-phrase {
+    float: right;
+    font-size: 18px;
+    color: #666;
+}
+
+.update-vocabulary {
+    position: absolute;
+    left: 175px;
+    font-size: 18px;
+    color: #666;
 }
