@@ -89,7 +89,7 @@
         "core-js": "^2.4.1",
         "css-loader": "^0.28.0",
         "devtron": "^1.4.0",
-        "electron": "^1.8.1",
+        "electron": "^1.8.2",
         "electron-builder": "^19.53.4",
         "electron-packager": "^9.1.0",
         "extract-text-webpack-plugin": "2.1.0",
