@@ -40,7 +40,8 @@ const mb = menubar({
     frame: false,
     showDockIcon: dockIcon,
     show: false,
-    alwaysOnTop: alwaysOnTop
+    alwaysOnTop: alwaysOnTop,
+    'auto-hide-menu-bar': true
 });
 
 mb.on('ready', () => {
@@ -112,7 +113,7 @@ mb.on('ready', () => {
 /**
  * Menu dialog on the right click
  */
-mb.on('after-create-window', function() {
+mb.on('after-create-window', function () {
     const contextMenu = Menu.buildFromTemplate([
         { label: 'About Oversetter', click: () => aboutWindow.showWindow() },
         { label: 'Open dictionary', click: () => dictionary.showWindow() },

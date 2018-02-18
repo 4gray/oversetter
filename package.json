@@ -52,10 +52,12 @@
         "dist": "build -mwl --x64 --ia32",
         "tslint": "tslint"
     },
-    "licenses": [{
-        "type": "MIT",
-        "url": "https://github.com/angular/angular.io/blob/master/LICENSE"
-    }],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/angular/angular.io/blob/master/LICENSE"
+        }
+    ],
     "dependencies": {
         "auto-launch": "^5.0.1",
         "menubar": "^5.2.3",
@@ -87,8 +89,8 @@
         "core-js": "^2.4.1",
         "css-loader": "^0.28.0",
         "devtron": "^1.4.0",
-        "electron": "^1.7.9",
-        "electron-builder": "^19.43.4",
+        "electron": "^1.8.1",
+        "electron-builder": "^19.53.4",
         "electron-packager": "^9.1.0",
         "extract-text-webpack-plugin": "2.1.0",
         "file-loader": "^0.11.1",
