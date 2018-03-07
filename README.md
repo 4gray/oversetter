@@ -29,6 +29,15 @@ You can download the latest version of the application for [macOS](https://githu
 ```
 npm install
 npm run build
+npm run electron
+```
+
+### Development
+```
+npm run build-dev
+```
+and
+```
 NODE_ENV=dev npm run electron
 ```
 
