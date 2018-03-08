@@ -2,15 +2,27 @@ import { Component } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
 @Component({
-	selector: 'my-app',
-	templateUrl: 'about.component.html'
+    selector: 'my-app',
+    templateUrl: 'about.component.html'
 })
 
 export class AboutComponent {
-	public version: string;
+    /**
+     * Version of the application
+     *
+     * @type {string}
+     * @memberof AboutComponent
+     */
+    public version: string;
 
-	constructor(private electronService: ElectronService) {
-		let window = this.electronService.remote.getCurrentWindow();
-		this.version = window['version'];
-	}
+    /**
+     * Creates an instance of AboutComponent.
+     * @param {ElectronService} electronService electron service
+     * @memberof AboutComponent
+     */
+    constructor(private electronService: ElectronService) {
+        const window = this.electronService.remote.getCurrentWindow();
+        // tslint:disable-next-line:no-string-literal
+        this.version = window['version'];
+    }
 }

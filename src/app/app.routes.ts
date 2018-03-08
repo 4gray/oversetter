@@ -1,10 +1,10 @@
 import { ModuleWithProviders } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { MainComponent } from './main/main.component';
+import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './about/about.component';
+import { DictionaryComponent } from './dictionary/dictionary.component';
+import { MainComponent } from './main/main.component';
 import { OfflineComponent } from "./offline/offline.component";
 import { SettingsComponent } from './settings/settings.component';
-import { DictionaryComponent } from './dictionary/dictionary.component';
 
 export const ROUTE_CONFIG: Routes = [
     {
