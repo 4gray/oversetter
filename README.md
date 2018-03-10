@@ -1,12 +1,17 @@
 <p align="center">
-  <img src="https://github.com/4gray/oversetter/blob/master/assets/icon.png" alt="App Icon" width="256">
+  <img src="https://4gray.github.io/oversetter/assets/icon.png" alt="App Icon" width="256">
 </p>
 
 
 <p align="center">
   <a href="https://github.com/4gray/oversetter/releases"><img src="https://img.shields.io/github/release/4gray/oversetter.svg?style=flat-square" alt="Release"></a>
   <a href="https://github.com/4gray/oversetter/releases"><img src="https://img.shields.io/github/downloads/4gray/oversetter/total.svg?style=flat-square" alt="Downloads" /></a>
+  <a href="https://github.com/4gray/oversetter"><img src="https://img.shields.io/travis/4gray/oversetter.svg?style=flat-square" alt="Downloads" /></a>
+
+
 </p>
+
+
 
 
 Oversetter is an translation app, which allows you to translate content directly from your menu bar. Oversetter is open-source application based on [Angular](https://angular.io/) and [Electron](http://electron.atom.io/). It uses free API of [Yandex Translate](https://tech.yandex.com/translate/) for text translation. 
