@@ -4,17 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxElectronModule } from 'ngx-electron';
-import { AboutComponent } from './about/about.component';
-import { routing } from './app.routes';
-import { DictionaryComponent } from './dictionary/dictionary.component';
-import { HomeComponent } from './home/home.component';
-import { KeysPipe } from './keys.pipe';
-import { MainComponent } from './main/main.component';
-import { OfflineComponent } from './offline/offline.component';
-import { SettingsComponent } from './settings/settings.component';
-import { TabComponent } from './settings/tab.component';
-import { TabsComponent } from './settings/tabs.component';
 
+import { AboutComponent } from '@modules/translation/about/about.component';
+import { routing } from '@app/app.routing';
+import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.component';
+import { HomeComponent } from '@modules/translation/home/home.component';
+import { KeysPipe } from '@pipes/keys.pipe';
+
+import { MainComponent } from '@modules/translation/main/main.component';
+import { OfflineComponent } from '@modules/translation/offline/offline.component';
+import { SettingsComponent } from '@modules/settings/settings/settings.component';
+import { TabComponent } from '@modules/settings/settings/tab.component';
+import { TabsComponent } from '@modules/settings/settings/tabs.component';
+import { TranslateService } from '@services/translate.service';
 @NgModule({
     imports: [
         BrowserModule,
@@ -36,6 +38,7 @@ import { TabsComponent } from './settings/tabs.component';
     ],
     bootstrap: [HomeComponent],
     providers: [
+        TranslateService,
         {
             provide: APP_BASE_HREF,
             useValue: 'main'

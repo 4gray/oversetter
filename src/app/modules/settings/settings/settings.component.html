@@ -1,0 +1,89 @@
+<app-tabs>
+    <app-tab [tabTitle]="'API'">
+        <div id="settings-area">
+            To use this application you need to
+            <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex Translate. For test you can use this dev-key:
+            <i>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</i>
+        </div>
+        <textarea id="api-key" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
+    </app-tab>
+
+
+    <app-tab tabTitle="Global">
+        <div class="settings-title">Application settings</div>
+        <ul>
+            <li class="checkbox-option">
+                <label for="start-at-login">
+                    <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start at login</label>
+            </li>
+            <li class="checkbox-option">
+                <label for="show-dock-icon">
+                    <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show dock icon</label>
+            </li>
+            <li class="checkbox-option">
+                <label for="always-on-top">
+                    <input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop"> Always on top</label>
+            </li>
+        </ul>
+        <div class="settings-title">Shortcuts</div>
+        <ul>
+            <li class="text">Use
+                <b>
+                    <kbd>⌘</kbd>/
+                    <kbd>Ctrl</kbd> +
+                    <kbd>Alt</kbd> +
+                    <kbd>T</kbd>
+                </b> to show application window</li>
+            <li class="text">Use
+                <b>
+                    <kbd>⌘</kbd>/
+                    <kbd>Ctrl</kbd> +
+                    <kbd>Alt</kbd> +
+                    <kbd>R</kbd>
+                </b> to translate text from clipboard</li>
+        </ul>
+
+        <div class="settings-note">
+            New settings will only take effect after a restart!
+        </div>
+    </app-tab>
+
+    <app-tab tabTitle="Languages">
+        <form>
+            <fieldset class="settings-checkboxes" ngModelGroup="languages">
+                <input type="radio" id="all" name="languages" value="all-languages" checked [(ngModel)]="languages">
+                <label for="all"> Show all languages</label>
+                <br>
+                <input type="radio" id="short" name="languages" value="select-languages" [(ngModel)]="languages">
+                <label for="short"> Select languages from the list:</label>
+            </fieldset>
+        </form>
+
+        <select multiple id="all-languages-list" [(ngModel)]="selectedLang" [disabled]="languageState()">
+            <option *ngFor="let lang of langList | keys" [ngValue]="lang.key">{{lang.value}}</option>
+        </select>
+
+        <select multiple id="selected-languages-list" [(ngModel)]="langToRemove" [disabled]="languageState()">
+            <option *ngFor="let l of preferedLangList | keys" [ngValue]="l.key">{{l.value}}</option>
+        </select>
+
+        <button class="btn" id="add-language" (click)="addLanguage(selectedLang)" [disabled]="languageState()"> &gt; </button>
+        <button div class="btn" id="remove-language" (click)="removeLanguage(langToRemove)"> &lt; </button>
+    </app-tab>
+</app-tabs>
+
+
+<div id="footer">
+    <div class="copyright">
+        <i class="fa fa-angle-left back-icon" (click)="validateApiKey()"></i>
+        <button [disabled]="!apiKey" (click)="saveApiKey(apiKey, 'apiKey')" class="save-settings-btn">
+            <i class="fa fa-save"></i> Save</button>
+        <div class="settings-text-bottom">{{errorMessage}}</div>
+        <div id="close-btn" (click)="electronService.remote.app.quit()">
+            <i class="fa fa-power-off"></i>
+        </div>
+        <div id="close-btn" (click)="openUrl('https://4gray.github.io/oversetter/')">
+            <i class="fa fa-github"></i>
+        </div>
+    </div>
+</div>
