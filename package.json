@@ -9,8 +9,6 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "prepare": "cp -a electron/. dist && cp LightIconTemplate.png dist",
-        "build:electron": "rimraf dist && ng build && npm run prepare",
         "run:electron": "electron ./dist/electron/main.js",
         "dev": "ng build -w"
     },
