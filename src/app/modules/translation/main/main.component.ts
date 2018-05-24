@@ -7,7 +7,8 @@ import { TranslateService } from '@services/translate.service';
 import { Translation } from '@models/translation';
 
 @Component({
-    templateUrl: 'main.component.html'
+    templateUrl: 'main.component.html',
+    styleUrls: ['main.component.scss']
 })
 
 export class MainComponent {
@@ -18,9 +19,13 @@ export class MainComponent {
     public updateAvailable = false;
     public detectedLanguage = '';
     public wordFavorited = false;
+    public showMoreMenu = false;
 
-    // tslint:disable-next-line:max-line-length
-    constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private ngZone: NgZone) {
+    constructor(private translateService: TranslateService,
+        private router: Router,
+        private electronService: ElectronService,
+        private ngZone: NgZone) {
+
         const window = electronService.remote.getCurrentWindow();
 
         if (window['dialog'] === 'about') {
@@ -35,7 +40,7 @@ export class MainComponent {
                 this.router.navigate(['/home']);
                 const clipboardText = this.electronService.clipboard.readText();
                 this.word = clipboardText;
-                this.translate(this.word, this.settings['fromLang'], this.settings['toLang']);
+                this.translate(this.word, this.settings['fromLang']['key'], this.settings['toLang']['key']);
             });
         });
 
@@ -64,8 +69,8 @@ export class MainComponent {
             });
         });
 
-        this.settings['fromLang'] = localStorage.getItem('fromLang') || 'ad';
-        this.settings['toLang'] = localStorage.getItem('toLang') || 'en';
+        this.settings['fromLang'] = JSON.parse(localStorage.getItem('fromLang')) || { 'key': 'ad', 'value': 'Auto-detect' };
+        this.settings['toLang'] = JSON.parse(localStorage.getItem('toLang')) || { 'key': 'en', 'value': 'English' };
 
         if (AppSettings.$API_KEY === '' || AppSettings.$API_KEY === null) {
             this.router.navigate(['/settings']);
@@ -88,8 +93,8 @@ export class MainComponent {
      * @param value option value
      * @param option name of the option
      */
-    public onSettingsChange(value: string, option: string) {
-        localStorage.setItem(option, value);
+    public onSettingsChange(value, option: string) {
+        localStorage.setItem(option, JSON.stringify(value));
         this.settings[option] = value;
     }
 
@@ -166,9 +171,32 @@ export class MainComponent {
         );
     }
 
-
+    /**
+     * Open given URL in external browser
+     * @param url url of the website
+     */
     openUrl(url: string): void {
         this.electronService.shell.openExternal(url);
+    }
+
+    /**
+     * Open dictionary window
+     */
+    showDictionary() {
+        this.electronService.ipcRenderer.send('openDictionary');
+        this.showMoreMenu = false;
+    }
+
+    showAbout() {
+        this.electronService.ipcRenderer.send('openAbout');
+        this.showMoreMenu = false;
+    }
+
+    /**
+     * Close application
+     */
+    closeApp() {
+        this.electronService.remote.app.quit();
     }
 
 }

@@ -107,6 +107,13 @@ mb.on('ready', () => {
         settings.set('showDockIcon', arg);
     });
 
+    ipcMain.on('openDictionary', () => {
+        dictionary.showWindow();
+    });
+
+    ipcMain.on('openAbout', () => {
+        aboutWindow.showWindow();
+    });
 
 });
 

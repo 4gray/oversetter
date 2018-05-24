@@ -1,22 +1,46 @@
 <div id="translate-area">
-    <form (ngSubmit)="translate(word, settings.fromLang, settings.toLang)" (keyup.enter)="translate(word, settings.fromLang, settings.toLang)">
+    <form (ngSubmit)="translate(word, settings.fromLang, settings.toLang)" (keyup.enter)="translate(word, settings.fromLang.key, settings.toLang.key)">
         <div class="options-panel">
             <label>Translate from:</label>
-            <select name="fromLang" [(ngModel)]="settings.fromLang" (ngModelChange)="onSettingsChange($event, 'fromLang')" class="form-control"
-                id="from-lang" required>
-                <option value="ad">Auto-detect</option>
-                <option *ngFor="let lang of langs | keys" [value]="lang.key">{{lang.value}}</option>
-            </select>
+            <div class="language-selectors">
+                <app-lang-selector [selected]="settings.fromLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'fromLang')"></app-lang-selector>
 
-            <span id="direction-switch" (click)="changeTranslationDir()">
-                <i class="fa fa-exchange"></i>
-            </span>
+                <span id="direction-switch" (click)="changeTranslationDir()">
+                    <i class="fa fa-exchange"></i>
+                </span>
 
-            <select name="toLang" [(ngModel)]="settings.toLang" (ngModelChange)="onSettingsChange($event, 'toLang')" id="to-lang">
-                <option *ngFor="let lang of langs | keys" [value]="lang.key">{{lang.value}}</option>
-            </select>
 
-            <i class="fa fa-cog settings-icon" [routerLink]="['/settings']"></i>
+                <app-lang-selector [selected]="settings.toLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'toLang')"></app-lang-selector>
+            </div>
+
+            <!-- <i class="fa fa-cog settings-icon" [routerLink]="['/settings']"></i> -->
+
+            <div class="dropdown is-right" [class.is-active]="showMoreMenu">
+                <div class="dropdown-trigger">
+                    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" (click)="showMoreMenu=!showMoreMenu">
+                        <span class="icon is-small">
+                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                        <a [routerLink]="['/settings']" class="dropdown-item">
+                            Preferences
+                        </a>
+                        <a [routerLink]="" class="dropdown-item" (click)="showDictionary()">
+                            Dictionary
+                        </a>
+                        <a [routerLink]="" class="dropdown-item" (click)="showAbout()">
+                            About
+                        </a>
+                        <hr class="dropdown-divider">
+                        <a [routerLink]="" class="dropdown-item" (click)="closeApp()">
+                            Quit
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <textarea class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word" autofocus></textarea>
@@ -31,6 +55,7 @@
     </div>
     <div *ngIf="!translation" class="translation-preview">Click
         <strong>Enter</strong> to translate</div>
+
     <div *ngIf="translation" class="translation">{{translation.text}}</div>
 </div>
 

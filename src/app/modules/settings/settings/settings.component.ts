@@ -46,7 +46,7 @@ export class SettingsComponent {
 
         if (localStorage.getItem('languages')) {
             this.languages = localStorage.getItem('languages');
-            console.log(JSON.parse(localStorage.getItem('preferedLanguageList')));
+            // console.log(JSON.parse(localStorage.getItem('preferedLanguageList')));
             this.preferedLangList = JSON.parse(localStorage.getItem('preferedLanguageList'));
         } else {
             // set default

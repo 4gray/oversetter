@@ -1,4 +1,4 @@
-import { ModuleWithProviders } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AboutComponent } from '@modules/translation/about/about.component';
@@ -7,7 +7,8 @@ import { MainComponent } from '@modules/translation/main/main.component';
 import { OfflineComponent } from '@modules/translation/offline/offline.component';
 import { SettingsComponent } from '@modules/settings/settings/settings.component';
 
-export const ROUTE_CONFIG: Routes = [
+
+const ROUTE_CONFIG: Routes = [
     {
         path: '',
         redirectTo: 'home',
@@ -35,4 +36,10 @@ export const ROUTE_CONFIG: Routes = [
     }
 ];
 
-export const routing: ModuleWithProviders = RouterModule.forRoot(ROUTE_CONFIG, { useHash: true });
+
+@NgModule({
+    imports: [RouterModule.forRoot(ROUTE_CONFIG)],
+    exports: [RouterModule]
+})
+
+export class AppRoutingModule { }

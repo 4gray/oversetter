@@ -1,6 +1,7 @@
 $a: #fff;
 html,
 body {
+    background: none !important;
     padding: 0;
     margin: 0;
     user-select: none;
@@ -13,36 +14,9 @@ body {
     background: #fff;
 }
 
-#direction-switch {
-    width: 30px;
-    padding: 3px 4px 2px 4px;
-    margin-right: 1px;
-    color: #666;
-}
-
-.textarea-original {
-    width: 480px;
-    height: 100px;
-    resize: none;
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
-    user-select: all;
-    -webkit-user-select: all;
-    font-size: 12px;
-}
-
 form {
     margin: 0;
     padding: 0;
-}
-
-.btn-translate {
-    margin-top: 5px;
-    padding: 10px;
-    background: #FC3746;
-    color: #fff;
-    border: none;
-    text-transform: uppercase;
-    width: 100%;
 }
 
 textarea {
@@ -53,47 +27,8 @@ textarea {
     font-size: 12px;
 }
 
-.btn-translate:disabled {
-    background: #333;
-    color: #666;
-}
-
-.btn-translate:hover {
-    background: #FC5357;
-}
-
-#translate-area {
-    background: #fff;
-    width: 100%;
-}
-
-.translation-preview {
-    color: #666;
-}
-
-.options-panel {
-    height: 40px;
-    line-height: 40px;
-    padding: 0 10px;
-    background-color: #fafafa;
-    background-image: linear-gradient( #ededed 0, #ededed 1px, #e7e7e7 2px, #d1d1d1 100%);
-    border-bottom: 1px solid #afafaf;
-}
-
 .options-panel>#tabs {
     padding: 0 !important;
-}
-
-#result-area {
-    width: 100%;
-    height: 100px;
-    background: #ECECEC;
-    overflow-y: auto;
-    margin-top: -3px;
-    word-wrap: break-word;
-    user-select: text;
-    -webkit-user-select: text;
-    font-size: 12px;
 }
 
 #result-area div,
@@ -109,7 +44,7 @@ textarea {
     width: 100%;
     background: #eceaed;
     border-top: 1px solid #c9c4ca;
-    background-image: linear-gradient( #eceaed 0, #d1cfd2 100%);
+    // background-image: linear-gradient( #eceaed 0, #d1cfd2 100%);
     font-size: 11px;
 }
 
@@ -148,6 +83,16 @@ textarea {
 
 
 /* styling */
+.options-panel {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    background-color: #ececec;
+    //background-image: linear-gradient( #ededed 0, #ededed 1px, #e7e7e7 2px, #d1d1d1 100%);
+    border-bottom: 1px solid #afafaf;
+    display: flex;
+    justify-content: space-between;
+}
 
 .options-panel select {
     background-color: transparent;
@@ -213,7 +158,7 @@ select#from-lang {
     position: absolute;
     right: 20px;
     color: #fff;
-    height: 30px;
+    height: 40px;
     border-right: 20px solid #b3b3b3;
     border-left: 20px solid #b3b3b3;
     border-bottom: 10px solid transparent;
@@ -236,12 +181,12 @@ select#from-lang {
 }
 
 #api-key {
-    width: 480px;
+    width: 100%;
     height: 100px;
     font-size: 12px;
     resize: none;
-    box-shadow: 0px -3px 4px 0 rgba(0, 0, 0, 0.2);
-    margin: 0 0 0 -10px;
+    margin: 0;
+    border-radius: 0.1px;
 }
 
 #settings-area {
@@ -249,11 +194,13 @@ select#from-lang {
     background: #ECECEC;
     overflow-y: auto;
     font-size: 12px;
-    margin-top: -3px;
+    padding: 0 10px;
     word-wrap: break-word;
-    height: 94px;
+    height: 101px;
     user-select: text;
     -webkit-user-select: text;
+    padding-top: 8px;
+    border-bottom: 1px solid #ccc;
 }
 
 .yandex-text {
@@ -271,15 +218,16 @@ select#from-lang {
     text-align: center;
     color: #444;
     margin-left: -10px;
+    display: flex;
+    justify-content: flex-start;
 }
 
 #tabs>div {
     cursor: pointer;
     padding: 0 5px 0 5px;
     width: 80px;
-    float: left;
-    border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
-    border-right: 1px solid #999;
+    // border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
+    border-right: 1px solid #afafaf;;
     color: #666;
 }
 
@@ -295,12 +243,11 @@ select#from-lang {
 }
 
 .settings-tab-content {
-    height: 221px;
     background: #ececec;
 }
 
 .settings-container {
-    padding: 10px;
+    // padding-top: 7px;
 }
 
 .settings-container>ul {
@@ -326,7 +273,7 @@ select#to-lang:hover {
 
 #all-languages-list {
     width: 220px;
-    height: 165px;
+    height: 152px;
     margin-left: -10px;
     border-left: none;
     padding-left: 10px;
@@ -334,18 +281,16 @@ select#to-lang:hover {
     border-bottom: 0;
     border-top: 1px solid #ccc;
     border-right: 1px solid #ccc;
-    float: left;
 }
 
 #selected-languages-list {
     width: 220px;
-    height: 165px;
+    height: 152px;
     margin-right: -12px;
     border-right: 0;
     border-bottom: 0;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
-    float: right;
 }
 
 #add-language {
@@ -357,8 +302,7 @@ select#to-lang:hover {
     border-radius: 4px;
     cursor: pointer;
     color: #555;
-    float: left;
-    margin: 11px;
+    margin: 10px;
 }
 
 #remove-language {
@@ -369,12 +313,11 @@ select#to-lang:hover {
     line-height: 40px;
     border-radius: 4px;
     cursor: pointer;
-    float: left;
-    margin: 11px;
+    margin: 10px;
 }
 
 .settings-note {
-    margin-top: 35px;
+    margin-top: 10px;
     font-size: 11px;
 }
 
@@ -436,7 +379,7 @@ kbd {
         padding: 0;
     }
     li {
-        padding: 5px 10px;
+        padding: 0px 10px;
         cursor: pointer;
         max-height: 30px;
         overflow: hidden;
@@ -454,9 +397,9 @@ kbd {
 #vocabulary-panel {
     background: #ececec;
     border-bottom: 1px solid #d2d2d2;
-    height: 20px;
-    line-height: 20px;
-    padding: 10px;
+    height: 45px;
+    line-height: 45px;
+    padding: 0 15px;
     -webkit-app-region: drag;
     .panel-line {
         height: 100%;
@@ -536,4 +479,21 @@ kbd {
 
 .about-footer {
     margin-top: 20px;
+}
+
+.dropdown {
+    margin-top: 6px;
+}
+
+.dropdown-menu {
+    padding-top: 0px;
+    max-height: 200px;
+    overflow-y: scroll;
+    border-bottom: 1px solid #ccc;
+    border-radius: 3px;
+    margin-top: -12px;
+}
+
+.dropdown-content {
+    border: 1px solid #ccc;
 }

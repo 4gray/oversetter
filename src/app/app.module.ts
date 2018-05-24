@@ -6,7 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgxElectronModule } from 'ngx-electron';
 
 import { AboutComponent } from '@modules/translation/about/about.component';
-import { routing } from '@app/app.routing';
+import { AppRoutingModule } from '@app/app.routing';
 import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.component';
 import { HomeComponent } from '@modules/translation/home/home.component';
 import { KeysPipe } from '@pipes/keys.pipe';
@@ -17,13 +17,14 @@ import { SettingsComponent } from '@modules/settings/settings/settings.component
 import { TabComponent } from '@modules/settings/settings/tab.component';
 import { TabsComponent } from '@modules/settings/settings/tabs.component';
 import { TranslateService } from '@services/translate.service';
+import { LangSelectorComponent } from './modules/translation/lang-selector/lang-selector.component';
 @NgModule({
     imports: [
         BrowserModule,
         HttpModule,
         FormsModule,
         NgxElectronModule,
-        routing
+        AppRoutingModule
     ],
     declarations: [
         HomeComponent,
@@ -34,15 +35,14 @@ import { TranslateService } from '@services/translate.service';
         DictionaryComponent,
         TabsComponent,
         TabComponent,
-        KeysPipe
+        KeysPipe,
+        LangSelectorComponent
     ],
-    bootstrap: [HomeComponent],
+    bootstrap: [
+        HomeComponent
+    ],
     providers: [
-        TranslateService,
-        {
-            provide: APP_BASE_HREF,
-            useValue: 'main'
-        }
+        TranslateService
     ]
 })
 
