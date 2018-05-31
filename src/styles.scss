@@ -486,12 +486,15 @@ kbd {
 }
 
 .dropdown-menu {
-    padding-top: 0px;
+    margin-top: -12px;
+}
+
+.lang-selector-dropdown {
     max-height: 200px;
     overflow-y: scroll;
+    padding-top: 0px;
     border-bottom: 1px solid #ccc;
     border-radius: 3px;
-    margin-top: -12px;
 }
 
 .dropdown-content {
