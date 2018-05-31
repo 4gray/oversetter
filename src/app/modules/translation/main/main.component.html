@@ -1,16 +1,16 @@
 <div id="translate-area">
-    <form (ngSubmit)="translate(word, settings.fromLang, settings.toLang)" (keyup.enter)="translate(word, settings.fromLang.key, settings.toLang.key)">
+    <form (ngSubmit)="translate(word, settings.fromLang.key, settings.toLang.key)" (keyup.enter)="translate(word, settings.fromLang.key, settings.toLang.key)">
         <div class="options-panel">
             <label>Translate from:</label>
             <div class="language-selectors">
-                <app-lang-selector [selected]="settings.fromLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'fromLang')"></app-lang-selector>
+                <app-lang-selector *ngIf="langs.length > 0" [selected]="settings.fromLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'fromLang')"></app-lang-selector>
 
-                <span id="direction-switch" (click)="changeTranslationDir()">
+                <span *ngIf="langs.length > 0" id="direction-switch" (click)="changeTranslationDir()">
                     <i class="fa fa-exchange"></i>
                 </span>
 
 
-                <app-lang-selector [selected]="settings.toLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'toLang')"></app-lang-selector>
+                <app-lang-selector *ngIf="langs.length > 0" [selected]="settings.toLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'toLang')"></app-lang-selector>
             </div>
 
             <!-- <i class="fa fa-cog settings-icon" [routerLink]="['/settings']"></i> -->

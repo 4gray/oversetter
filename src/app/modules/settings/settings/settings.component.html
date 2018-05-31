@@ -64,7 +64,7 @@
         </form>
         <div style="display: flex;justify-content: space-between;">
             <select multiple id="all-languages-list" [(ngModel)]="selectedLang" [disabled]="languageState()">
-                <option *ngFor="let lang of langList | keys" [ngValue]="lang.key">{{lang.value}}</option>
+                <option *ngFor="let lang of langList" [ngValue]="lang">{{lang.value}}</option>
             </select>
 
             <div style="text-align:center;">
@@ -73,7 +73,7 @@
             </div>
 
             <select multiple id="selected-languages-list" [(ngModel)]="langToRemove" [disabled]="languageState()">
-                <option *ngFor="let l of preferedLangList | keys" [ngValue]="l.key">{{l.value}}</option>
+                <option *ngFor="let prefLang of preferedLangList" [ngValue]="prefLang">{{prefLang.value}}</option>
             </select>
         </div>
     </app-tab>

@@ -15,8 +15,8 @@ export class SettingsComponent {
     public autolaunch = false;
     public alwaysOnTop = false;
     public showDockIcon = false;
-    public langList: object = {};
-    public preferedLangList: object = {};
+    public langList = [];
+    public preferedLangList = [];
     public languages = 'all-languages';
 
     /**
@@ -47,10 +47,10 @@ export class SettingsComponent {
         if (localStorage.getItem('languages')) {
             this.languages = localStorage.getItem('languages');
             // console.log(JSON.parse(localStorage.getItem('preferedLanguageList')));
-            this.preferedLangList = JSON.parse(localStorage.getItem('preferedLanguageList'));
+            this.preferedLangList = JSON.parse(localStorage.getItem('preferedLanguageList')) || [];
         } else {
             // set default
-            this.preferedLangList = { en: 'English' };
+            this.preferedLangList.push({ 'key': 'en', 'value': 'English' });
         }
 
         this.langList = AppSettings.$LANGS;
@@ -101,12 +101,15 @@ export class SettingsComponent {
     public addLanguage(language) {
         if (!language) { return; }
 
-        if (typeof language === 'string') {
-            this.preferedLangList[language] = this.langList[language];
-        } else {
-            // tslint:disable-next-line:prefer-for-of
+        if (language instanceof Array) {
             for (let i = 0; i < language.length; i++) {
-                this.preferedLangList[language[i]] = this.langList[language[i]];
+                if (this.preferedLangList.filter(item => item.value === language[i].value).length === 0) {
+                    this.preferedLangList.push(language[i]);
+                }
+            }
+        } else {
+            if (this.preferedLangList.filter(item => item.value === language[0].value).length === 0) {
+                this.preferedLangList.push(language[0]);
             }
         }
     }
@@ -116,17 +119,22 @@ export class SettingsComponent {
      * @param language selected one or multiple languages (array or string)
      */
     public removeLanguage(language) {
-        if (!language || Object.keys(this.preferedLangList).length <= 1) { return; }
 
-        if (typeof language === 'string') {
-            delete this.preferedLangList[language];
-        } else {
-            // tslint:disable-next-line:prefer-for-of
+        let index;
+
+        if (language instanceof Array) {
             for (let i = 0; i < language.length; i++) {
-                this.removeLanguage(language[i]);
+                index = this.preferedLangList.indexOf(language[i]);
+                if (index > -1) {
+                    this.preferedLangList.splice(index, 1);
+                }
+            }
+        } else {
+            index = this.preferedLangList.indexOf(language[0]);
+            if (index > -1) {
+                this.preferedLangList.splice(index, 1);
             }
         }
-
     }
 
     /**

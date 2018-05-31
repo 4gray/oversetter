@@ -4,7 +4,7 @@
  */
 export class AppSettings {
     private static apiKey = localStorage.getItem('apiKey');
-    private static langsList: object;
+    private static langsList = [];
     private static toLang: string;
     private static fromLang: string;
 
@@ -33,11 +33,11 @@ export class AppSettings {
         this.apiKey = key;
     }
 
-    public static get $LANGS(): object {
+    public static get $LANGS() {
         return this.langsList;
     }
 
-    public static set $LANGS(list: object) {
+    public static set $LANGS(list) {
         this.langsList = list;
     }
 

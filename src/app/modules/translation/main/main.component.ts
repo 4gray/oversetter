@@ -13,7 +13,7 @@ import { Translation } from '@models/translation';
 
 export class MainComponent {
     public translation: Translation;
-    public langs = {};
+    public langs = [];
     public settings = {};
     public word = '';
     public updateAvailable = false;
@@ -160,15 +160,38 @@ export class MainComponent {
         const l$ = this.translateService.getLanguagesList();
         l$.subscribe(
             response => {
+                const sorted = this.sortLanguages(response['langs']);
                 if (localStorage.getItem('languages') === 'select-languages') {
                     this.langs = JSON.parse(localStorage.getItem('preferedLanguageList'));
                 } else {
-                    this.langs = response['langs'];
+                    this.langs = sorted;
                 }
-                AppSettings.$LANGS = response['langs']; // TODO: save fetched languages in localstorage
+                // save fetched languages in localstorage
+                AppSettings.$LANGS = sorted;
             },
             error => console.error(error)
         );
+    }
+
+    /**
+     * Sort languages
+     *
+     * @param {any} languages object with languages
+     * @returns sorted array with language list
+     * @memberof MainComponent
+     */
+    sortLanguages(languages) {
+        const sortedLangs = [];
+        // tslint:disable-next-line:forin
+        for (const key in languages) {
+            sortedLangs.push({
+                key: key,
+                value: languages[key]
+            });
+        }
+        sortedLangs.sort((a, b) => a.value.localeCompare(b.value));
+
+        return sortedLangs;
     }
 
     /**
