@@ -1,0 +1,40 @@
+{
+    "productName": "oversetter",
+    "directories": {
+        "output": "app-builds"
+    },
+    "files": [
+        "**/*",
+        "!*.ts",
+        "!*.code-workspace",
+        "!LICENSE.md",
+        "!package.json",
+        "!package-lock.json",
+        "!src/",
+        "!e2e/",
+        "!hooks/",
+        "!.angular-cli.json",
+        "!_config.yml",
+        "!karma.conf.js",
+        "!tsconfig.json",
+        "!tslint.json"
+    ],
+    "win": {
+        "icon": "assets",
+        "target": [
+            "portable"
+        ]
+    },
+    "mac": {
+        "icon": "assets",
+        "target": [
+            "dmg"
+        ]
+    },
+    "linux": {
+        "icon": "assets",
+        "target": [
+            "AppImage"
+        ]
+    }
+}
