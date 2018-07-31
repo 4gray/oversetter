@@ -34,7 +34,8 @@
     "linux": {
         "icon": "assets",
         "target": [
-            "AppImage"
+            "AppImage",
+            "Snap"
         ]
     }
 }
