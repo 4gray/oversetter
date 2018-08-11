@@ -37,14 +37,17 @@ export class SettingsComponent {
         }
     ];
     public selectedTabId = 'api';
+    public showArrow = false;
 
     /**
      * Constructor function - set API key from the localstorage
      * @param translateService translation service object
      * @param router router object
      */
-    // tslint:disable-next-line:max-line-length
-    constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private uiService: UiService) {
+    constructor(private translateService: TranslateService,
+        private router: Router,
+        private electronService: ElectronService,
+        private uiService: UiService) {
 
         this.apiKey = AppSettings.$API_KEY;
         if (localStorage.getItem('autolaunch')) {
@@ -73,6 +76,7 @@ export class SettingsComponent {
         }
 
         this.langList = AppSettings.$LANGS;
+        this.showArrow = this.uiService.showArrow;
     }
 
     /**

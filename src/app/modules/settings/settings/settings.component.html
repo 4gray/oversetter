@@ -1,6 +1,6 @@
 <div fxLayout="column" fxFlexFill style="overflow: hidden;">
 
-    <div fxFlex="15px" class="arrow-up" *ngIf="uiService.showArrow"></div>
+    <div fxFlex="15px" class="arrow-up" *ngIf="showArrow"></div>
 
     <div id="tabs" fxFlex="40px" class="options-panel">
         <div *ngFor="let tab of tabs" (click)="selectTab(tab.id)" [class.active-tab]="tab.id === selectedTabId">{{tab.title}}</div>
