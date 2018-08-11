@@ -1,8 +1,17 @@
 import { Component } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
+import { DictionaryItem } from '@app/models/dictionary-item';
+import { StorageService } from '@app/services/storage.service';
 
+/**
+ * Dictionary component
+ *
+ * @export
+ * @class DictionaryComponent
+ */
 @Component({
-    templateUrl: 'dictionary.component.html'
+    templateUrl: 'dictionary.component.html',
+    styleUrls: ['dictionary.component.scss']
 })
 
 export class DictionaryComponent {
@@ -11,13 +20,13 @@ export class DictionaryComponent {
      *
      * @memberof DictionaryComponent
      */
-    public vocabulary = [];
+    public vocabulary: DictionaryItem[] = [];
     /**
      * Selected vocabulary
      *
      * @memberof DictionaryComponent
      */
-    public selectedItem = {};
+    public selectedItem: DictionaryItem = null;
     /**
      * Highlighted row
      *
@@ -30,9 +39,8 @@ export class DictionaryComponent {
      * @param {ElectronService} electronService electron service
      * @memberof DictionaryComponent
      */
-    constructor(private electronService: ElectronService) {
-        console.log(localStorage.getItem('vocabulary'));
-        this.vocabulary = JSON.parse(localStorage.getItem('vocabulary')) || [];
+    constructor(private electronService: ElectronService, private storageService: StorageService) {
+        this.vocabulary = storageService.getVocabulary();
     }
 
     /**
@@ -41,7 +49,7 @@ export class DictionaryComponent {
      * @memberof DictionaryComponent
      */
     public updateDictionary() {
-        this.vocabulary = JSON.parse(localStorage.getItem('vocabulary'));
+        this.vocabulary = this.storageService.getVocabulary();
     }
 
     /**
@@ -49,18 +57,20 @@ export class DictionaryComponent {
      * @param item current item
      * @param index index of item
      */
-    public setSelectedItem(item: object, index: number) {
+    public setSelectedItem(item: DictionaryItem, index: number) {
         this.selectedItem = item;
         this.selectedRow = index;
     }
 
     /**
      * Remove provided item from the list by selected list index
+     *
+     * @memberof DictionaryComponent
      */
     public removeItem() {
         this.vocabulary.splice(this.selectedRow, 1);
-        localStorage.setItem('vocabulary', JSON.stringify(this.vocabulary));
-        this.selectedItem = {};
+        this.storageService.updateVocabulary(this.vocabulary);
+        this.selectedItem = null;
         this.selectedRow = -1;
     }
 }

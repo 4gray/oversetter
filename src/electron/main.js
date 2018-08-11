@@ -1,6 +1,11 @@
 'use strict';
 
-const { app, Menu, globalShortcut, ipcMain } = require('electron');
+const {
+    app,
+    Menu,
+    globalShortcut,
+    ipcMain
+} = require('electron');
 const menubar = require('menubar');
 const AutoLaunch = require('auto-launch');
 const semver = require('semver');
@@ -57,12 +62,31 @@ mb.on('ready', () => {
     // create the application's main menu // TODO: refactor
     const template = [{
         label: "Menu",
-        submenu: [
-            { label: "Hide", accelerator: "Esc", click: () => mb.window.hide() },
-            { label: "Cut", accelerator: "CmdOrCtrl+X", role: "cut" },
-            { label: "Copy", accelerator: "CmdOrCtrl+C", role: "copy" },
-            { label: "Paste", accelerator: "CmdOrCtrl+V", role: "paste" },
-            { label: "Select All", accelerator: "CmdOrCtrl+A", role: "selectall" },
+        submenu: [{
+                label: "Hide",
+                accelerator: "Esc",
+                click: () => mb.window.hide()
+            },
+            {
+                label: "Cut",
+                accelerator: "CmdOrCtrl+X",
+                role: "cut"
+            },
+            {
+                label: "Copy",
+                accelerator: "CmdOrCtrl+C",
+                role: "copy"
+            },
+            {
+                label: "Paste",
+                accelerator: "CmdOrCtrl+V",
+                role: "paste"
+            },
+            {
+                label: "Select All",
+                accelerator: "CmdOrCtrl+A",
+                role: "selectall"
+            },
             {
                 label: 'Toggle Developer Tools',
                 accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
@@ -121,9 +145,14 @@ mb.on('ready', () => {
  * Menu dialog on the right click
  */
 mb.on('after-create-window', function () {
-    const contextMenu = Menu.buildFromTemplate([
-        { label: 'About Oversetter', click: () => aboutWindow.showWindow() },
-        { label: 'Open dictionary', click: () => dictionary.showWindow() },
+    const contextMenu = Menu.buildFromTemplate([{
+            label: 'About Oversetter',
+            click: () => aboutWindow.showWindow()
+        },
+        {
+            label: 'Open dictionary',
+            click: () => dictionary.showWindow()
+        },
         {
             label: 'Preferences',
             click: () => {
@@ -138,8 +167,15 @@ mb.on('after-create-window', function () {
                 mb.app.relaunch();
             }
         }, // TODO: add check for updates option
-        { type: 'separator' },
-        { label: 'Quit', click: () => { mb.app.quit(); } }
+        {
+            type: 'separator'
+        },
+        {
+            label: 'Quit',
+            click: () => {
+                mb.app.quit();
+            }
+        }
     ]);
     mb.tray.on('right-click', () => {
         mb.tray.popUpContextMenu(contextMenu);

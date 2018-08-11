@@ -1,4 +1,3 @@
-import { APP_BASE_HREF } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -14,17 +13,20 @@ import { KeysPipe } from '@pipes/keys.pipe';
 import { MainComponent } from '@modules/translation/main/main.component';
 import { OfflineComponent } from '@modules/translation/offline/offline.component';
 import { SettingsComponent } from '@modules/settings/settings/settings.component';
-import { TabComponent } from '@modules/settings/settings/tab.component';
-import { TabsComponent } from '@modules/settings/settings/tabs.component';
 import { TranslateService } from '@services/translate.service';
 import { LangSelectorComponent } from './modules/translation/lang-selector/lang-selector.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { StorageService } from '@app/services/storage.service';
+import { UiService } from '@app/services/ui.service';
+
 @NgModule({
     imports: [
         BrowserModule,
         HttpModule,
         FormsModule,
         NgxElectronModule,
-        AppRoutingModule
+        AppRoutingModule,
+        FlexLayoutModule
     ],
     declarations: [
         HomeComponent,
@@ -33,8 +35,6 @@ import { LangSelectorComponent } from './modules/translation/lang-selector/lang-
         AboutComponent,
         OfflineComponent,
         DictionaryComponent,
-        TabsComponent,
-        TabComponent,
         KeysPipe,
         LangSelectorComponent
     ],
@@ -42,7 +42,9 @@ import { LangSelectorComponent } from './modules/translation/lang-selector/lang-
         HomeComponent
     ],
     providers: [
-        TranslateService
+        TranslateService,
+        StorageService,
+        UiService
     ]
 })
 

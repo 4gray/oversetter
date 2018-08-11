@@ -1,6 +1,36 @@
+/**
+ * Model class of translation object
+ *
+ * @export
+ * @class Translation
+ */
 export class Translation {
+
+    /**
+     * Language code/abbreviation
+     *
+     * @private
+     * @type {number}
+     * @memberof Translation
+     */
     private code: number;
+
+    /**
+     * Language as label
+     *
+     * @private
+     * @type {string}
+     * @memberof Translation
+     */
     private lang: string;
+
+    /**
+     * Text to translate
+     *
+     * @private
+     * @type {string}
+     * @memberof Translation
+     */
     private text: string;
 
     constructor(code: number, lang: string, text: string) {

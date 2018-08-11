@@ -3,10 +3,12 @@ import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
+import { UiService } from '@app/services/ui.service';
 
 @Component({
     providers: [TranslateService],
-    templateUrl: 'settings.component.html'
+    templateUrl: 'settings.component.html',
+    styleUrls: ['settings.component.scss']
 })
 
 export class SettingsComponent {
@@ -18,6 +20,23 @@ export class SettingsComponent {
     public langList = [];
     public preferedLangList = [];
     public languages = 'all-languages';
+    public selectedLang;
+    public langToRemove;
+    public tabs = [
+        {
+            id: 'api',
+            title: 'API'
+        },
+        {
+            id: 'general',
+            title: 'General'
+        },
+        {
+            id: 'languages',
+            title: 'Languages'
+        }
+    ];
+    public selectedTabId = 'api';
 
     /**
      * Constructor function - set API key from the localstorage
@@ -25,7 +44,7 @@ export class SettingsComponent {
      * @param router router object
      */
     // tslint:disable-next-line:max-line-length
-    constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService) {
+    constructor(private translateService: TranslateService, private router: Router, private electronService: ElectronService, private uiService: UiService) {
 
         this.apiKey = AppSettings.$API_KEY;
         if (localStorage.getItem('autolaunch')) {
@@ -144,7 +163,7 @@ export class SettingsComponent {
      * @returns boolean value
      * @memberof SettingsComponent
      */
-    private languageState() {
+    public languageState() {
         if (this.languages === 'all-languages') {
             return true;
         } else {
@@ -187,6 +206,10 @@ export class SettingsComponent {
 
     openUrl(url: string): void {
         this.electronService.shell.openExternal(url);
+    }
+
+    selectTab(tabId) {
+        this.selectedTabId = tabId;
     }
 
 }

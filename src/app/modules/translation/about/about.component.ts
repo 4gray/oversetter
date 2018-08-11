@@ -23,7 +23,11 @@ export class AboutComponent {
      */
     constructor(private electronService: ElectronService) {
         const window = this.electronService.remote.getCurrentWindow();
-        // tslint:disable-next-line:no-string-literal
+
         this.version = window['version'];
+    }
+
+    openUrl(url) {
+        this.electronService.shell.openExternal(url);
     }
 }

@@ -1,0 +1,94 @@
+.settings-text-bottom {
+    color: red;
+    padding-left: 10px;
+    float: left;
+    width: 330px;
+}
+
+#api-key {
+    width: 100%;
+    height: 100px;
+    font-size: 12px;
+    resize: none;
+    margin: 0;
+    border-radius: 0.1px;
+}
+
+#settings-area {
+    width: 100%;
+    background: #eee;
+    overflow-y: auto;
+    font-size: 12px;
+    padding: 0 10px;
+    word-wrap: break-word;
+    height: 101px;
+    user-select: text;
+    -webkit-user-select: text;
+    padding-top: 8px;
+    border-bottom: 1px solid #ccc;
+}
+
+.yandex-text {
+    float: left;
+}
+
+.update-text {
+    float: right;
+}
+
+#tabs {
+    height: 40px;
+    position: relative;
+    line-height: 40px;
+    text-align: center;
+    color: #444;
+    margin-left: -10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+#tabs>div {
+    cursor: pointer;
+    padding: 0 5px 0 5px;
+    width: 80px; // border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
+    border-right: 1px solid #afafaf;
+    ;
+    color: #666;
+}
+
+#tabs>div:first-child {
+    border-right: 1px solid #999;
+}
+
+.active-tab {
+    color: #111 !important;
+    background: #eee;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    height: 40px;
+}
+
+.settings-tab-content {
+    background: #ececec;
+}
+
+.settings-container {
+    padding-left: 10px;
+    padding-top: 10px;
+    background: #eee; // padding-top: 7px;
+}
+
+.settings-container>ul {
+    padding: 0px;
+    margin: 0;
+}
+
+kbd {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 0.1em 0.5em;
+    margin: 0 0.2em;
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
+    background-color: #f7f7f7;
+}

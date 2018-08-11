@@ -1,72 +1,72 @@
-<div id="translate-area">
-    <form (ngSubmit)="translate(word, settings.fromLang.key, settings.toLang.key)" (keyup.enter)="translate(word, settings.fromLang.key, settings.toLang.key)">
-        <div class="options-panel">
-            <label>Translate from:</label>
-            <div class="language-selectors">
-                <app-lang-selector *ngIf="langs.length > 0" [selected]="settings.fromLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'fromLang')"></app-lang-selector>
+<div fxLayout="column" fxFlexFill style="overflow: hidden;">
 
-                <span *ngIf="langs.length > 0" id="direction-switch" (click)="changeTranslationDir()">
-                    <i class="fa fa-exchange"></i>
-                </span>
+    <div fxFlex="15px" class="arrow-up"></div>
 
+    <div fxFlex="40px" class="options-panel">
+        <label>Translate from:</label>
+        <div class="language-selectors">
+            <app-lang-selector *ngIf="langs.length > 0" direction="fromLang" [selected]="settings.fromLang.$value" [languages]="langs"
+                (changeLanguage)="onLanguageChange('fromLang', $event)"></app-lang-selector>
 
-                <app-lang-selector *ngIf="langs.length > 0" [selected]="settings.toLang.value" [languages]="langs" (changeLanguage)="onSettingsChange($event, 'toLang')"></app-lang-selector>
+            <button class="button" *ngIf="langs.length > 0" id="direction-switch" (click)="changeTranslationDir()" [disabled]="settings.fromLang.$key === 'ad'">
+                <i class="fa fa-exchange"></i>
+            </button>
+
+            <app-lang-selector *ngIf="langs.length > 0" direction="toLang" [selected]="settings.toLang.$value" [languages]="langs" (changeLanguage)="onLanguageChange('toLang', $event)"></app-lang-selector>
+        </div>
+
+        <div class="dropdown is-right" [class.is-active]="showMoreMenu">
+            <div class="dropdown-trigger">
+                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" (click)="showMoreMenu=!showMoreMenu">
+                    <span class="icon is-small">
+                        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </span>
+                </button>
             </div>
-
-            <!-- <i class="fa fa-cog settings-icon" [routerLink]="['/settings']"></i> -->
-
-            <div class="dropdown is-right" [class.is-active]="showMoreMenu">
-                <div class="dropdown-trigger">
-                    <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" (click)="showMoreMenu=!showMoreMenu">
-                        <span class="icon is-small">
-                            <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                        </span>
-                    </button>
-                </div>
-                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                    <div class="dropdown-content">
-                        <a [routerLink]="['/settings']" class="dropdown-item">
-                            Preferences
-                        </a>
-                        <a [routerLink]="" class="dropdown-item" (click)="showDictionary()">
-                            Dictionary
-                        </a>
-                        <a [routerLink]="" class="dropdown-item" (click)="showAbout()">
-                            About
-                        </a>
-                        <hr class="dropdown-divider">
-                        <a [routerLink]="" class="dropdown-item" (click)="closeApp()">
-                            Quit
-                        </a>
-                    </div>
+            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                    <a [routerLink]="['/settings']" class="dropdown-item">
+                        Preferences
+                    </a>
+                    <a [routerLink]="" class="dropdown-item" (click)="showDictionary()">
+                        Dictionary
+                    </a>
+                    <a [routerLink]="" class="dropdown-item" (click)="showAbout()">
+                        About
+                    </a>
+                    <hr class="dropdown-divider">
+                    <a [routerLink]="" class="dropdown-item" (click)="closeApp()">
+                        Quit
+                    </a>
                 </div>
             </div>
         </div>
 
-        <textarea class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word" autofocus></textarea>
-    </form>
-
-</div>
-
-<div id="result-area">
-    <div id="translation-toolbar" (click)="saveToDictionary()" *ngIf="translation">
-        <i class="fa fa-star-o" *ngIf="!wordFavorited"></i>
-        <i *ngIf="wordFavorited" class="fa fa-star"></i>
     </div>
-    <div *ngIf="!translation" class="translation-preview">Click
-        <strong>Enter</strong> to translate</div>
 
-    <div *ngIf="translation" class="translation">{{translation.text}}</div>
-</div>
+    <textarea fxFlex fxFlexFill class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word"
+        autofocus (keydown.enter)="translate(word, settings.fromLang.$key, settings.toLang.$key)"></textarea>
 
-
-<div id="footer">
-    <div class="copyright">
-        <div class="yandex-text">Powered by
-            <a href="#" (click)="openUrl('http://translate.yandex.ru/')">«Yandex Translator»</a>
+    <div fxFlex id="result-area">
+        <div id="translation-toolbar" (click)="saveToDictionary()" *ngIf="translation">
+            <i class="fa fa-star-o" *ngIf="!wordFavorited"></i>
+            <i *ngIf="wordFavorited" class="fa fa-star"></i>
         </div>
-        <div class="update-text" *ngIf="updateAvailable">
-            <a href (click)="openUrl('https://github.com/4gray/oversetter/releases')">New app version is available</a>
+        <div *ngIf="!translation" class="translation-preview">Click
+            <strong>Enter</strong> to translate</div>
+
+        <div *ngIf="translation" class="translation">{{translation.$text}}</div>
+    </div>
+
+
+    <div fxFlex="40px" id="footer">
+        <div class="copyright">
+            <div class="yandex-text">Powered by
+                <a href="#" (click)="openUrl('http://translate.yandex.ru/')">«Yandex Translator»</a>
+            </div>
+            <div class="update-text" *ngIf="updateAvailable">
+                <a href (click)="openUrl('https://github.com/4gray/oversetter/releases')">New app version is available</a>
+            </div>
         </div>
     </div>
 </div>

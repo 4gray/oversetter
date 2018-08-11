@@ -1,11 +1,45 @@
 /**
  * Settings class contains getters and setters for all application options
- * Uses localstorage as store for api key and last used translation directions
+ * It uses local storage as store for api key and last used translation directions
  */
 export class AppSettings {
+
+    /**
+     * API key for yandex translate service
+     *
+     * @private
+     * @static
+     * @memberof AppSettings
+     */
     private static apiKey = localStorage.getItem('apiKey');
+
+    /**
+     * Language list
+     *
+     * @private
+     * @static
+     * @memberof AppSettings
+     */
     private static langsList = [];
+
+    /**
+     * Tatget language
+     *
+     * @private
+     * @static
+     * @type {string}
+     * @memberof AppSettings
+     */
     private static toLang: string;
+
+    /**
+     * Origin language
+     *
+     * @private
+     * @static
+     * @type {string}
+     * @memberof AppSettings
+     */
     private static fromLang: string;
 
     public static get $toLang(): string {
@@ -23,7 +57,6 @@ export class AppSettings {
     public static set $fromLang(value: string) {
         this.fromLang = value;
     }
-
 
     public static get $API_KEY(): string {
         return this.apiKey;

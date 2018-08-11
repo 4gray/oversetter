@@ -9,11 +9,12 @@
     </div>
     <div class="dropdown-menu lang-selector-dropdown" id="dropdown-menu" role="menu">
         <div class="dropdown-content">
-            <a [routerLink]="" class="dropdown-item" (click)="switchLanguage({key:'ad',value: 'Auto-detect'}, 'fromLang')" [class.is-active]="selected === 'Auto-detect'">
+            <a *ngIf="direction === 'fromLang'" [routerLink]="" class="dropdown-item" (click)="switchLanguage(autoDetectLang, direction)"
+                [class.is-active]="selected === 'Auto-detect'">
                 Auto-detect
             </a>
-            <a [routerLink]="" class="dropdown-item" *ngFor="let lang of languages" (click)="switchLanguage(lang, 'fromLang')" [class.is-active]="selected === lang.value">
-                {{lang.value}}
+            <a [routerLink]="" class="dropdown-item" *ngFor="let lang of languages" (click)="switchLanguage(lang, direction)" [class.is-active]="selected === lang.$value">
+                {{lang.$value}}
             </a>
         </div>
     </div>

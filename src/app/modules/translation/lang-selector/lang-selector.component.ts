@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
+import { Language } from '@app/models/language';
 
 @Component({
     selector: 'app-lang-selector',
@@ -7,9 +8,11 @@ import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRe
 })
 export class LangSelectorComponent implements OnInit {
 
-    @Input() languages = [];
+    @Input() languages: Language[] = [];
     @Input() selected;
+    @Input() direction;
     @Output() changeLanguage = new EventEmitter();
+    autoDetectLang: Language = new Language('ad', 'Auto-detect');
 
     isSelected = false;
 
@@ -17,7 +20,8 @@ export class LangSelectorComponent implements OnInit {
 
     ngOnInit() { }
 
-    switchLanguage(lang) {
+    switchLanguage(lang: Language) {
+        console.log(lang);
         this.changeLanguage.emit(lang);
         this.toggleSelected();
     }

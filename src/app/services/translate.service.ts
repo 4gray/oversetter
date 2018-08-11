@@ -33,14 +33,14 @@ export class TranslateService {
      */
     public getLanguagesList(): Observable<string[]> {
         return this.http.get(this.getLanguagesUrl())
-            .map(res => res.json())
+            .map(res => res.json()['langs'])
             .catch(this.handleError);
     }
 
     /**
      * Return translation result
-     * @param word Word or sentence to translate
-     * @param fromLang  Origin language
+     * @param word Phrase to translate
+     * @param fromLang Origin language
      * @param toLang Result language
      */
     public getTranslation(word: string, fromLang: string, toLang: string): Observable<Translation> {
@@ -51,7 +51,6 @@ export class TranslateService {
                 return new Translation(response.code, response.lang, response.text);
             })
             .catch(this.handleError);
-
     }
 
     /**

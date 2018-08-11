@@ -1,0 +1,78 @@
+#dictionary-container {
+    overflow: hidden;
+}
+
+.dictionary-title {
+    padding-left: 10px;
+    border-right: 1px solid #d2d2d2;
+}
+
+#vocabulary-list {
+    overflow-y: scroll;
+    height: 100vh;
+    background: #ECECEC;
+    border-right: 1px solid #d2d2d2;
+    ul {
+        color: #111;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    li {
+        padding: 0px 10px;
+        cursor: pointer;
+        max-height: 30px;
+        overflow: hidden;
+        line-height: 30px;
+    }
+    li:hover {
+        background: #ccc;
+    }
+    .active {
+        background-color: #d2d2d2;
+        font-weight: bold;
+    }
+}
+
+#vocabulary-panel {
+    background: #ececec;
+    border-bottom: 1px solid #d2d2d2;
+    height: 45px;
+    line-height: 45px;
+    -webkit-app-region: drag;
+    border-bottom: 1px solid #d2d2d2;
+    .panel-line {
+        height: 100%;
+        width: 1px;
+        background: #d2d2d2;
+        display: block;
+        position: absolute;
+        left: 200px;
+        top: 0;
+    }
+}
+
+#vocabulary-translation {
+    padding: 10px;
+    color: #111;
+    background: #fff;
+    #source-text {
+        font-weight: bold;
+    }
+    #translated-text {
+        margin-top: 10px;
+    }
+}
+
+.remove-phrase {
+    text-align: right;
+    font-size: 18px;
+    color: #666;
+    padding-right: 10px;
+}
+
+.update-vocabulary {
+    font-size: 18px;
+    color: #666;
+    padding-left: 10px;
+}
