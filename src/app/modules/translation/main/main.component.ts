@@ -9,6 +9,7 @@ import { DictionaryItem } from '@app/models/dictionary-item';
 import { Settings } from '@app/models/settings';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
+import { UiService } from '@app/services/ui.service';
 
 @Component({
     templateUrl: 'main.component.html',
@@ -28,9 +29,11 @@ export class MainComponent {
     public detectedLanguage = '';
     public wordFavorited = false;
     public showMoreMenu = false;
+    public showArrow = false;
 
     constructor(private translateService: TranslateService,
         private storageService: StorageService,
+        private uiService: UiService,
         private router: Router,
         private electronService: ElectronService,
         private ngZone: NgZone) {
@@ -79,6 +82,8 @@ export class MainComponent {
                     this.router.navigate(['/settings']);
                 });
             });
+
+            this.showArrow = this.uiService.showArrow;
         }
 
         this.settings.fromLang = this.storageService.getFromLanguage();
