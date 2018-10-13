@@ -5,14 +5,21 @@
     <div fxFlex="40px" class="options-panel">
         <label>Translate from:</label>
         <div class="language-selectors">
-            <app-lang-selector *ngIf="langs.length > 0" direction="fromLang" [selected]="settings.fromLang.$value" [languages]="langs"
-                (changeLanguage)="onLanguageChange('fromLang', $event)"></app-lang-selector>
 
-            <button class="button" *ngIf="langs.length > 0" id="direction-switch" (click)="changeTranslationDir()" [disabled]="settings.fromLang.$key === 'ad'">
+
+
+            <app-lang-selector *ngIf="langs.length > 0" direction="fromLang" [selected]="settings.fromLang.$value"
+                [languages]="langs" (changeLanguage)="onLanguageChange('fromLang', $event)"></app-lang-selector>
+
+            <button class="button" *ngIf="langs.length > 0" id="direction-switch" (click)="changeTranslationDir()"
+                [disabled]="settings.fromLang.$key === 'ad'">
                 <i class="fa fa-exchange"></i>
             </button>
 
-            <app-lang-selector *ngIf="langs.length > 0" direction="toLang" [selected]="settings.toLang.$value" [languages]="langs" (changeLanguage)="onLanguageChange('toLang', $event)"></app-lang-selector>
+
+            <app-lang-selector *ngIf="langs.length > 0" direction="toLang" [selected]="settings.toLang.$value"
+                [languages]="langs" (changeLanguage)="onLanguageChange('toLang', $event)"></app-lang-selector>
+
         </div>
 
         <div class="dropdown is-right" [class.is-active]="showMoreMenu">
@@ -31,9 +38,9 @@
                     <a [routerLink]="" class="dropdown-item" (click)="showDictionary()">
                         Dictionary
                     </a>
-                    <a [routerLink]="" class="dropdown-item" (click)="showAbout()">
+                    <!-- <a [routerLink]="['/settings']" class="dropdown-item">
                         About
-                    </a>
+                    </a> -->
                     <hr class="dropdown-divider">
                     <a [routerLink]="" class="dropdown-item" (click)="closeApp()">
                         Quit
@@ -44,8 +51,8 @@
 
     </div>
 
-    <textarea fxFlex fxFlexFill class="textarea-original" name="word" placeholder="Type text to translate" type="text" [(ngModel)]="word"
-        autofocus (keydown.enter)="translate(word, settings.fromLang.$key, settings.toLang.$key)"></textarea>
+    <textarea fxFlex fxFlexFill class="textarea-original" name="word" placeholder="Type text to translate" type="text"
+        [(ngModel)]="word" autofocus (keydown.enter)="translate(word, settings.fromLang.$key, settings.toLang.$key)"></textarea>
 
     <div fxFlex id="result-area">
         <div id="translation-toolbar" (click)="saveToDictionary()" *ngIf="translation">

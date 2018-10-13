@@ -4,6 +4,7 @@ import { ElectronService } from 'ngx-electron';
 import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
 import { UiService } from '@app/services/ui.service';
+import { Language } from '@app/models/language';
 
 @Component({
     providers: [TranslateService],
@@ -34,10 +35,22 @@ export class SettingsComponent {
         {
             id: 'languages',
             title: 'Languages'
+        },
+        {
+            id: 'about',
+            title: 'About'
         }
     ];
     public selectedTabId = 'api';
     public showArrow = false;
+
+    /**
+     * Version of the application
+     *
+     * @type {string}
+     * @memberof AboutComponent
+     */
+    public version: string;
 
     /**
      * Constructor function - set API key from the localstorage
@@ -68,15 +81,20 @@ export class SettingsComponent {
 
         if (localStorage.getItem('languages')) {
             this.languages = localStorage.getItem('languages');
-            // console.log(JSON.parse(localStorage.getItem('preferedLanguageList')));
             this.preferedLangList = JSON.parse(localStorage.getItem('preferedLanguageList')) || [];
+            this.preferedLangList.map(item => new Language(item.key, item.value));
         } else {
             // set default
-            this.preferedLangList.push({ 'key': 'en', 'value': 'English' });
+            this.preferedLangList.push(new Language('en', 'English'));
         }
 
         this.langList = AppSettings.$LANGS;
         this.showArrow = this.uiService.showArrow;
+
+        if (this.electronService.remote) {
+            const window = this.electronService.remote.getCurrentWindow();
+            this.version = window['version'];
+        }
     }
 
     /**
@@ -188,7 +206,9 @@ export class SettingsComponent {
      */
     private setAlwaysOnTop() {
         localStorage.setItem('alwaysOnTop', String(this.alwaysOnTop));
-        this.electronService.ipcRenderer.send('alwaysOnTop', this.alwaysOnTop); // TODO: implement in the main process
+        if (this.electronService.ipcRenderer) {
+            this.electronService.ipcRenderer.send('alwaysOnTop', this.alwaysOnTop); // TODO: implement in the main process
+        }
     }
 
     /**
@@ -196,7 +216,9 @@ export class SettingsComponent {
      */
     private setShowDockIcon() {
         localStorage.setItem('showDockIcon', String(this.showDockIcon));
-        this.electronService.ipcRenderer.send('showDockIcon', this.showDockIcon); // TODO: implement in the main process
+        if (this.electronService.ipcRenderer) {
+            this.electronService.ipcRenderer.send('showDockIcon', this.showDockIcon); // TODO: implement in the main process
+        }
     }
 
     /**
@@ -204,7 +226,9 @@ export class SettingsComponent {
      */
     private setAutoLaunch() {
         localStorage.setItem('autolaunch', String(this.autolaunch));
-        this.electronService.ipcRenderer.send('autolaunch', this.autolaunch);
+        if (this.electronService.ipcRenderer) {
+            this.electronService.ipcRenderer.send('autolaunch', this.autolaunch);
+        }
     }
 
 
@@ -215,5 +239,6 @@ export class SettingsComponent {
     selectTab(tabId) {
         this.selectedTabId = tabId;
     }
+
 
 }

@@ -21,7 +21,6 @@ export class LangSelectorComponent implements OnInit {
     ngOnInit() { }
 
     switchLanguage(lang: Language) {
-        console.log(lang);
         this.changeLanguage.emit(lang);
         this.toggleSelected();
     }

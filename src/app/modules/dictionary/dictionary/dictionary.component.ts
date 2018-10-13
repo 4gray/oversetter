@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { DictionaryItem } from '@app/models/dictionary-item';
 import { StorageService } from '@app/services/storage.service';
@@ -41,6 +41,12 @@ export class DictionaryComponent {
      */
     constructor(private electronService: ElectronService, private storageService: StorageService) {
         this.vocabulary = storageService.getVocabulary();
+
+        storageService.dictionaryChange.subscribe(changes => {
+            console.log('updated!');
+            this.updateDictionary();
+        });
+
     }
 
     /**

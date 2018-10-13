@@ -15,7 +15,9 @@
         "lint": "ng lint",
         "e2e": "ng e2e",
         "run:electron": "electron ./dist/electron/main.js",
-        "dev": "ng build -w"
+        "dev": "ng build -w",
+        "build:linux": "electron-builder -l",
+        "build:all": "electron-builder -mwl"
     },
     "main": "dist/electron/main.js",
     "private": true,

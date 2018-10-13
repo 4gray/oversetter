@@ -266,41 +266,6 @@ select#to-lang:hover {
     }
 }
 
-.about-container {
-    width: 300px;
-    background: #ececec;
-    height: 100%;
-    position: fixed;
-    padding: 10px;
-    text-align: center;
-}
-
-.about-icon {
-    width: 128px;
-    height: 128px;
-    padding: 10px;
-    margin: auto;
-    display: block;
-}
-
-.about-title {
-    padding: 10px;
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.about-version {
-    text-align: center;
-}
-
-.about-description {
-    margin-top: 10px;
-}
-
-.about-footer {
-    margin-top: 20px;
-}
-
 .dropdown {
     margin-top: 6px;
 }
@@ -319,4 +284,8 @@ select#to-lang:hover {
 
 .dropdown-content {
     border: 1px solid #ccc;
+}
+
+button.slds-button.slds-button--neutral.slds-picklist__label {
+    width: 130px !important;
 }

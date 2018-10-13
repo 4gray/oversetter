@@ -17,7 +17,7 @@
     </div>
     <div fxFlex>
         <div fxLayout="row" fxFlexFill>
-            <div fxFlex="30" id="vocabulary-list">
+            <div fxFlex="30" id="vocabulary-list" style="overflow-y: auto;">
                 <ul>
                     <li *ngFor="let item of vocabulary; let i = index" (click)="setSelectedItem(item, i)" [class.active]="i == selectedRow">{{item.$text}}</li>
                 </ul>

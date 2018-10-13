@@ -31,6 +31,10 @@ export class MainComponent {
     public showMoreMenu = false;
     public showArrow = false;
 
+    fromLang: any = [];
+    toLang: any = [];
+
+
     constructor(private translateService: TranslateService,
         private storageService: StorageService,
         private uiService: UiService,
@@ -103,8 +107,8 @@ export class MainComponent {
      */
     public changeTranslationDir() {
         const temp = this.settings.fromLang;
-        this.settings['fromLang'] = this.settings.toLang;
-        this.settings['toLang'] = temp;
+        this.settings.fromLang = this.settings.toLang;
+        this.settings.toLang = temp;
     }
 
     /**
@@ -168,6 +172,7 @@ export class MainComponent {
         this.settings.vocabulary.push(dictItem);
         this.wordFavorited = true;
         this.storageService.updateVocabulary(this.settings['vocabulary']);
+        this.storageService.dictionaryChange.next('updated');
     }
 
     /**
@@ -180,6 +185,7 @@ export class MainComponent {
                 if (localStorage.getItem('languages') === 'select-languages') {
                     // save fetched languages in localstorage
                     this.langs = JSON.parse(localStorage.getItem('preferedLanguageList'));
+                    this.langs = this.langs.map((item: any) => new Language(item.key, item.value));
                 } else {
                     this.langs = sorted;
                 }
@@ -227,11 +233,6 @@ export class MainComponent {
      */
     showDictionary() {
         this.electronService.ipcRenderer.send('openDictionary');
-        this.showMoreMenu = false;
-    }
-
-    showAbout() {
-        this.electronService.ipcRenderer.send('openAbout');
         this.showMoreMenu = false;
     }
 

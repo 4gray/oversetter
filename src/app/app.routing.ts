@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { AboutComponent } from '@modules/translation/about/about.component';
 import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.component';
 import { MainComponent } from '@modules/translation/main/main.component';
 import { OfflineComponent } from '@modules/translation/offline/offline.component';
@@ -24,7 +22,7 @@ const ROUTE_CONFIG: Routes = [
     },
     {
         path: 'about',
-        component: AboutComponent
+        component: SettingsComponent
     },
     {
         path: 'offline',

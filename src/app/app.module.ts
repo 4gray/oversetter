@@ -4,7 +4,6 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxElectronModule } from 'ngx-electron';
 
-import { AboutComponent } from '@modules/translation/about/about.component';
 import { AppRoutingModule } from '@app/app.routing';
 import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.component';
 import { HomeComponent } from '@modules/translation/home/home.component';
@@ -32,7 +31,6 @@ import { UiService } from '@app/services/ui.service';
         HomeComponent,
         MainComponent,
         SettingsComponent,
-        AboutComponent,
         OfflineComponent,
         DictionaryComponent,
         KeysPipe,

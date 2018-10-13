@@ -9,7 +9,8 @@
     <div fxLayout="column" *ngIf="selectedTabId==='api'" style="height:100%">
         <div fxFlex id="settings-area">
             To use this application you need to
-            <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex Translate. For test you can use this dev-key:
+            <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex Translate.
+            For test you can use this dev-key:
             <i>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</i>
         </div>
         <textarea fxFlex id="api-key" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
@@ -21,15 +22,18 @@
             <ul>
                 <li class="checkbox-option">
                     <label for="start-at-login">
-                        <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start at login</label>
+                        <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start
+                        at login</label>
                 </li>
                 <li class="checkbox-option">
                     <label for="show-dock-icon">
-                        <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show dock icon</label>
+                        <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show
+                        dock icon</label>
                 </li>
                 <li class="checkbox-option">
                     <label for="always-on-top">
-                        <input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop"> Always on top</label>
+                        <input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop">                        Always
+                        on top</label>
                 </li>
             </ul>
             <div class="settings-title">Shortcuts</div>
@@ -73,13 +77,34 @@
                 </select>
 
                 <div ngFlex style="text-align:center;">
-                    <button class="btn" id="add-language" (click)="addLanguage(selectedLang)" [disabled]="languageState()"> &gt; </button>
+                    <button class="btn" id="add-language" (click)="addLanguage(selectedLang)" [disabled]="languageState()"> &gt;
+                    </button>
                     <button div class="btn" id="remove-language" (click)="removeLanguage(langToRemove)"> &lt; </button>
                 </div>
 
                 <select ngFlex multiple id="selected-languages-list" [(ngModel)]="langToRemove" [disabled]="languageState()">
                     <option *ngFor="let prefLang of preferedLangList" [ngValue]="prefLang">{{prefLang.value}}</option>
                 </select>
+            </div>
+        </div>
+    </div>
+
+    <div fxLayout="column" *ngIf="selectedTabId==='about'" style="height:100%">
+        <div fxFlex class="settings-container">
+            <div fxLayout="row">
+                <div fxFlex="160px">
+                    <img src="./assets/icon.png" class="about-icon">
+                </div>
+                <div fxFlex>
+                    <div class="about-title">Oversetter</div>
+                    <div class="about-version">{{version}}</div>
+                    <div class="about-description">Translate text directly from your menubar.</div>
+                    <div class="about-footer">
+                        2017 &copy; 4gray.
+                        <a href="#" (click)="openUrl('https://4gray.github.io/oversetter/')">Homepage</a>.
+                        <a href="#" (click)="openUrl('https://github.com/4gray/oversetter/issues')">Report a bug</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

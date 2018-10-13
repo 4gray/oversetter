@@ -1,11 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Language } from '@app/models/language';
 import { DictionaryItem } from '@app/models/dictionary-item';
+import { Subject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StorageService {
+
+    dictionaryChange: Subject<string> = new Subject<string>();
 
     /**
      * Returns origin language from the local storage
