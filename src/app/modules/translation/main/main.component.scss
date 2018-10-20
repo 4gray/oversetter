@@ -36,3 +36,21 @@
 .translation-preview {
     color: #666;
 }
+
+#result-area:hover>#translation-toolbar {
+    display: block;
+    position: absolute;
+    right: 10px;
+    color: #b3b3b3;
+    border: 1px solid #b3b3b3;
+    background: #fff;
+    height: 30px;
+    width: 30px;
+    padding: 6px 7px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+#translation-toolbar>i {
+    font-size: 16px;
+}

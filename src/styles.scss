@@ -1,3 +1,5 @@
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
 html,
 body {
     background: none !important;
@@ -29,7 +31,7 @@ textarea {
     font-size: 12px;
 }
 
-.options-panel > #tabs {
+.options-panel>#tabs {
     padding: 0 !important;
 }
 
@@ -83,7 +85,7 @@ textarea {
 /* styling */
 
 .options-panel {
-    line-height: 40px;
+    line-height: 28px;
     padding: 0 10px;
     background-color: #ececec; //background-image: linear-gradient( #ededed 0, #ededed 1px, #e7e7e7 2px, #d1d1d1 100%);
     border-bottom: 1px solid #afafaf;
@@ -149,26 +151,6 @@ select#from-lang {
     cursor: pointer;
 }
 
-#result-area:hover > #translation-toolbar {
-    display: block;
-    position: absolute;
-    right: 20px;
-    color: #fff;
-    height: 40px;
-    border-right: 20px solid #b3b3b3;
-    border-left: 20px solid #b3b3b3;
-    border-bottom: 10px solid transparent;
-    width: 0px;
-    padding: 0;
-}
-
-#translation-toolbar > i {
-    position: absolute;
-    left: -7px;
-    top: 8px;
-    font-size: 16px;
-}
-
 li.text {
     margin-left: 22px;
 }
@@ -185,19 +167,11 @@ select#to-lang:hover {
     cursor: pointer;
 }
 
-#all-languages-list {
-    width: 220px;
-    height: 170px;
-    margin-left: 10px;
-    padding: 0px 5px;
-    outline: none;
-    border: 1px solid #ccc;
-}
-
+#all-languages-list,
 #selected-languages-list {
     width: 220px;
-    height: 170px;
-    margin-right: 10px;
+    height: 155px;
+    margin-left: 10px;
     padding: 0px 5px;
     outline: none;
     border: 1px solid #ccc;
@@ -288,4 +262,33 @@ select#to-lang:hover {
 
 button.slds-button.slds-button--neutral.slds-picklist__label {
     width: 130px !important;
+}
+
+
+/** NG-SELECT **/
+
+ng-select {
+    width: 150px;
+    margin: 6px;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+    height: 28px;
+}
+
+.ng-select .ng-select-container {
+    min-height: 28px;
+}
+
+.ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
+    top: 0;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    padding: 0px 8px;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    height: 25px;
+    line-height: 25px;
 }

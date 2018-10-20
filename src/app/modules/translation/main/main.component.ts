@@ -6,7 +6,6 @@ import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
 import { Translation } from '@models/translation';
 import { DictionaryItem } from '@app/models/dictionary-item';
-import { Settings } from '@app/models/settings';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
 import { UiService } from '@app/services/ui.service';
@@ -17,13 +16,46 @@ import { UiService } from '@app/services/ui.service';
 })
 
 export class MainComponent {
+    /**
+     * Translated word/phrase/sentence
+     *
+     * @type {Translation}
+     * @memberof MainComponent
+     */
     public translation: Translation;
-    public langs: Language[] = [];
-    public settings: Settings = {
-        toLang: null,
-        fromLang: null,
-        vocabulary: null
-    };
+
+    /**
+     * List of languages
+     *
+     * @type {Language[]}
+     * @memberof MainComponent
+     */
+    public languageList: Language[] = [];
+
+    /**
+     * Translate to the given language
+     *
+     * @type {Language}
+     * @memberof MainComponent
+     */
+    public toLang: Language;
+
+    /**
+     * Translate from the given language
+     *
+     * @type {Language}
+     * @memberof MainComponent
+     */
+    public fromLang: Language;
+
+    /**
+     * List with vocabularies
+     *
+     * @type {DictionaryItem[]}
+     * @memberof MainComponent
+     */
+    public vocabulary: DictionaryItem[];
+
     public word = '';
     public updateAvailable = false;
     public detectedLanguage = '';
@@ -31,8 +63,6 @@ export class MainComponent {
     public showMoreMenu = false;
     public showArrow = false;
 
-    fromLang: any = [];
-    toLang: any = [];
 
 
     constructor(private translateService: TranslateService,
@@ -58,7 +88,7 @@ export class MainComponent {
                     this.router.navigate(['/home']);
                     const clipboardText = this.electronService.clipboard.readText();
                     this.word = clipboardText;
-                    this.translate(this.word, this.settings.fromLang.$key, this.settings.toLang.$key);
+                    this.translate(this.word, this.fromLang.$key, this.toLang.$key);
                 });
             });
 
@@ -90,10 +120,10 @@ export class MainComponent {
             this.showArrow = this.uiService.showArrow;
         }
 
-        this.settings.fromLang = this.storageService.getFromLanguage();
-        this.settings.toLang = this.storageService.getToLanguage();
+        this.fromLang = this.storageService.getFromLanguage();
+        this.toLang = this.storageService.getToLanguage();
 
-        if (AppSettings.$API_KEY === '' || AppSettings.$API_KEY === null) {
+        if (AppSettings.$apiKey === '' || AppSettings.$apiKey === null) {
             this.router.navigate(['/settings']);
         } else {
             this.requestLanguageList();
@@ -106,9 +136,11 @@ export class MainComponent {
      * @memberof MainComponent
      */
     public changeTranslationDir() {
-        const temp = this.settings.fromLang;
-        this.settings.fromLang = this.settings.toLang;
-        this.settings.toLang = temp;
+        const temp = this.fromLang;
+        this.fromLang = this.toLang;
+        this.toLang = temp;
+        this.onLanguageChange('fromLang', this.fromLang);
+        this.onLanguageChange('toLang', this.toLang);
     }
 
     /**
@@ -118,11 +150,15 @@ export class MainComponent {
      */
     public onLanguageChange(langDirection: string, value: Language) {
         localStorage.setItem(langDirection, JSON.stringify(value));
-        this.settings[langDirection] = value;
+        // this[langDirection] = value;
+        if (langDirection === 'toLang' && this.word !== '') {
+            this.translate(this.word, this.fromLang.$key, this.toLang.$key);
+        }
     }
 
     /**
      * Translate text
+     *
      * @param word string to translate
      */
     public translate(word: string, fromLang: string, toLang: string) {
@@ -139,7 +175,7 @@ export class MainComponent {
                         error => console.error(`Error:  ${error}`)
                     );
             } else {
-                if (this.settings.fromLang.$key !== 'ad') {
+                if (this.fromLang.$key !== 'ad') {
                     this.detectedLanguage = '';
                 }
                 this.translateService
@@ -164,61 +200,39 @@ export class MainComponent {
      *
      * @memberof MainComponent
      */
-    public saveToDictionary() {
-        this.settings.vocabulary = this.storageService.getVocabulary();
-        console.log(this.settings.vocabulary);
+    saveToDictionary(): void {
+        this.vocabulary = this.storageService.getVocabulary();
 
-        const dictItem = new DictionaryItem(this.word, this.translation.$text, this.settings.fromLang, this.settings.toLang);
-        this.settings.vocabulary.push(dictItem);
+        const dictItem = new DictionaryItem(this.word, this.translation.$text, this.fromLang, this.toLang);
+        this.vocabulary.push(dictItem);
         this.wordFavorited = true;
-        this.storageService.updateVocabulary(this.settings['vocabulary']);
+        this.storageService.updateVocabulary(this.vocabulary);
         this.storageService.dictionaryChange.next('updated');
     }
 
     /**
      * Get list with all available languages from the API
+     *
+     * @memberof MainComponent
      */
-    private requestLanguageList() {
+    requestLanguageList(): void {
         this.translateService.getLanguagesList().subscribe(
-            response => {
-                const sorted = this.sortLanguages(response);
+            (response: Language[]) => {
                 if (localStorage.getItem('languages') === 'select-languages') {
                     // save fetched languages in localstorage
-                    this.langs = JSON.parse(localStorage.getItem('preferedLanguageList'));
-                    this.langs = this.langs.map((item: any) => new Language(item.key, item.value));
+                    this.languageList = JSON.parse(localStorage.getItem('preferedLanguageList'));
+                    this.languageList = this.languageList.map((item: any) => new Language(item.key, item.value));
                 } else {
-                    this.langs = sorted;
+                    this.languageList = response;
                 }
-                AppSettings.$LANGS = sorted;
+
+                this.languageList.unshift(new Language('ad', 'Auto-detect'));
+                AppSettings.$languageList = response;
             },
             error => console.error(error)
         );
     }
 
-    /**
-     * Sort languages
-     *
-     * @param {any} languages object with languages
-     * @returns sorted array with language list
-     * @memberof MainComponent
-     */
-    sortLanguages(languages) {
-        let sortedLangs = [];
-        // tslint:disable-next-line:forin
-        for (const key in languages) {
-            sortedLangs.push({
-                key: key,
-                value: languages[key]
-            });
-        }
-
-        sortedLangs.sort((a, b) => a.value.localeCompare(b.value));
-        sortedLangs = sortedLangs.map(item => {
-            return new Language(item.key, item.value);
-        });
-
-        return sortedLangs;
-    }
 
     /**
      * Open given URL in external browser
@@ -229,18 +243,31 @@ export class MainComponent {
     }
 
     /**
-     * Open dictionary window
+     * Opens dictionary window
+     *
+     * @memberof MainComponent
      */
     showDictionary() {
         this.electronService.ipcRenderer.send('openDictionary');
-        this.showMoreMenu = false;
+        this.hideMenu();
     }
 
     /**
-     * Close application
+     * Closes the application
+     *
+     * @memberof MainComponent
      */
     closeApp() {
         this.electronService.remote.app.quit();
+    }
+
+    /**
+     * Closes more menu
+     *
+     * @memberof MainComponent
+     */
+    hideMenu() {
+        this.showMoreMenu = false;
     }
 
 }

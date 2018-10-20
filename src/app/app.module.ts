@@ -17,6 +17,8 @@ import { LangSelectorComponent } from './modules/translation/lang-selector/lang-
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { StorageService } from '@app/services/storage.service';
 import { UiService } from '@app/services/ui.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
     imports: [
@@ -25,7 +27,9 @@ import { UiService } from '@app/services/ui.service';
         FormsModule,
         NgxElectronModule,
         AppRoutingModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        NgSelectModule,
+        ClickOutsideModule
     ],
     declarations: [
         HomeComponent,

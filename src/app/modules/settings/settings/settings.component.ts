@@ -62,7 +62,7 @@ export class SettingsComponent {
         private electronService: ElectronService,
         private uiService: UiService) {
 
-        this.apiKey = AppSettings.$API_KEY;
+        this.apiKey = AppSettings.$apiKey;
         if (localStorage.getItem('autolaunch')) {
             this.autolaunch = (localStorage.getItem('autolaunch') === 'true');
         }
@@ -88,7 +88,7 @@ export class SettingsComponent {
             this.preferedLangList.push(new Language('en', 'English'));
         }
 
-        this.langList = AppSettings.$LANGS;
+        this.langList = AppSettings.$languageList;
         this.showArrow = this.uiService.showArrow;
 
         if (this.electronService.remote) {
@@ -104,7 +104,7 @@ export class SettingsComponent {
      */
     public saveApiKey(value: string, option: string) {
         localStorage.setItem(option, value);
-        AppSettings.$API_KEY = value;
+        AppSettings.$apiKey = value;
         this.validateApiKey();
         this.setAutoLaunch(); // TODO: combine to one IPCrenderer-request
         this.setAlwaysOnTop();
@@ -231,12 +231,23 @@ export class SettingsComponent {
         }
     }
 
-
+    /**
+     * Opens the given URL in external browser
+     *
+     * @param {string} url
+     * @memberof SettingsComponent
+     */
     openUrl(url: string): void {
         this.electronService.shell.openExternal(url);
     }
 
-    selectTab(tabId) {
+    /**
+     * Sets the given tab as selected
+     *
+     * @param {string} tabId tab id
+     * @memberof SettingsComponent
+     */
+    selectTab(tabId: string) {
         this.selectedTabId = tabId;
     }
 

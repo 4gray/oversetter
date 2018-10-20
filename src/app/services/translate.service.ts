@@ -6,9 +6,12 @@ import 'rxjs/add/operator/catch';
 
 import { AppSettings } from '@models/appsettings';
 import { Translation } from '@models/translation';
+import { Language } from '@app/models/language';
 
 @Injectable()
 export class TranslateService {
+
+    SERVICE_URL = 'https://translate.yandex.net/api/v1.5/tr.json';
 
     /**
      * Creates an instance of TranslateService.
@@ -31,10 +34,36 @@ export class TranslateService {
     /**
      * Return json list with available languages from yandex api
      */
-    public getLanguagesList(): Observable<string[]> {
+    public getLanguagesList(): Observable<Language[]> {
         return this.http.get(this.getLanguagesUrl())
-            .map(res => res.json()['langs'])
+            .map(res => this.sortLanguages(res.json()['langs']))
+            // .map(res => res.json()['langs'])
             .catch(this.handleError);
+    }
+
+    /**
+     * Sort languages
+     *
+     * @param {any} languages object with languages
+     * @returns sorted array with language list
+     * @memberof MainComponent
+     */
+    sortLanguages(languages) {
+        let sortedLangs = [];
+        // tslint:disable-next-line:forin
+        for (const key in languages) {
+            sortedLangs.push({
+                key: key,
+                value: languages[key]
+            });
+        }
+
+        sortedLangs.sort((a, b) => a.value.localeCompare(b.value));
+        sortedLangs = sortedLangs.map(item => {
+            return new Language(item.key, item.value);
+        });
+
+        return sortedLangs;
     }
 
     /**
@@ -72,14 +101,14 @@ export class TranslateService {
      * Return URL for language request from Yandex Translate API
      */
     private getLanguagesUrl() {
-        return 'https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=' + AppSettings.$API_KEY + '&ui=en';
+        return this.SERVICE_URL + '/getLangs?key=' + AppSettings.$apiKey + '&ui=en';
     }
 
     /**
      * Return base part of URL for translation request
      */
     private getTranslateUrl() {
-        return 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' + AppSettings.$API_KEY;
+        return this.SERVICE_URL + '/translate?key=' + AppSettings.$apiKey;
     }
 
     /**
@@ -90,7 +119,7 @@ export class TranslateService {
      * @memberof TranslateService
      */
     private getAutoDetectLanguageUrl() {
-        return 'https://translate.yandex.net/api/v1.5/tr.json/detect?key=' + AppSettings.$API_KEY;
+        return this.SERVICE_URL + '/detect?key=' + AppSettings.$apiKey;
     }
 
     /**

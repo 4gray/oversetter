@@ -1,3 +1,9 @@
+/* interface Settings {
+    apiKey: string;
+    fromLang: string;
+    toLang: string;
+} */
+
 /**
  * Settings class contains getters and setters for all application options
  * It uses local storage as store for api key and last used translation directions
@@ -20,7 +26,7 @@ export class AppSettings {
      * @static
      * @memberof AppSettings
      */
-    private static langsList = [];
+    private static languageList = [];
 
     /**
      * Tatget language
@@ -58,20 +64,20 @@ export class AppSettings {
         this.fromLang = value;
     }
 
-    public static get $API_KEY(): string {
+    public static get $apiKey(): string {
         return this.apiKey;
     }
 
-    public static set $API_KEY(key: string) {
+    public static set $apiKey(key: string) {
         this.apiKey = key;
     }
 
-    public static get $LANGS() {
-        return this.langsList;
+    public static get $languageList(): any[] {
+        return this.languageList;
     }
 
-    public static set $LANGS(list) {
-        this.langsList = list;
+    public static set $languageList(list) {
+        this.languageList = list;
     }
 
 }
