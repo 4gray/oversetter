@@ -21,10 +21,6 @@ const ROUTE_CONFIG: Routes = [
         component: SettingsComponent
     },
     {
-        path: 'about',
-        component: SettingsComponent
-    },
-    {
         path: 'offline',
         component: OfflineComponent
     },

@@ -1,6 +1,6 @@
 <div fxLayout="column" fxFlexFill style="overflow: hidden;">
 
-    <div fxFlex="15px" class="arrow-up" *ngIf="showArrow"></div>
+    <!-- <div fxFlex="15px" class="arrow-up" *ngIf="showArrow"></div> -->
 
     <div id="tabs" fxFlex="40px" class="options-panel">
         <div *ngFor="let tab of tabs" (click)="selectTab(tab.id)" [class.active-tab]="tab.id === selectedTabId">{{tab.title}}</div>
@@ -9,7 +9,8 @@
     <div fxLayout="column" *ngIf="selectedTabId==='api'" style="height:100%">
         <div fxFlex id="settings-area">
             To use this application you need to
-            <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex Translate.
+            <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex
+            Translate.
             For test you can use this dev-key:
             <i>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</i>
         </div>
@@ -22,17 +23,20 @@
             <ul>
                 <li class="checkbox-option">
                     <label for="start-at-login">
-                        <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start
+                        <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch">
+                        Start
                         at login</label>
                 </li>
                 <li class="checkbox-option">
                     <label for="show-dock-icon">
-                        <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show
+                        <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon">
+                        Show
                         dock icon</label>
                 </li>
                 <li class="checkbox-option">
                     <label for="always-on-top">
-                        <input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop">                        Always
+                        <input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop">
+                        Always
                         on top</label>
                 </li>
             </ul>
@@ -77,7 +81,8 @@
                 </select>
 
                 <div ngFlex style="text-align:center;">
-                    <button class="btn" id="add-language" (click)="addLanguage(selectedLang)" [disabled]="languageState()"> &gt;
+                    <button class="btn" id="add-language" (click)="addLanguage(selectedLang)" [disabled]="languageState()">
+                        &gt;
                     </button>
                     <button div class="btn" id="remove-language" (click)="removeLanguage(langToRemove)"> &lt; </button>
                 </div>

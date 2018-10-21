@@ -86,8 +86,8 @@ textarea {
 
 .options-panel {
     line-height: 28px;
-    padding: 0 10px;
-    background-color: #ececec; //background-image: linear-gradient( #ededed 0, #ededed 1px, #e7e7e7 2px, #d1d1d1 100%);
+    padding-right: 10px;
+    background-color: #ececec;
     border-bottom: 1px solid #afafaf;
     display: flex;
     justify-content: space-between;
@@ -273,4 +273,12 @@ ng-select {
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
     height: 25px;
     line-height: 25px;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+    background-color: #efefef;
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+    background-color: #ddd;
 }

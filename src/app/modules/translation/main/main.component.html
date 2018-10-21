@@ -1,6 +1,6 @@
 <div fxLayout="column" fxFlexFill style="overflow: hidden;">
 
-    <div fxFlex="15px" class="arrow-up" *ngIf="showArrow"></div>
+    <!-- <div fxFlex="15px" class="arrow-up" *ngIf="showArrow"></div> -->
 
     <div fxFlex="40px" class="options-panel">
         <!-- <label>Translate from:</label> -->
@@ -33,9 +33,9 @@
                     <a [routerLink]="" class="dropdown-item" (click)="showDictionary()">
                         Dictionary
                     </a>
-                    <!-- <a [routerLink]="['/settings/about']" class="dropdown-item">
+                    <a [routerLink]="['/settings']" [queryParams]="{'tab': 'about'}" class="dropdown-item">
                         About
-                    </a> -->
+                    </a>
                     <hr class="dropdown-divider">
                     <a [routerLink]="" class="dropdown-item" (click)="closeApp()">
                         Quit

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
@@ -60,7 +60,15 @@ export class SettingsComponent {
     constructor(private translateService: TranslateService,
         private router: Router,
         private electronService: ElectronService,
-        private uiService: UiService) {
+        private uiService: UiService,
+        private route: ActivatedRoute) {
+
+        route.queryParams.subscribe(param => {
+            const tabName = param['tab'] || '';
+            if (tabName === 'about') {
+                this.selectedTabId = 'about';
+            }
+        });
 
         this.apiKey = AppSettings.$apiKey;
         if (localStorage.getItem('autolaunch')) {
