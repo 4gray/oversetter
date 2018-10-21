@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 
 @Component({
     providers: [],
-    templateUrl: './offline.component.html'
+    templateUrl: './offline.component.html',
+    styleUrls: ['offline.component.scss']
 })
 
 export class OfflineComponent {
