@@ -9,6 +9,9 @@ import { DictionaryItem } from '@app/models/dictionary-item';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
 import { UiService } from '@app/services/ui.service';
+import { of, Subject } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
+
 
 @Component({
     templateUrl: 'main.component.html',
@@ -63,6 +66,7 @@ export class MainComponent {
     public showMoreMenu = false;
     public showArrow = false;
 
+    public keyUp = new Subject<string>();
 
 
     constructor(private translateService: TranslateService,
@@ -128,6 +132,16 @@ export class MainComponent {
         } else {
             this.requestLanguageList();
         }
+
+
+        this.keyUp.pipe(
+            map((event: KeyboardEvent) => event.target['value']),
+            debounceTime(250),
+            distinctUntilChanged(),
+            flatMap(search => of(search).pipe(delay(500)))
+        ).subscribe(
+            (text: string) => this.translate(text, this.fromLang.$key, this.toLang.$key)
+        );
     }
 
     /**

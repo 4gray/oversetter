@@ -16,18 +16,6 @@
             <ng-select [items]="languageList" [clearable]="false" bindLabel="value" [(ngModel)]="toLang" (change)="onLanguageChange('toLang', $event)">
             </ng-select>
         </div>
-        <!-- <div class="language-selectors"> -->
-        <!-- <app-lang-selector *ngIf="languageList.length > 0" direction="fromLang" [selected]="fromLang.$value"
-                [languages]="languageList" (changeLanguage)="onLanguageChange('fromLang', $event)"></app-lang-selector> -->
-
-        <!-- <button class="button" *ngIf="languageList.length > 0" id="direction-switch" (click)="changeTranslationDir()"
-                [disabled]="fromLang.$key === 'ad'">
-                <i class="fa fa-exchange"></i>
-            </button>
-
-            <app-lang-selector *ngIf="languageList.length > 0" direction="toLang" [selected]="toLang.$value"
-                [languages]="languageList" (changeLanguage)="onLanguageChange('toLang', $event)"></app-lang-selector> -->
-        <!-- </div> -->
 
         <div class="dropdown is-right" [class.is-active]="showMoreMenu" (clickOutside)="hideMenu()">
             <div class="dropdown-trigger">
@@ -59,7 +47,7 @@
     </div>
 
     <textarea fxFlex fxFlexFill class="textarea-original" name="word" placeholder="Type text to translate" type="text"
-        [(ngModel)]="word" autofocus (keydown.enter)="translate(word, fromLang.$key, toLang.$key)"></textarea>
+        [(ngModel)]="word" autofocus (keydown.enter)="translate(word, fromLang.$key, toLang.$key)" (keyup)="keyUp.next($event)"></textarea>
 
     <div fxFlex id="result-area">
         <div id="translation-toolbar" (click)="saveToDictionary()" *ngIf="translation">
