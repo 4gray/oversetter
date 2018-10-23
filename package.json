@@ -14,7 +14,7 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "run:electron": "electron ./dist/electron/main.js",
+        "run:electron": "electron ./dist/electron/main.js --disable-gpu",
         "dev": "ng build -w",
         "build:linux": "electron-builder -l",
         "build:all": "electron-builder -mwl"

@@ -1,6 +1,7 @@
 'use strict';
 
 const Electron = require('electron');
+const path = require('path');
 
 class Dictionary {
 
@@ -12,6 +13,7 @@ class Dictionary {
             this.window.show();
         } else {
             this.window = new Electron.BrowserWindow({
+                icon: path.join(__dirname, '../assets/icon.png'),
                 resizable: true,
                 center: true,
                 minimizable: true,
