@@ -7,18 +7,18 @@ import { NgxElectronModule } from 'ngx-electron';
 import { AppRoutingModule } from '@app/app.routing';
 import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.component';
 import { HomeComponent } from '@modules/translation/home/home.component';
-import { KeysPipe } from '@pipes/keys.pipe';
 
 import { MainComponent } from '@modules/translation/main/main.component';
 import { OfflineComponent } from '@modules/translation/offline/offline.component';
 import { SettingsComponent } from '@modules/settings/settings/settings.component';
 import { TranslateService } from '@services/translate.service';
-import { LangSelectorComponent } from './modules/translation/lang-selector/lang-selector.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { StorageService } from '@app/services/storage.service';
 import { UiService } from '@app/services/ui.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { LanguageSettingsComponent } from '@modules/settings/language-settings/language-settings.component';
+import { AboutComponent } from '@modules/settings/about/about.component';
 
 @NgModule({
     imports: [
@@ -37,8 +37,8 @@ import { ClickOutsideModule } from 'ng-click-outside';
         SettingsComponent,
         OfflineComponent,
         DictionaryComponent,
-        KeysPipe,
-        LangSelectorComponent
+        LanguageSettingsComponent,
+        AboutComponent
     ],
     bootstrap: [
         HomeComponent

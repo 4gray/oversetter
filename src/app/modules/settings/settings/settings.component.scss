@@ -42,7 +42,6 @@
     line-height: 40px;
     text-align: center;
     color: #444;
-    margin-left: -10px;
     display: flex;
     justify-content: flex-start;
 }
@@ -89,39 +88,4 @@ kbd {
     margin: 0 0.2em;
     box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
     background-color: #f7f7f7;
-}
-
-.about-container {
-    width: 300px;
-    background: #ececec;
-    height: 100%;
-    position: fixed;
-    padding: 10px;
-    text-align: center;
-}
-
-.about-icon {
-    width: 128px;
-    height: 128px;
-    padding: 10px;
-    margin: auto;
-    display: block;
-}
-
-.about-title {
-    font-weight: bold;
-    font-size: 16px;
-    margin-top: 20px;
-}
-
-.about-version {
-    text-align: center;
-}
-
-.about-description {
-    margin-top: 10px;
-}
-
-.about-footer {
-    margin-top: 10px;
 }

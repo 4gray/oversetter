@@ -167,39 +167,6 @@ select#to-lang:hover {
     cursor: pointer;
 }
 
-#all-languages-list,
-#selected-languages-list {
-    width: 220px;
-    height: 155px;
-    margin-left: 10px;
-    padding: 0px 5px;
-    outline: none;
-    border: 1px solid #ccc;
-}
-
-#add-language {
-    background: #ccc;
-    width: 40px;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 4px;
-    cursor: pointer;
-    color: #555;
-    margin: 10px;
-}
-
-#remove-language {
-    background: #ccc;
-    width: 40px;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 10px;
-}
-
 .settings-note {
     margin-top: 10px;
     font-size: 11px;
@@ -208,12 +175,6 @@ select#to-lang:hover {
 .settings-title {
     padding: 5px;
     font-weight: bold;
-}
-
-.settings-checkboxes {
-    border: 0;
-    padding: 0 0 8px 0;
-    margin: 0;
 }
 
 .btn {
@@ -230,13 +191,13 @@ select#to-lang:hover {
     margin-top: -12px;
 }
 
-.lang-selector-dropdown {
+/* .lang-selector-dropdown {
     max-height: 200px;
     overflow-y: scroll;
     padding-top: 0px;
     border-bottom: 1px solid #ccc;
     border-radius: 3px;
-}
+} */
 
 .dropdown-content {
     border: 1px solid #ccc;

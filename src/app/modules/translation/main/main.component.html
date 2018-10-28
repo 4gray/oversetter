@@ -5,15 +5,16 @@
     <div fxFlex="40px" class="options-panel">
         <!-- <label>Translate from:</label> -->
         <div fxLayout="row">
-            <ng-select [items]="languageList" [clearable]="false" bindLabel="value" [(ngModel)]="fromLang" (change)="onLanguageChange('fromLang', $event)">
+            <ng-select [items]="languageListFrom | async" [clearable]="false" bindLabel="value" [(ngModel)]="fromLang"
+                (change)="onLanguageChange('fromLang', $event)">
             </ng-select>
 
-            <button class="button" *ngIf="languageList.length > 0" id="direction-switch" (click)="changeTranslationDir()"
-                [disabled]="fromLang.$key === 'ad'">
+            <button class="button" id="direction-switch" (click)="changeTranslationDir()" [disabled]="fromLang.$key === 'ad'">
                 <i class="fa fa-exchange"></i>
             </button>
 
-            <ng-select [items]="languageList" [clearable]="false" bindLabel="value" [(ngModel)]="toLang" (change)="onLanguageChange('toLang', $event)">
+            <ng-select [items]="languageListTo | async" [clearable]="false" bindLabel="value" [(ngModel)]="toLang"
+                (change)="onLanguageChange('toLang', $event)">
             </ng-select>
         </div>
 

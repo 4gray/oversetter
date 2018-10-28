@@ -12,7 +12,7 @@
             <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex
             Translate.
             For test you can use this dev-key:
-            <i>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</i>
+            <kbd>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</kbd>
         </div>
         <textarea fxFlex id="api-key" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
     </div>
@@ -63,54 +63,16 @@
             </div>
         </div>
     </div>
-    <div fxLayout="column" *ngIf="selectedTabId==='languages'" style="height:100%">
+    <div fxLayout="column" *ngIf="selectedTabId==='languages'" style="height:100%; background: #eee;">
         <div fxFlex class="settings-container">
-            <form>
-                <fieldset class="settings-checkboxes" ngModelGroup="languages">
-                    <input type="radio" id="all" name="languages" value="all-languages" checked [(ngModel)]="languages">
-                    <label for="all"> Show all languages</label>
-                    <br>
-                    <input type="radio" id="short" name="languages" value="select-languages" [(ngModel)]="languages">
-                    <label for="short"> Select languages from the list:</label>
-                </fieldset>
-            </form>
-
-            <div fxLayout="row">
-                <select ngFlex multiple id="all-languages-list" [(ngModel)]="selectedLang" [disabled]="languageState()">
-                    <option *ngFor="let lang of langList" [ngValue]="lang">{{lang.value}}</option>
-                </select>
-
-                <div ngFlex style="text-align:center;">
-                    <button class="btn" id="add-language" (click)="addLanguage(selectedLang)" [disabled]="languageState()">
-                        &gt;
-                    </button>
-                    <button div class="btn" id="remove-language" (click)="removeLanguage(langToRemove)"> &lt; </button>
-                </div>
-
-                <select ngFlex multiple id="selected-languages-list" [(ngModel)]="langToRemove" [disabled]="languageState()">
-                    <option *ngFor="let prefLang of preferedLangList" [ngValue]="prefLang">{{prefLang.value}}</option>
-                </select>
-            </div>
+            <app-language-settings [languagesList]="languagesList | async" [preferedLangList]="preferedLangList | async"
+                [languages]="languages" (changeLanguageSettings)="updateLanguageSettings($event)"></app-language-settings>
         </div>
     </div>
 
     <div fxLayout="column" *ngIf="selectedTabId==='about'" style="height:100%">
         <div fxFlex class="settings-container">
-            <div fxLayout="row">
-                <div fxFlex="160px">
-                    <img src="./assets/icon.png" class="about-icon">
-                </div>
-                <div fxFlex>
-                    <div class="about-title">Oversetter</div>
-                    <div class="about-version">{{version}}</div>
-                    <div class="about-description">Translate text directly from your menubar.</div>
-                    <div class="about-footer">
-                        2017 &copy; 4gray.
-                        <a href="#" (click)="openUrl('https://4gray.github.io/oversetter/')">Homepage</a>.
-                        <a href="#" (click)="openUrl('https://github.com/4gray/oversetter/issues')">Report a bug</a>
-                    </div>
-                </div>
-            </div>
+            <app-about></app-about>
         </div>
     </div>
 

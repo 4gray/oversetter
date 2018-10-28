@@ -7,6 +7,8 @@ import 'rxjs/add/operator/catch';
 import { AppSettings } from '@models/appsettings';
 import { Translation } from '@models/translation';
 import { Language } from '@app/models/language';
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable()
 export class TranslateService {
@@ -34,11 +36,29 @@ export class TranslateService {
     /**
      * Return json list with available languages from yandex api
      */
-    public getLanguagesList(): Observable<Language[]> {
-        return this.http.get(this.getLanguagesUrl())
-            .map(res => this.sortLanguages(res.json()['langs']))
-            // .map(res => res.json()['langs'])
-            .catch(this.handleError);
+    public getLanguagesList(includeAutoDetect: boolean = false, storeType: string = 'languages'): Observable<Language[]> {
+        // const langPreferences = localStorage.getItem(storeType);
+        let data: Observable<Language[]>;
+
+        if (storeType === 'select-languages') {
+            data = of<Language[]>(JSON.parse(localStorage.getItem('preferedLanguageList')));
+        } else {
+            data = this.http.get(this.getLanguagesUrl())
+                .map(res => this.sortLanguages(res.json()['langs']));
+        }
+
+        return data.pipe<Language[]>(
+            map((result: Language[]) => {
+                if (includeAutoDetect) {
+                    result.unshift(new Language('ad', 'Auto-detect'));
+                }
+                /* if (result === null) {
+                    result = [];
+                } */
+                return result.map((item: any) => new Language(item.key, item.value)) || [];
+            }),
+            catchError(this.handleError)
+        );
     }
 
     /**

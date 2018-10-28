@@ -9,7 +9,7 @@ import { DictionaryItem } from '@app/models/dictionary-item';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
 import { UiService } from '@app/services/ui.service';
-import { of, Subject } from 'rxjs';
+import { of, Subject, Observable, from } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
 
 
@@ -28,12 +28,20 @@ export class MainComponent {
     public translation: Translation;
 
     /**
-     * List of languages
+     * List of languages for "translate from" dropdown
      *
      * @type {Language[]}
      * @memberof MainComponent
      */
-    public languageList: Language[] = [];
+    public languageListFrom: Observable<Language[]>;
+
+    /**
+     * List of languages for "translate to" dropdown
+     *
+     * @type {Observable<Language[]>}
+     * @memberof MainComponent
+     */
+    public languageListTo: Observable<Language[]>;
 
     /**
      * Translate to the given language
@@ -64,7 +72,7 @@ export class MainComponent {
     public detectedLanguage = '';
     public wordFavorited = false;
     public showMoreMenu = false;
-    public showArrow = false;
+    /* public showArrow = false; */
 
     public keyUp = new Subject<string>();
 
@@ -117,11 +125,11 @@ export class MainComponent {
             // show app settings
             this.electronService.ipcRenderer.on('show-settings', () => {
                 this.ngZone.run(() => {
-                    this.router.navigate(['/settings']);
+                    this.router.navigate(['/settings'], { queryParams: { 'tab': 'about' } });
                 });
             });
 
-            this.showArrow = this.uiService.showArrow;
+            /* this.showArrow = this.uiService.showArrow; */
         }
 
         this.fromLang = this.storageService.getFromLanguage();
@@ -164,7 +172,7 @@ export class MainComponent {
      */
     public onLanguageChange(langDirection: string, value: Language) {
         localStorage.setItem(langDirection, JSON.stringify(value));
-        // this[langDirection] = value;
+
         if (langDirection === 'toLang' && this.word !== '') {
             this.translate(this.word, this.fromLang.$key, this.toLang.$key);
         }
@@ -230,21 +238,10 @@ export class MainComponent {
      * @memberof MainComponent
      */
     requestLanguageList(): void {
-        this.translateService.getLanguagesList().subscribe(
-            (response: Language[]) => {
-                if (localStorage.getItem('languages') === 'select-languages') {
-                    // save fetched languages in localstorage
-                    this.languageList = JSON.parse(localStorage.getItem('preferedLanguageList'));
-                    this.languageList = this.languageList.map((item: any) => new Language(item.key, item.value));
-                } else {
-                    this.languageList = response;
-                }
+        const languageSettings = localStorage.getItem('languages') || 'all-languages';
 
-                this.languageList.unshift(new Language('ad', 'Auto-detect'));
-                AppSettings.$languageList = response;
-            },
-            error => console.error(error)
-        );
+        this.languageListFrom = this.translateService.getLanguagesList(true, languageSettings);
+        this.languageListTo = this.translateService.getLanguagesList(false, languageSettings);
     }
 
 

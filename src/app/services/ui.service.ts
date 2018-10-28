@@ -3,8 +3,19 @@ import { ElectronService } from 'ngx-electron';
 
 @Injectable()
 export class UiService {
+
+    /**
+     * Arrow flag
+     *
+     * @memberof UiService
+     */
     showArrow = false;
 
+    /**
+     *Creates an instance of UiService.
+     * @param {ElectronService} electronService electron service
+     * @memberof UiService
+     */
     constructor(private electronService: ElectronService) {
 
         // show arrow on the top of the window in mac os

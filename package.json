@@ -25,6 +25,7 @@
         "@ng-select/ng-select": "^2.11.0",
         "auto-launch": "^5.0.5",
         "electron-settings": "^3.1.1",
+        "electron-window-state": "^5.0.2",
         "menubar": "^5.2.3",
         "ng-click-outside": "^4.0.0",
         "ngx-electron": "^1.0.4",

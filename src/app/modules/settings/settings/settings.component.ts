@@ -3,8 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
-import { UiService } from '@app/services/ui.service';
 import { Language } from '@app/models/language';
+import { Observable } from 'rxjs';
 
 @Component({
     providers: [TranslateService],
@@ -18,11 +18,11 @@ export class SettingsComponent {
     public autolaunch = false;
     public alwaysOnTop = false;
     public showDockIcon = false;
-    public langList = [];
-    public preferedLangList = [];
-    public languages = 'all-languages';
-    public selectedLang;
-    public langToRemove;
+    public languagesList: Observable<Language[]>;
+    public preferedLangList: Observable<Language[]>;
+    public languages = localStorage.getItem('languages') || 'all-languages';
+    // public selectedLang;
+    // public langToRemove;
     public tabs = [
         {
             id: 'api',
@@ -42,15 +42,7 @@ export class SettingsComponent {
         }
     ];
     public selectedTabId = 'api';
-    public showArrow = false;
-
-    /**
-     * Version of the application
-     *
-     * @type {string}
-     * @memberof AboutComponent
-     */
-    public version: string;
+    /* public showArrow = false; */
 
     /**
      * Constructor function - set API key from the localstorage
@@ -60,8 +52,7 @@ export class SettingsComponent {
     constructor(private translateService: TranslateService,
         private router: Router,
         private electronService: ElectronService,
-        private uiService: UiService,
-        private route: ActivatedRoute) {
+        route: ActivatedRoute) {
 
         route.queryParams.subscribe(param => {
             const tabName = param['tab'] || '';
@@ -85,24 +76,13 @@ export class SettingsComponent {
 
         if (localStorage.getItem('languages')) {
             this.showDockIcon = (localStorage.getItem('languages') === 'true');
+            /* const preferedLangs = JSON.parse(localStorage.getItem('preferedLanguageList')) || [new Language('en', 'English')]; */
+            this.preferedLangList = this.translateService.getLanguagesList(false, 'select-languages');
         }
 
-        if (localStorage.getItem('languages')) {
-            this.languages = localStorage.getItem('languages');
-            this.preferedLangList = JSON.parse(localStorage.getItem('preferedLanguageList')) || [];
-            this.preferedLangList.map(item => new Language(item.key, item.value));
-        } else {
-            // set default
-            this.preferedLangList.push(new Language('en', 'English'));
-        }
+        this.languagesList = this.translateService.getLanguagesList();
+        /* this.showArrow = this.uiService.showArrow; */
 
-        this.langList = AppSettings.$languageList;
-        this.showArrow = this.uiService.showArrow;
-
-        if (this.electronService.remote) {
-            const window = this.electronService.remote.getCurrentWindow();
-            this.version = window['version'];
-        }
     }
 
     /**
@@ -144,69 +124,10 @@ export class SettingsComponent {
     }
 
     /**
-     * Add one or multiple language(-s) to the prefered language list
-     * @param language string or array with language list as strings
-     */
-    public addLanguage(language) {
-        if (!language) { return; }
-
-        if (language instanceof Array) {
-            for (let i = 0; i < language.length; i++) {
-                if (this.preferedLangList.filter(item => item.value === language[i].value).length === 0) {
-                    this.preferedLangList.push(language[i]);
-                }
-            }
-        } else {
-            if (this.preferedLangList.filter(item => item.value === language[0].value).length === 0) {
-                this.preferedLangList.push(language[0]);
-            }
-        }
-    }
-
-    /**
-     * Remove one or multiple selected language(-s) from prefered language list
-     * @param language selected one or multiple languages (array or string)
-     */
-    public removeLanguage(language) {
-
-        let index;
-
-        if (language instanceof Array) {
-            for (let i = 0; i < language.length; i++) {
-                index = this.preferedLangList.indexOf(language[i]);
-                if (index > -1) {
-                    this.preferedLangList.splice(index, 1);
-                }
-            }
-        } else {
-            index = this.preferedLangList.indexOf(language[0]);
-            if (index > -1) {
-                this.preferedLangList.splice(index, 1);
-            }
-        }
-    }
-
-    /**
-     * Get language state (show all languages or only selected set)
-     *
-     * @private
-     * @returns boolean value
-     * @memberof SettingsComponent
-     */
-    public languageState() {
-        if (this.languages === 'all-languages') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Save list with prefered languages
      */
     private setPreferedLanguageList() {
         localStorage.setItem('languages', String(this.languages));
-        localStorage.setItem('preferedLanguageList', JSON.stringify(this.preferedLangList));
     }
 
     /**
@@ -257,6 +178,10 @@ export class SettingsComponent {
      */
     selectTab(tabId: string) {
         this.selectedTabId = tabId;
+    }
+
+    updateLanguageSettings(languageSettings: string) {
+        this.languages = languageSettings;
     }
 
 
