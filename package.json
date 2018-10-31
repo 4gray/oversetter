@@ -6,7 +6,7 @@
         "name": "4gray",
         "email": "dev@artslab.info"
     },
-    "description": "Translation bar",
+    "description": "Translate text directly from your menubar",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",

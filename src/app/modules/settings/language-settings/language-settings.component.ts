@@ -12,19 +12,56 @@ import { Language } from '@app/models/language';
 
 export class LanguageSettingsComponent implements OnInit {
 
+    /**
+     * Language options
+     *
+     * @type {string}
+     * @memberof LanguageSettingsComponent
+     */
     @Input() languages: string;
+
+    /**
+     * Language list
+     *
+     * @type {Language[]}
+     * @memberof LanguageSettingsComponent
+     */
     @Input() languagesList: Language[];
+
+    /**
+     * Selected languages
+     *
+     * @type {Language[]}
+     * @memberof LanguageSettingsComponent
+     */
     @Input() preferedLangList: Language[] = [];
+
+    /**
+     * Changed languages emitter
+     *
+     * @memberof LanguageSettingsComponent
+     */
     @Output() changeLanguageSettings = new EventEmitter<any>();
 
+    /**
+     * Selected language
+     *
+     * @type {Language}
+     * @memberof LanguageSettingsComponent
+     */
     selectedLanguage: Language;
+
+    /**
+     * Language to remove
+     *
+     * @type {Language}
+     * @memberof LanguageSettingsComponent
+     */
     langToRemove: Language;
 
     constructor() { }
 
-    ngOnInit() {
-        console.log(this.languages);
-    }
+    ngOnInit() { }
 
     /**
      * Add one or multiple language(-s) to the prefered language list
@@ -90,9 +127,12 @@ export class LanguageSettingsComponent implements OnInit {
         }
     }
 
-
+    /**
+     * Event emitter for language changes
+     *
+     * @memberof LanguageSettingsComponent
+     */
     updateLanguageSettings() {
-        localStorage.setItem('preferedLanguageList', JSON.stringify(this.preferedLangList));
         this.changeLanguageSettings.emit(this.languages);
     }
 

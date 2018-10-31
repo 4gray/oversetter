@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SettingsService } from '@app/services/settings.service';
 
 /**
  * Home component with router-outlet

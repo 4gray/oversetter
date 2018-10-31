@@ -2,15 +2,15 @@ import { Component, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 
-import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
 import { Translation } from '@models/translation';
 import { DictionaryItem } from '@app/models/dictionary-item';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
-import { UiService } from '@app/services/ui.service';
-import { of, Subject, Observable, from } from 'rxjs';
+import { of, Subject, Observable } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
+import { SettingsService } from '@app/services/settings.service';
+import { UiService } from '@app/services/ui.service';
 
 
 @Component({
@@ -72,12 +72,12 @@ export class MainComponent {
     public detectedLanguage = '';
     public wordFavorited = false;
     public showMoreMenu = false;
-    /* public showArrow = false; */
 
     public keyUp = new Subject<string>();
 
-
-    constructor(private translateService: TranslateService,
+    constructor(
+        private settingsService: SettingsService,
+        private translateService: TranslateService,
         private storageService: StorageService,
         private uiService: UiService,
         private router: Router,
@@ -128,18 +128,12 @@ export class MainComponent {
                     this.router.navigate(['/settings'], { queryParams: { 'tab': 'about' } });
                 });
             });
-
-            /* this.showArrow = this.uiService.showArrow; */
         }
 
-        this.fromLang = this.storageService.getFromLanguage();
-        this.toLang = this.storageService.getToLanguage();
+        this.fromLang = this.settingsService.getSettings().fromLang;
+        this.toLang = this.settingsService.getSettings().toLang;
 
-        if (AppSettings.$apiKey === '' || AppSettings.$apiKey === null) {
-            this.router.navigate(['/settings']);
-        } else {
-            this.requestLanguageList();
-        }
+        this.requestLanguageList();
 
 
         this.keyUp.pipe(
@@ -157,7 +151,7 @@ export class MainComponent {
      *
      * @memberof MainComponent
      */
-    public changeTranslationDir() {
+    public changeTranslationDir(): void {
         const temp = this.fromLang;
         this.fromLang = this.toLang;
         this.toLang = temp;
@@ -171,7 +165,7 @@ export class MainComponent {
      * @param value option value
      */
     public onLanguageChange(langDirection: string, value: Language) {
-        localStorage.setItem(langDirection, JSON.stringify(value));
+        this.settingsService.setLanguage(langDirection, value);
 
         if (langDirection === 'toLang' && this.word !== '') {
             this.translate(this.word, this.fromLang.$key, this.toLang.$key);
@@ -238,19 +232,17 @@ export class MainComponent {
      * @memberof MainComponent
      */
     requestLanguageList(): void {
-        const languageSettings = localStorage.getItem('languages') || 'all-languages';
-
-        this.languageListFrom = this.translateService.getLanguagesList(true, languageSettings);
-        this.languageListTo = this.translateService.getLanguagesList(false, languageSettings);
+        this.languageListFrom = this.translateService.getLanguagesList(true);
+        this.languageListTo = this.translateService.getLanguagesList(false);
     }
 
 
     /**
-     * Open given URL in external browser
+     * Opens given URL in external browser
      * @param url url of the website
      */
     openUrl(url: string): void {
-        this.electronService.shell.openExternal(url);
+        this.uiService.openUrl(url);
     }
 
     /**
@@ -269,7 +261,7 @@ export class MainComponent {
      * @memberof MainComponent
      */
     closeApp() {
-        this.electronService.remote.app.quit();
+        this.uiService.closeApp();
     }
 
     /**

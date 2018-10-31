@@ -19,6 +19,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { LanguageSettingsComponent } from '@modules/settings/language-settings/language-settings.component';
 import { AboutComponent } from '@modules/settings/about/about.component';
+import { ApiGuardService } from './services/api-guard.service';
+import { SettingsService } from './services/settings.service';
 
 @NgModule({
     imports: [
@@ -46,7 +48,9 @@ import { AboutComponent } from '@modules/settings/about/about.component';
     providers: [
         TranslateService,
         StorageService,
-        UiService
+        UiService,
+        ApiGuardService,
+        SettingsService
     ]
 })
 

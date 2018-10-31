@@ -4,7 +4,7 @@ import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.c
 import { MainComponent } from '@modules/translation/main/main.component';
 import { OfflineComponent } from '@modules/translation/offline/offline.component';
 import { SettingsComponent } from '@modules/settings/settings/settings.component';
-
+import { ApiGuardService as ApiGuard } from '@services/api-guard.service';
 
 const ROUTE_CONFIG: Routes = [
     {
@@ -14,7 +14,8 @@ const ROUTE_CONFIG: Routes = [
     },
     {
         path: 'home',
-        component: MainComponent
+        component: MainComponent,
+        canActivate: [ApiGuard]
     },
     {
         path: 'settings',
@@ -27,7 +28,11 @@ const ROUTE_CONFIG: Routes = [
     {
         path: 'dictionary',
         component: DictionaryComponent
-    }
+    },
+    {
+        path: '**',
+        redirectTo: 'home'
+    },
 ];
 
 

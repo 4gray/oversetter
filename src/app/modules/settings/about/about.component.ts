@@ -15,7 +15,6 @@ import { ElectronService } from 'ngx-electron';
 })
 export class AboutComponent implements OnInit {
 
-
     /**
      * Version of the application
      *
@@ -24,7 +23,19 @@ export class AboutComponent implements OnInit {
      */
     public version: string;
 
+    /**
+     * Application description
+     *
+     * @type {string}
+     * @memberof AboutComponent
+     */
+    public description: string;
 
+    /**
+     * Creates an instance of AboutComponent.
+     * @param {ElectronService} electronService electron service
+     * @memberof AboutComponent
+     */
     constructor(private electronService: ElectronService) { }
 
     /**

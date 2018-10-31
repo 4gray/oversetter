@@ -1,6 +1,11 @@
-export class Language {
-    private key: string;
-    private value: string;
+interface ILanguage {
+    key: string;
+    value: string;
+}
+
+export class Language implements ILanguage {
+    key: string;
+    value: string;
 
     /**
      *Creates an instance of Language.

@@ -2,43 +2,55 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Language } from '@app/models/language';
 import { DictionaryItem } from '@app/models/dictionary-item';
 import { Subject } from 'rxjs';
+import { Settings } from '@app/models/settings';
 
 @Injectable({
     providedIn: 'root'
 })
 export class StorageService {
 
+    SETTINGS = 'oversetter.settings';
+    VOCABULARY = 'oversetter.vocabulary';
+
     dictionaryChange: Subject<string> = new Subject<string>();
 
     /**
-     * Returns origin language from the local storage
+     * Returns saved settings from the localstorage or defaults
      *
-     * @returns {Language}
+     * @returns {Settings} settings object
      * @memberof StorageService
      */
-    getFromLanguage(): Language {
-        const fromLang = JSON.parse(localStorage.getItem('fromLang'));
-        if (fromLang) {
-            return new Language(fromLang.key, fromLang.value);
+    getSettings(): Settings {
+        const data = localStorage.getItem(this.SETTINGS);
+        let settings;
+
+        if (data !== null && data !== undefined) {
+            settings = JSON.parse(data) as Settings;
+            settings.preferedLanguageList = settings.preferedLanguageList.map(item => new Language(item.key, item.value));
+
+            settings.fromLang = new Language(settings.fromLang.key, settings.fromLang.value);
+            settings.toLang = new Language(settings.toLang.key, settings.toLang.value);
+
+            return settings;
         } else {
-            return new Language('ad', 'Auto-detect');
+            settings = new Settings();
+            this.saveSettings(settings);
+
+            return settings;
         }
     }
 
     /**
-     * Returns target language from the local storage
+     * Updates settings in the localstorage
      *
-     * @returns {Language}
+     * @param {Settings} settings settings object
      * @memberof StorageService
      */
-    getToLanguage(): Language {
-        const toLang = JSON.parse(localStorage.getItem('toLang'));
-        if (toLang) {
-            return new Language(toLang.key, toLang.value);
-        } else {
-            return new Language('en', 'English');
-        }
+    saveSettings(settings: Settings) {
+        localStorage.setItem(this.SETTINGS, JSON.stringify(settings));
     }
+
+    /** OLD */
 
     /**
      * Returns vocabulary from local storage
@@ -47,7 +59,7 @@ export class StorageService {
      * @memberof StorageService
      */
     getVocabulary(): DictionaryItem[] {
-        let vocabulary = JSON.parse(localStorage.getItem('vocabulary')) || [];
+        let vocabulary = JSON.parse(localStorage.getItem(this.VOCABULARY)) || [];
         if (vocabulary.length > 0) {
             vocabulary = vocabulary.map(item => {
                 return new DictionaryItem(item.text, item.translation, item.fromLang, item.toLang);
@@ -63,7 +75,7 @@ export class StorageService {
      * @memberof StorageService
      */
     updateVocabulary(vocabulary) {
-        localStorage.setItem('vocabulary', JSON.stringify(vocabulary));
+        localStorage.setItem(this.VOCABULARY, JSON.stringify(vocabulary));
     }
 
 }

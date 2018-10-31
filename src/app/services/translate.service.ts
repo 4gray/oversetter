@@ -4,23 +4,27 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { AppSettings } from '@models/appsettings';
 import { Translation } from '@models/translation';
 import { Language } from '@app/models/language';
 import { map, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
+import { SettingsService } from './settings.service';
+import { Settings } from '@app/models/settings';
 
 @Injectable()
 export class TranslateService {
 
     SERVICE_URL = 'https://translate.yandex.net/api/v1.5/tr.json';
+    settings: Settings;
 
     /**
      * Creates an instance of TranslateService.
      * @param {Http} http angular http module
      * @memberof TranslateService
      */
-    constructor(private http: Http) { }
+    constructor(private http: Http, private settingsService: SettingsService) {
+        this.settings = this.settingsService.getSettings();
+    }
 
     public detectLanguage(word, fromLang, toLang) {
         const requestUrl = this.createRequest(word, fromLang);
@@ -36,12 +40,13 @@ export class TranslateService {
     /**
      * Return json list with available languages from yandex api
      */
-    public getLanguagesList(includeAutoDetect: boolean = false, storeType: string = 'languages'): Observable<Language[]> {
-        // const langPreferences = localStorage.getItem(storeType);
+    public getLanguagesList(includeAutoDetect: boolean = false): Observable<Language[]> {
         let data: Observable<Language[]>;
+        const storeType = this.settingsService.getSettings().languages;
 
         if (storeType === 'select-languages') {
-            data = of<Language[]>(JSON.parse(localStorage.getItem('preferedLanguageList')));
+            const temp = this.settingsService.getSettings().preferedLanguageList;
+            data = of(temp);
         } else {
             data = this.http.get(this.getLanguagesUrl())
                 .map(res => this.sortLanguages(res.json()['langs']));
@@ -52,10 +57,8 @@ export class TranslateService {
                 if (includeAutoDetect) {
                     result.unshift(new Language('ad', 'Auto-detect'));
                 }
-                /* if (result === null) {
-                    result = [];
-                } */
-                return result.map((item: any) => new Language(item.key, item.value)) || [];
+
+                return result.map((item: any) => new Language(item.key, item.value));
             }),
             catchError(this.handleError)
         );
@@ -121,14 +124,14 @@ export class TranslateService {
      * Return URL for language request from Yandex Translate API
      */
     private getLanguagesUrl() {
-        return this.SERVICE_URL + '/getLangs?key=' + AppSettings.$apiKey + '&ui=en';
+        return this.SERVICE_URL + '/getLangs?key=' + this.settings.apiKey + '&ui=en';
     }
 
     /**
      * Return base part of URL for translation request
      */
     private getTranslateUrl() {
-        return this.SERVICE_URL + '/translate?key=' + AppSettings.$apiKey;
+        return this.SERVICE_URL + '/translate?key=' + this.settings.apiKey;
     }
 
     /**
@@ -139,7 +142,7 @@ export class TranslateService {
      * @memberof TranslateService
      */
     private getAutoDetectLanguageUrl() {
-        return this.SERVICE_URL + '/detect?key=' + AppSettings.$apiKey;
+        return this.SERVICE_URL + '/detect?key=' + this.settings.apiKey;
     }
 
     /**
@@ -161,7 +164,7 @@ export class TranslateService {
         }
 
         console.error(errMessage);
-        return Observable.throw(result || 'Please check your network connection');
+        return throwError(result || 'Please check your network connection');
 
     }
 

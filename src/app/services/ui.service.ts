@@ -32,4 +32,23 @@ export class UiService {
         }
     }
 
+    /**
+     * Closes application
+     *
+     * @memberof UiService
+     */
+    closeApp() {
+        this.electronService.remote.app.quit();
+    }
+
+    /**
+     * Opens the given URL in external browser
+     *
+     * @param {string} url webiste url
+     * @memberof SettingsComponent
+     */
+    openUrl(url: string): void {
+        this.electronService.shell.openExternal(url);
+    }
+
 }
