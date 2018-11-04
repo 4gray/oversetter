@@ -65,10 +65,10 @@
     <div fxFlex="40px" id="footer">
         <div class="copyright">
             <div class="yandex-text">Powered by
-                <a href="#" (click)="openUrl('http://translate.yandex.ru/')">«Yandex Translator»</a>
+                <a (click)="openUrl('http://translate.yandex.ru/')">«Yandex Translator»</a>
             </div>
             <div class="update-text" *ngIf="updateAvailable">
-                <a href (click)="openUrl('https://github.com/4gray/oversetter/releases')">New app version is available</a>
+                <a (click)="openUrl('https://github.com/4gray/oversetter/releases')">New app version is available</a>
             </div>
         </div>
     </div>
