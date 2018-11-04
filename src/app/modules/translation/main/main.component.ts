@@ -8,7 +8,7 @@ import { DictionaryItem } from '@app/models/dictionary-item';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
 import { of, Subject, Observable } from 'rxjs';
-import { debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
+import { debounceTime, delay, distinctUntilChanged, flatMap, map, filter } from 'rxjs/operators';
 import { SettingsService } from '@app/services/settings.service';
 import { UiService } from '@app/services/ui.service';
 
@@ -67,14 +67,53 @@ export class MainComponent {
      */
     public vocabulary: DictionaryItem[];
 
+    /**
+     * Word/phrase to translate
+     *
+     * @memberof MainComponent
+     */
     public word = '';
+
+    /**
+     * Update checker flag
+     *
+     * @memberof MainComponent
+     */
     public updateAvailable = false;
-    public detectedLanguage = '';
+
+    /**
+     * Is word/phrase saved as favorite
+     *
+     * @memberof MainComponent
+     */
     public wordFavorited = false;
+
+    /**
+     * Menu visibility flag
+     *
+     * @memberof MainComponent
+     */
     public showMoreMenu = false;
 
+    /**
+     * Textarea key up listener
+     *
+     * @memberof MainComponent
+     */
     public keyUp = new Subject<string>();
 
+
+    /**
+     * Creates an instance of MainComponent.
+     * @param {SettingsService} settingsService settings service
+     * @param {TranslateService} translateService translateion service
+     * @param {StorageService} storageService storage service
+     * @param {UiService} uiService UI service
+     * @param {Router} router angular router
+     * @param {ElectronService} electronService electron service
+     * @param {NgZone} ngZone
+     * @memberof MainComponent
+     */
     constructor(
         private settingsService: SettingsService,
         private translateService: TranslateService,
@@ -85,56 +124,13 @@ export class MainComponent {
         private ngZone: NgZone) {
 
         if (electronService.remote) {
-
-            const window = electronService.remote.getCurrentWindow();
-
-            if (window['dialog'] === 'about') {
-                this.router.navigate(['/about']);
-            } else if (window['dialog'] === 'dictionary') {
-                this.router.navigate(['/dictionary']);
-            }
-
-            // translate content from clipboard
-            this.electronService.ipcRenderer.on('translate-clipboard', () => {
-                this.ngZone.run(() => {
-                    this.router.navigate(['/home']);
-                    const clipboardText = this.electronService.clipboard.readText();
-                    this.word = clipboardText;
-                    this.translate(this.word, this.fromLang.$key, this.toLang.$key);
-                });
-            });
-
-            // clear translate area
-            this.electronService.ipcRenderer.on('translate', () => {
-                this.ngZone.run(() => {
-                    this.router.navigate(['/home']);
-                    this.word = '';
-                    if (this.translation) {
-                        this.translation = null;
-                    }
-                });
-            });
-
-            // show update text if new version of the application is available
-            this.electronService.ipcRenderer.on('update-available', () => {
-                this.ngZone.run(() => {
-                    this.updateAvailable = true;
-                });
-            });
-
-            // show app settings
-            this.electronService.ipcRenderer.on('show-settings', () => {
-                this.ngZone.run(() => {
-                    this.router.navigate(['/settings'], { queryParams: { 'tab': 'about' } });
-                });
-            });
+            this.setElectronListeners();
         }
 
-        this.fromLang = this.settingsService.getSettings().fromLang;
-        this.toLang = this.settingsService.getSettings().toLang;
+        this.fromLang = this.settingsService.getFromLang();
+        this.toLang = this.settingsService.getToLang();
 
         this.requestLanguageList();
-
 
         this.keyUp.pipe(
             map((event: KeyboardEvent) => event.target['value']),
@@ -144,6 +140,57 @@ export class MainComponent {
         ).subscribe(
             (text: string) => this.translate(text, this.fromLang.$key, this.toLang.$key)
         );
+    }
+
+    /**
+     * Sets electron ipc renderers listeners
+     *
+     * @private
+     * @memberof MainComponent
+     */
+    private setElectronListeners() {
+        const window = this.electronService.remote.getCurrentWindow();
+
+        if (window['dialog'] === 'about') {
+            this.router.navigate(['/about']);
+        } else if (window['dialog'] === 'dictionary') {
+            this.router.navigate(['/dictionary']);
+        }
+
+        // translate content from clipboard
+        this.electronService.ipcRenderer.on('translate-clipboard', () => {
+            this.ngZone.run(() => {
+                this.router.navigate(['/home']);
+                const clipboardText = this.electronService.clipboard.readText();
+                this.word = clipboardText;
+                this.translate(this.word, this.fromLang.$key, this.toLang.$key);
+            });
+        });
+
+        // clear translation area
+        this.electronService.ipcRenderer.on('translate', () => {
+            this.ngZone.run(() => {
+                this.router.navigate(['/home']);
+                this.word = '';
+                if (this.translation) {
+                    this.translation = null;
+                }
+            });
+        });
+
+        // show update text if new version of the application is available
+        this.electronService.ipcRenderer.on('update-available', () => {
+            this.ngZone.run(() => {
+                this.updateAvailable = true;
+            });
+        });
+
+        // show app settings
+        this.electronService.ipcRenderer.on('show-settings', () => {
+            this.ngZone.run(() => {
+                this.router.navigate(['/settings'], { queryParams: { 'tab': 'about' } });
+            });
+        });
     }
 
     /**
@@ -164,8 +211,8 @@ export class MainComponent {
      * @param langDirection name of the translation direction (toLang or fromlang)
      * @param value option value
      */
-    public onLanguageChange(langDirection: string, value: Language) {
-        this.settingsService.setLanguage(langDirection, value);
+    public onLanguageChange(langDirection: string, selectedLanguage: Language): void {
+        this.settingsService.setLanguage(langDirection, selectedLanguage);
 
         if (langDirection === 'toLang' && this.word !== '') {
             this.translate(this.word, this.fromLang.$key, this.toLang.$key);
@@ -177,8 +224,9 @@ export class MainComponent {
      *
      * @param word string to translate
      */
-    public translate(word: string, fromLang: string, toLang: string) {
+    public translate(word: string, fromLang: string, toLang: string): void {
         const temp = word.replace(/\n/g, ' '); // check for new line characters
+        let detectedLanguage = '';
         if (!/^ *$/.test(temp)) {
             if (fromLang === 'ad') {
                 this.translateService
@@ -186,20 +234,20 @@ export class MainComponent {
                     .subscribe(
                         (language: string) => {
                             this.translate(word, language, toLang);
-                            this.detectedLanguage = ' (' + language + ' -> ' + toLang + ')';
+                            detectedLanguage = ' (' + language + ' -> ' + toLang + ')';
                         },
                         error => console.error(`Error:  ${error}`)
                     );
             } else {
                 if (this.fromLang.$key !== 'ad') {
-                    this.detectedLanguage = '';
+                    detectedLanguage = '';
                 }
                 this.translateService
                     .getTranslation(word, fromLang, toLang)
                     .subscribe(
                         (translation: Translation) => {
                             this.translation = translation;
-                            this.translation.$text += this.detectedLanguage;
+                            this.translation.$text += detectedLanguage;
                             this.wordFavorited = false;
                         },
                         error => console.error(`Error:  ${error}`),
@@ -219,11 +267,15 @@ export class MainComponent {
     saveToDictionary(): void {
         this.vocabulary = this.storageService.getVocabulary();
 
-        const dictItem = new DictionaryItem(this.word, this.translation.$text, this.fromLang, this.toLang);
+        const dictItem: DictionaryItem = {
+            text: this.word,
+            translation: this.translation.$text,
+            fromLang: this.fromLang,
+            toLang: this.toLang
+        };
         this.vocabulary.push(dictItem);
         this.wordFavorited = true;
         this.storageService.updateVocabulary(this.vocabulary);
-        this.storageService.dictionaryChange.next('updated');
     }
 
     /**
@@ -232,8 +284,13 @@ export class MainComponent {
      * @memberof MainComponent
      */
     requestLanguageList(): void {
-        this.languageListFrom = this.translateService.getLanguagesList(true);
-        this.languageListTo = this.translateService.getLanguagesList(false);
+        this.languageListFrom = this.translateService.getLanguagesList().pipe(
+            map((result: Language[]) => {
+                result.unshift(new Language('ad', 'Auto-detect'));
+                return result;
+            }),
+        );
+        this.languageListTo = this.translateService.getLanguagesList();
     }
 
 
@@ -250,7 +307,7 @@ export class MainComponent {
      *
      * @memberof MainComponent
      */
-    showDictionary() {
+    showDictionary(): void {
         this.electronService.ipcRenderer.send('openDictionary');
         this.hideMenu();
     }
@@ -260,7 +317,7 @@ export class MainComponent {
      *
      * @memberof MainComponent
      */
-    closeApp() {
+    closeApp(): void {
         this.uiService.closeApp();
     }
 
@@ -269,7 +326,7 @@ export class MainComponent {
      *
      * @memberof MainComponent
      */
-    hideMenu() {
+    hideMenu(): void {
         this.showMoreMenu = false;
     }
 

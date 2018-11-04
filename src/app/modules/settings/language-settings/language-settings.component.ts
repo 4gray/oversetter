@@ -67,7 +67,7 @@ export class LanguageSettingsComponent implements OnInit {
      * Add one or multiple language(-s) to the prefered language list
      * @param language string or array with language list as strings
      */
-    public addLanguage(language: Language) {
+    public addLanguage(language: Language): void {
         if (!language) { return; }
 
         if (language instanceof Array) {
@@ -89,7 +89,7 @@ export class LanguageSettingsComponent implements OnInit {
      * Remove one or multiple selected language(-s) from prefered language list
      * @param language selected one or multiple languages (array or string)
      */
-    public removeLanguage(language: Language) {
+    public removeLanguage(language: Language): void {
         if (!language) { return; }
 
         let index;
@@ -119,7 +119,7 @@ export class LanguageSettingsComponent implements OnInit {
      * @returns boolean value
      * @memberof SettingsComponent
      */
-    public languageState() {
+    public languageState(): boolean {
         if (this.languages === 'all-languages') {
             return true;
         } else {
@@ -132,7 +132,7 @@ export class LanguageSettingsComponent implements OnInit {
      *
      * @memberof LanguageSettingsComponent
      */
-    updateLanguageSettings() {
+    updateLanguageSettings(): void {
         this.changeLanguageSettings.emit(this.languages);
     }
 

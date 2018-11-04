@@ -8,11 +8,21 @@ import { Language } from '@app/models/language';
 })
 export class SettingsService implements OnInit {
 
+    /**
+     * Settings object
+     *
+     * @type {Settings}
+     * @memberof SettingsService
+     */
     settings: Settings;
 
+    /**
+     * Creates an instance of SettingsService.
+     * @param {StorageService} storageService storage service
+     * @memberof SettingsService
+     */
     constructor(private storageService: StorageService) {
         this.settings = this.storageService.getSettings();
-        console.log(this.settings);
     }
 
     ngOnInit(): void { }
@@ -40,10 +50,22 @@ export class SettingsService implements OnInit {
         this.saveSettings();
     }
 
+    /**
+     * Saves settings to the localstorage
+     *
+     * @memberof SettingsService
+     */
     saveSettings() {
         this.storageService.saveSettings(this.settings);
     }
 
+    /**
+     * Sets "from" or "to" language
+     *
+     * @param {string} langDirection translation direction
+     * @param {Language} language selected language object
+     * @memberof SettingsService
+     */
     setLanguage(langDirection: string, language: Language) {
         if (langDirection === 'fromLang') {
             this.settings.fromLang = language;
@@ -52,6 +74,26 @@ export class SettingsService implements OnInit {
         }
 
         this.saveSettings();
+    }
+
+    /**
+     * Returns "from" language
+     *
+     * @returns {Language} language object
+     * @memberof SettingsService
+     */
+    getFromLang(): Language {
+        return this.settings.fromLang;
+    }
+
+    /**
+     * Returns "to" language
+     *
+     * @returns {Language} language object
+     * @memberof SettingsService
+     */
+    getToLang(): Language {
+        return this.settings.toLang;
     }
 
 }

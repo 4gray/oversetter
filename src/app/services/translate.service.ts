@@ -40,7 +40,7 @@ export class TranslateService {
     /**
      * Return json list with available languages from yandex api
      */
-    public getLanguagesList(includeAutoDetect: boolean = false): Observable<Language[]> {
+    public getLanguagesList(): Observable<Language[]> {
         let data: Observable<Language[]>;
         const storeType = this.settingsService.getSettings().languages;
 
@@ -54,10 +54,6 @@ export class TranslateService {
 
         return data.pipe<Language[]>(
             map((result: Language[]) => {
-                if (includeAutoDetect) {
-                    result.unshift(new Language('ad', 'Auto-detect'));
-                }
-
                 return result.map((item: any) => new Language(item.key, item.value));
             }),
             catchError(this.handleError)

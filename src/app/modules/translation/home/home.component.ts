@@ -15,7 +15,7 @@ import { SettingsService } from '@app/services/settings.service';
 
 export class HomeComponent {
     /**
-     * Creates an instance of HomeComponent. Register offline listener
+     * Creates an instance of HomeComponent. Register offline/online listeners
      * @param {Router} router angulars router module
      * @memberof HomeComponent
      */

@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Language } from '@app/models/language';
 import { DictionaryItem } from '@app/models/dictionary-item';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Settings } from '@app/models/settings';
 
 @Injectable({
@@ -11,8 +11,6 @@ export class StorageService {
 
     SETTINGS = 'oversetter.settings';
     VOCABULARY = 'oversetter.vocabulary';
-
-    dictionaryChange: Subject<string> = new Subject<string>();
 
     /**
      * Returns saved settings from the localstorage or defaults
@@ -50,8 +48,6 @@ export class StorageService {
         localStorage.setItem(this.SETTINGS, JSON.stringify(settings));
     }
 
-    /** OLD */
-
     /**
      * Returns vocabulary from local storage
      *
@@ -62,7 +58,13 @@ export class StorageService {
         let vocabulary = JSON.parse(localStorage.getItem(this.VOCABULARY)) || [];
         if (vocabulary.length > 0) {
             vocabulary = vocabulary.map(item => {
-                return new DictionaryItem(item.text, item.translation, item.fromLang, item.toLang);
+                const dictItem: DictionaryItem = {
+                    text: item.text,
+                    translation: item.translation,
+                    fromLang: item.fromLang,
+                    toLang: item.toLang
+                };
+                return dictItem;
             });
         }
         return vocabulary;
@@ -71,10 +73,10 @@ export class StorageService {
     /**
      * Updates local storage value with vocabulary list
      *
-     * @param {*} vocabulary
+     * @param {DictionaryItem[]} vocabulary
      * @memberof StorageService
      */
-    updateVocabulary(vocabulary) {
+    updateVocabulary(vocabulary: DictionaryItem[]): void {
         localStorage.setItem(this.VOCABULARY, JSON.stringify(vocabulary));
     }
 

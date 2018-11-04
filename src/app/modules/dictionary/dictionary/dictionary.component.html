@@ -6,7 +6,7 @@
             </div>
             <div fxFlex="70">
                 <div fxFlex fxFlexAlign="start" class="update-vocabulary">
-                    <i class="fa fa-refresh" (click)="updateDictionary()"></i>
+                    <i class="fa fa-refresh" (click)="refreshDictionary()"></i>
                 </div>
                 <div fxFlex></div>
                 <div fxFlex class="remove-phrase">
@@ -19,14 +19,15 @@
         <div fxLayout="row" fxFlexFill>
             <div fxFlex="30" id="vocabulary-list" style="overflow-y: auto;">
                 <ul>
-                    <li *ngFor="let item of vocabulary; let i = index" (click)="setSelectedItem(item, i)" [class.active]="i == selectedRow">{{item.$text}}</li>
+                    <li *ngFor="let item of vocabulary; let i = index" (click)="setSelectedItem(item, i)"
+                        [class.active]="i == selectedRow">{{item.text}}</li>
                 </ul>
             </div>
             <div fxFlex="70" id="vocabulary-translation">
                 <div *ngIf="selectedItem === null">Welcome to your offline dictionary.</div>
                 <ng-container *ngIf="selectedItem">
-                    <div id="source-text">{{selectedItem.$text}}</div>
-                    <div id="translated-text">{{selectedItem.$translation}}</div>
+                    <div id="source-text">{{selectedItem.text}}</div>
+                    <div id="translated-text">{{selectedItem.translation}}</div>
                 </ng-container>
             </div>
         </div>
