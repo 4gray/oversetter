@@ -7,7 +7,8 @@
     <div fxLayout="column" *ngIf="selectedTabId==='api'" class="full-height">
         <div fxFlex id="settings-area">
             To use this application you need to
-            <a (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex
+            <span class="link" (click)="openUrl('https://tech.yandex.com/translate/')">register</span> free API-Key
+            from Yandex
             Translate.
             For test you can use this dev-key:
             <small>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</small>

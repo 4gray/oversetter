@@ -17,6 +17,8 @@
         "run:electron": "electron ./dist/electron/main.js --disable-gpu",
         "dev": "ng build -w",
         "build:linux": "electron-builder -l",
+        "build:mac": "electron-builder -m",
+        "build:win": "electron-builder -w",
         "build:all": "electron-builder -mwl"
     },
     "main": "dist/electron/main.js",
