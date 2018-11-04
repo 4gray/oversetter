@@ -1,9 +1,15 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
+/**
+ * Offline view component
+ *
+ * @export
+ * @class OfflineComponent
+ */
 @Component({
     providers: [],
-    templateUrl: './offline.component.html'
+    templateUrl: './offline.component.html',
+    styleUrls: ['offline.component.scss']
 })
 
 export class OfflineComponent {
@@ -13,6 +19,6 @@ export class OfflineComponent {
      * @memberof OfflineComponent
      */
     constructor(private router: Router) {
-        console.log('Offline mode');
+        console.log('Offline mode enabled');
     }
 }

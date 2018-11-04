@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { DictionaryItem } from '@app/models/dictionary-item';
 import { StorageService } from '@app/services/storage.service';
@@ -36,11 +36,18 @@ export class DictionaryComponent {
 
     /**
      * Creates an instance of DictionaryComponent
-     * @param {ElectronService} electronService electron service
+     * @param {StorageService} storageService storage service
      * @memberof DictionaryComponent
      */
-    constructor(private electronService: ElectronService, private storageService: StorageService) {
+    constructor(private storageService: StorageService) {
         this.vocabulary = storageService.getVocabulary();
+
+        // subscribe for changes
+        window.addEventListener('storage', (event: StorageEvent) => {
+            if (event.key === 'oversetter.vocabulary') {
+                this.refreshDictionary();
+            }
+        });
     }
 
     /**
@@ -48,7 +55,7 @@ export class DictionaryComponent {
      *
      * @memberof DictionaryComponent
      */
-    public updateDictionary() {
+    public refreshDictionary(): void {
         this.vocabulary = this.storageService.getVocabulary();
     }
 
@@ -57,7 +64,7 @@ export class DictionaryComponent {
      * @param item current item
      * @param index index of item
      */
-    public setSelectedItem(item: DictionaryItem, index: number) {
+    public setSelectedItem(item: DictionaryItem, index: number): void {
         this.selectedItem = item;
         this.selectedRow = index;
     }
@@ -67,7 +74,7 @@ export class DictionaryComponent {
      *
      * @memberof DictionaryComponent
      */
-    public removeItem() {
+    public removeItem(): void {
         this.vocabulary.splice(this.selectedRow, 1);
         this.storageService.updateVocabulary(this.vocabulary);
         this.selectedItem = null;

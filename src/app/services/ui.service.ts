@@ -3,8 +3,19 @@ import { ElectronService } from 'ngx-electron';
 
 @Injectable()
 export class UiService {
+
+    /**
+     * Arrow flag
+     *
+     * @memberof UiService
+     */
     showArrow = false;
 
+    /**
+     *Creates an instance of UiService.
+     * @param {ElectronService} electronService electron service
+     * @memberof UiService
+     */
     constructor(private electronService: ElectronService) {
 
         // show arrow on the top of the window in mac os
@@ -19,6 +30,25 @@ export class UiService {
             }
 
         }
+    }
+
+    /**
+     * Closes application
+     *
+     * @memberof UiService
+     */
+    closeApp() {
+        this.electronService.remote.app.quit();
+    }
+
+    /**
+     * Opens the given URL in external browser
+     *
+     * @param {string} url webiste url
+     * @memberof SettingsComponent
+     */
+    openUrl(url: string): void {
+        this.electronService.shell.openExternal(url);
     }
 
 }

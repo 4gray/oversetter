@@ -1,8 +1,23 @@
-import { Language } from '@app/models/language';
-import { DictionaryItem } from '@app/models/dictionary-item';
+import { Language } from './language';
 
-export interface Settings {
+interface ISettings {
+    alwaysOnTop: boolean;
+    apiKey: string;
+    autolaunch: boolean;
+    languages: string;
     fromLang: Language;
     toLang: Language;
-    vocabulary: DictionaryItem[];
+    preferedLanguageList: Language[];
+    showDockIcon: boolean;
+}
+
+export class Settings implements ISettings {
+    alwaysOnTop = false;
+    apiKey = '';
+    autolaunch = false;
+    languages = 'all-languages';
+    fromLang = new Language('en', 'English');
+    toLang = new Language('ru', 'Russian');
+    preferedLanguageList = [];
+    showDockIcon = false;
 }

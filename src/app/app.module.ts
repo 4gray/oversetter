@@ -4,20 +4,23 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxElectronModule } from 'ngx-electron';
 
-import { AboutComponent } from '@modules/translation/about/about.component';
 import { AppRoutingModule } from '@app/app.routing';
 import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.component';
 import { HomeComponent } from '@modules/translation/home/home.component';
-import { KeysPipe } from '@pipes/keys.pipe';
 
 import { MainComponent } from '@modules/translation/main/main.component';
 import { OfflineComponent } from '@modules/translation/offline/offline.component';
 import { SettingsComponent } from '@modules/settings/settings/settings.component';
 import { TranslateService } from '@services/translate.service';
-import { LangSelectorComponent } from './modules/translation/lang-selector/lang-selector.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { StorageService } from '@app/services/storage.service';
 import { UiService } from '@app/services/ui.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { LanguageSettingsComponent } from '@modules/settings/language-settings/language-settings.component';
+import { AboutComponent } from '@modules/settings/about/about.component';
+import { ApiGuardService } from './services/api-guard.service';
+import { SettingsService } from './services/settings.service';
 
 @NgModule({
     imports: [
@@ -26,17 +29,18 @@ import { UiService } from '@app/services/ui.service';
         FormsModule,
         NgxElectronModule,
         AppRoutingModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        NgSelectModule,
+        ClickOutsideModule
     ],
     declarations: [
         HomeComponent,
         MainComponent,
         SettingsComponent,
-        AboutComponent,
         OfflineComponent,
         DictionaryComponent,
-        KeysPipe,
-        LangSelectorComponent
+        LanguageSettingsComponent,
+        AboutComponent
     ],
     bootstrap: [
         HomeComponent
@@ -44,7 +48,9 @@ import { UiService } from '@app/services/ui.service';
     providers: [
         TranslateService,
         StorageService,
-        UiService
+        UiService,
+        ApiGuardService,
+        SettingsService
     ]
 })
 

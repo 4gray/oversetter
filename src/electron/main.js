@@ -12,12 +12,10 @@ const semver = require('semver');
 const superagent = require('superagent');
 const path = require('path');
 const settings = require('electron-settings');
-const About = require('./about');
 const Dictionary = require('./dictionary');
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
 const currentVersion = app.getVersion();
-let aboutWindow = new About();
 let dictionary = new Dictionary();
 
 const keyboardShortcuts = {
@@ -55,6 +53,7 @@ mb.on('ready', () => {
         mb.window.openDevTools();
 
     if (process.platform === 'linux') {
+        mb.window.setIcon(path.join(__dirname, '../assets/icon.png'));
         mb.tray.setToolTip('Translate');
         mb.window.setResizable(false); // workaround for linux
     }
@@ -135,10 +134,6 @@ mb.on('ready', () => {
         dictionary.showWindow();
     });
 
-    ipcMain.on('openAbout', () => {
-        aboutWindow.showWindow();
-    });
-
 });
 
 /**
@@ -147,7 +142,10 @@ mb.on('ready', () => {
 mb.on('after-create-window', function () {
     const contextMenu = Menu.buildFromTemplate([{
             label: 'About Oversetter',
-            click: () => aboutWindow.showWindow()
+            click: () => {
+                mb.window.webContents.send('show-settings');
+                showApp();
+            }
         },
         {
             label: 'Open dictionary',

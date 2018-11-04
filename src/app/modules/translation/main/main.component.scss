@@ -12,14 +12,11 @@
     user-select: text;
     -webkit-user-select: text;
     font-size: 12px;
+    border-top: 1px solid #ccc;
 }
 
 #direction-switch {
-    /* width: 30px;
-    padding: 3px 4px 2px 4px;
-    margin-right: 1px;
-    color: #666; */
-    margin: 6px;
+    margin: 7px;
 }
 
 .textarea-original {
@@ -39,4 +36,22 @@
 
 .translation-preview {
     color: #666;
+}
+
+#result-area:hover>#translation-toolbar {
+    display: block;
+    position: absolute;
+    right: 10px;
+    color: #b3b3b3;
+    border: 1px solid #b3b3b3;
+    background: #fff;
+    height: 30px;
+    width: 30px;
+    padding: 6px 7px;
+    margin-top: 10px;
+    border-radius: 4px;
+}
+
+#translation-toolbar>i {
+    font-size: 16px;
 }

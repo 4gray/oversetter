@@ -6,7 +6,7 @@
         "name": "4gray",
         "email": "dev@artslab.info"
     },
-    "description": "Translation bar",
+    "description": "Translate text directly from your menubar",
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
@@ -14,15 +14,20 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "run:electron": "electron ./dist/electron/main.js",
-        "dev": "ng build -w"
+        "run:electron": "electron ./dist/electron/main.js --disable-gpu",
+        "dev": "ng build -w",
+        "build:linux": "electron-builder -l",
+        "build:all": "electron-builder -mwl"
     },
     "main": "dist/electron/main.js",
     "private": true,
     "dependencies": {
+        "@ng-select/ng-select": "^2.11.0",
         "auto-launch": "^5.0.5",
         "electron-settings": "^3.1.1",
+        "electron-window-state": "^5.0.2",
         "menubar": "^5.2.3",
+        "ng-click-outside": "^4.0.0",
         "ngx-electron": "^1.0.4",
         "rxjs-compat": "^6.2.2",
         "semver": "^5.4.1",

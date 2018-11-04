@@ -1,35 +1,41 @@
 <div fxLayout="column" fxFlexFill style="overflow: hidden;">
 
-    <div fxFlex="15px" class="arrow-up" *ngIf="showArrow"></div>
-
     <div id="tabs" fxFlex="40px" class="options-panel">
         <div *ngFor="let tab of tabs" (click)="selectTab(tab.id)" [class.active-tab]="tab.id === selectedTabId">{{tab.title}}</div>
     </div>
 
-    <div fxLayout="column" *ngIf="selectedTabId==='api'" style="height:100%">
+    <div fxLayout="column" *ngIf="selectedTabId==='api'" class="full-height">
         <div fxFlex id="settings-area">
             To use this application you need to
-            <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex Translate. For test you can use this dev-key:
-            <i>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</i>
+            <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">register</a> free API-Key from Yandex
+            Translate.
+            For test you can use this dev-key:
+            <small>trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf</small>
         </div>
-        <textarea fxFlex id="api-key" placeholder="Enter your API key here" type="text" [(ngModel)]="apiKey"></textarea>
+        <textarea fxFlex id="api-key" placeholder="Enter your API key here" type="text" [(ngModel)]="settings.apiKey"></textarea>
     </div>
 
-    <div fxLayout="column" *ngIf="selectedTabId==='general'" style="height:100%">
+    <div fxLayout="column" *ngIf="selectedTabId==='general'" class="full-height">
         <div fxFlex class="settings-container">
             <div class="settings-title">Application settings</div>
             <ul>
                 <li class="checkbox-option">
                     <label for="start-at-login">
-                        <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="autolaunch"> Start at login</label>
+                        <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="settings.autolaunch">
+                        Start
+                        at login</label>
                 </li>
                 <li class="checkbox-option">
                     <label for="show-dock-icon">
-                        <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="showDockIcon"> Show dock icon</label>
+                        <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="settings.showDockIcon">
+                        Show
+                        dock icon</label>
                 </li>
                 <li class="checkbox-option">
                     <label for="always-on-top">
-                        <input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="alwaysOnTop"> Always on top</label>
+                        <input type="checkbox" id="always-on-top" value="Stay always on the top" [(ngModel)]="settings.alwaysOnTop">
+                        Always
+                        on top</label>
                 </li>
             </ul>
             <div class="settings-title">Shortcuts</div>
@@ -55,39 +61,23 @@
             </div>
         </div>
     </div>
-    <div fxLayout="column" *ngIf="selectedTabId==='languages'" style="height:100%">
+    <div fxLayout="column" *ngIf="selectedTabId==='languages'" class="full-height">
         <div fxFlex class="settings-container">
-            <form>
-                <fieldset class="settings-checkboxes" ngModelGroup="languages">
-                    <input type="radio" id="all" name="languages" value="all-languages" checked [(ngModel)]="languages">
-                    <label for="all"> Show all languages</label>
-                    <br>
-                    <input type="radio" id="short" name="languages" value="select-languages" [(ngModel)]="languages">
-                    <label for="short"> Select languages from the list:</label>
-                </fieldset>
-            </form>
+            <app-language-settings [languagesList]="languagesList | async" [preferedLangList]="settings.preferedLanguageList"
+                [languages]="settings.languages" (changeLanguageSettings)="updateLanguageSettings($event)"></app-language-settings>
+        </div>
+    </div>
 
-            <div fxLayout="row">
-                <select ngFlex multiple id="all-languages-list" [(ngModel)]="selectedLang" [disabled]="languageState()">
-                    <option *ngFor="let lang of langList" [ngValue]="lang">{{lang.value}}</option>
-                </select>
-
-                <div ngFlex style="text-align:center;">
-                    <button class="btn" id="add-language" (click)="addLanguage(selectedLang)" [disabled]="languageState()"> &gt; </button>
-                    <button div class="btn" id="remove-language" (click)="removeLanguage(langToRemove)"> &lt; </button>
-                </div>
-
-                <select ngFlex multiple id="selected-languages-list" [(ngModel)]="langToRemove" [disabled]="languageState()">
-                    <option *ngFor="let prefLang of preferedLangList" [ngValue]="prefLang">{{prefLang.value}}</option>
-                </select>
-            </div>
+    <div fxLayout="column" *ngIf="selectedTabId==='about'" class="full-height">
+        <div fxFlex class="settings-container">
+            <app-about></app-about>
         </div>
     </div>
 
     <div fxFlex="40px" id="footer" class="options-panel">
         <div fxLayout="row" class="copyright" fxFlexFill>
             <i fxFlex="20px" class="fa fa-angle-left back-icon" (click)="validateApiKey()"></i>
-            <button fxFlex="75px" [disabled]="!apiKey" (click)="saveApiKey(apiKey, 'apiKey')" class="save-settings-btn">
+            <button fxFlex="75px" [disabled]="!settings.apiKey" (click)="saveSettings()" class="save-settings-btn">
                 <i class="fa fa-save"></i> Save</button>
             <div fxFlex class="settings-text-bottom">{{errorMessage}}</div>
             <div fxFlex="20px" id="close-btn" (click)="closeApp()">

@@ -4,18 +4,27 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
-import { AppSettings } from '@models/appsettings';
 import { Translation } from '@models/translation';
+import { Language } from '@app/models/language';
+import { map, catchError } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
+import { SettingsService } from './settings.service';
+import { Settings } from '@app/models/settings';
 
 @Injectable()
 export class TranslateService {
+
+    SERVICE_URL = 'https://translate.yandex.net/api/v1.5/tr.json';
+    settings: Settings;
 
     /**
      * Creates an instance of TranslateService.
      * @param {Http} http angular http module
      * @memberof TranslateService
      */
-    constructor(private http: Http) { }
+    constructor(private http: Http, private settingsService: SettingsService) {
+        this.settings = this.settingsService.getSettings();
+    }
 
     public detectLanguage(word, fromLang, toLang) {
         const requestUrl = this.createRequest(word, fromLang);
@@ -31,10 +40,49 @@ export class TranslateService {
     /**
      * Return json list with available languages from yandex api
      */
-    public getLanguagesList(): Observable<string[]> {
-        return this.http.get(this.getLanguagesUrl())
-            .map(res => res.json()['langs'])
-            .catch(this.handleError);
+    public getLanguagesList(): Observable<Language[]> {
+        let data: Observable<Language[]>;
+        const storeType = this.settingsService.getSettings().languages;
+
+        if (storeType === 'select-languages') {
+            const temp = this.settingsService.getSettings().preferedLanguageList;
+            data = of(temp);
+        } else {
+            data = this.http.get(this.getLanguagesUrl())
+                .map(res => this.sortLanguages(res.json()['langs']));
+        }
+
+        return data.pipe<Language[]>(
+            map((result: Language[]) => {
+                return result.map((item: any) => new Language(item.key, item.value));
+            }),
+            catchError(this.handleError)
+        );
+    }
+
+    /**
+     * Sort languages
+     *
+     * @param {any} languages object with languages
+     * @returns sorted array with language list
+     * @memberof MainComponent
+     */
+    sortLanguages(languages) {
+        let sortedLangs = [];
+        // tslint:disable-next-line:forin
+        for (const key in languages) {
+            sortedLangs.push({
+                key: key,
+                value: languages[key]
+            });
+        }
+
+        sortedLangs.sort((a, b) => a.value.localeCompare(b.value));
+        sortedLangs = sortedLangs.map(item => {
+            return new Language(item.key, item.value);
+        });
+
+        return sortedLangs;
     }
 
     /**
@@ -72,14 +120,14 @@ export class TranslateService {
      * Return URL for language request from Yandex Translate API
      */
     private getLanguagesUrl() {
-        return 'https://translate.yandex.net/api/v1.5/tr.json/getLangs?key=' + AppSettings.$API_KEY + '&ui=en';
+        return this.SERVICE_URL + '/getLangs?key=' + this.settings.apiKey + '&ui=en';
     }
 
     /**
      * Return base part of URL for translation request
      */
     private getTranslateUrl() {
-        return 'https://translate.yandex.net/api/v1.5/tr.json/translate?key=' + AppSettings.$API_KEY;
+        return this.SERVICE_URL + '/translate?key=' + this.settings.apiKey;
     }
 
     /**
@@ -90,7 +138,7 @@ export class TranslateService {
      * @memberof TranslateService
      */
     private getAutoDetectLanguageUrl() {
-        return 'https://translate.yandex.net/api/v1.5/tr.json/detect?key=' + AppSettings.$API_KEY;
+        return this.SERVICE_URL + '/detect?key=' + this.settings.apiKey;
     }
 
     /**
@@ -112,7 +160,7 @@ export class TranslateService {
         }
 
         console.error(errMessage);
-        return Observable.throw(result || 'Please check your network connection');
+        return throwError(result || 'Please check your network connection');
 
     }
 
