@@ -72,12 +72,12 @@ export class LanguageSettingsComponent implements OnInit {
 
         if (language instanceof Array) {
             for (let i = 0; i < language.length; i++) {
-                if (this.preferedLangList.filter(item => item.$value === language[i].value).length === 0) {
+                if (this.preferedLangList.filter(item => item.value === language[i].value).length === 0) {
                     this.preferedLangList.push(language[i]);
                 }
             }
         } else {
-            if (this.preferedLangList.filter(item => item.$value === language[0].value).length === 0) {
+            if (this.preferedLangList.filter(item => item.value === language[0].value).length === 0) {
                 this.preferedLangList.push(language[0]);
             }
         }

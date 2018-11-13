@@ -1,10 +1,16 @@
+export interface Translation {
+    code: string;
+    lang: string;
+    text: string;
+}
+
 /**
  * Model class of translation object
  *
  * @export
  * @class Translation
  */
-export class Translation {
+export class Translation2 {
 
     /**
      * Language code/abbreviation

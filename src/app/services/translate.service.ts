@@ -26,7 +26,15 @@ export class TranslateService {
         this.settings = this.settingsService.getSettings();
     }
 
-    public detectLanguage(word, fromLang, toLang) {
+    /**
+     * Translate with Auto-detect
+     *
+     * @param {string} word word or phrase
+     * @param {Language} fromLang from language
+     * @returns
+     * @memberof TranslateService
+     */
+    public detectLanguage(word: string, fromLang: string) {
         const requestUrl = this.createRequest(word, fromLang);
         return this.http.get(requestUrl)
             .map(response => response.json())
@@ -38,51 +46,46 @@ export class TranslateService {
     }
 
     /**
-     * Return json list with available languages from yandex api
+     * Returns JSON list with prefered languages
+     *
+     * @returns {Language[]} language list
+     * @memberof TranslateService
      */
-    public getLanguagesList(): Observable<Language[]> {
-        let data: Observable<Language[]>;
-        const storeType = this.settingsService.getSettings().languages;
-
-        if (storeType === 'select-languages') {
-            const temp = this.settingsService.getSettings().preferedLanguageList;
-            data = of(temp);
-        } else {
-            data = this.http.get(this.getLanguagesUrl())
-                .map(res => this.sortLanguages(res.json()['langs']));
-        }
-
-        return data.pipe<Language[]>(
-            map((result: Language[]) => {
-                return result.map((item: any) => new Language(item.key, item.value));
-            }),
-            catchError(this.handleError)
-        );
+    getPreferedLanguagesList(): Observable<Language[]> {
+        return of(this.settingsService.getSettings().preferedLanguageList);
     }
 
     /**
-     * Sort languages
+     * Returns JSON list with available languages from Yandex API
+     *
+     * @returns {Observable<Language[]>}
+     * @memberof TranslateService
+     */
+    public getLanguagesList(): Observable<Language[]> {
+        return this.http.get(this.getLanguagesUrl())
+            .map(res => res.json()['langs'])
+            .map(res => this.sortLanguages(res))
+            .pipe<Language[]>(
+                catchError(this.handleError)
+            );
+    }
+
+    /**
+     * Sorts languages alphabetically
      *
      * @param {any} languages object with languages
      * @returns sorted array with language list
      * @memberof MainComponent
      */
     sortLanguages(languages) {
-        let sortedLangs = [];
-        // tslint:disable-next-line:forin
-        for (const key in languages) {
+        const sortedLangs: Language[] = [];
+        for (const key of Object.keys(languages)) {
             sortedLangs.push({
                 key: key,
                 value: languages[key]
             });
         }
-
-        sortedLangs.sort((a, b) => a.value.localeCompare(b.value));
-        sortedLangs = sortedLangs.map(item => {
-            return new Language(item.key, item.value);
-        });
-
-        return sortedLangs;
+        return sortedLangs.sort((a, b) => a.value.localeCompare(b.value));
     }
 
     /**
@@ -95,9 +98,7 @@ export class TranslateService {
         const requestUrl = this.createRequest(word, fromLang, toLang);
         return this.http.get(requestUrl)
             .map(response => response.json())
-            .map(response => {
-                return new Translation(response.code, response.lang, response.text);
-            })
+            .map((response: Translation) => response)
             .catch(this.handleError);
     }
 

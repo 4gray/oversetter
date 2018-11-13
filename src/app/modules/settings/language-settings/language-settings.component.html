@@ -1,5 +1,5 @@
 <form>
-    <fieldset class="settings-checkboxes" ngModelGroup="languages">
+    <fieldset class="settings-checkboxes" ngModelGroup="languages" (change)="updateLanguageSettings()">
         <input type="radio" id="all" name="languages" value="all-languages" checked [(ngModel)]="languages">
         <label for="all"> Show all languages</label>
         <br>
@@ -10,7 +10,7 @@
 
 <div fxLayout="row">
     <select ngFlex multiple id="all-languages-list" [(ngModel)]="selectedLanguage" [disabled]="languageState()">
-        <option *ngFor="let lang of languagesList" [ngValue]="lang">{{lang.$value}}</option>
+        <option *ngFor="let lang of languagesList" [ngValue]="lang">{{lang.value}}</option>
     </select>
 
     <div ngFlex style="text-align:center;">
@@ -21,6 +21,6 @@
     </div>
 
     <select ngFlex multiple id="selected-languages-list" [(ngModel)]="langToRemove" [disabled]="languageState()">
-        <option *ngFor="let prefLang of preferedLangList" [ngValue]="prefLang">{{prefLang.$value}}</option>
+        <option *ngFor="let prefLang of preferedLangList" [ngValue]="prefLang">{{prefLang.value}}</option>
     </select>
 </div>

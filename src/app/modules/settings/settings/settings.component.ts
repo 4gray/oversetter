@@ -94,14 +94,6 @@ export class SettingsComponent implements OnInit {
 
         this.settings = this.settingsService.getSettings();
 
-        // set settings -> TODO
-        /* this.apiKey = this.settings.apiKey;
-        this.autolaunch = this.settings.autolaunch;
-        this.alwaysOnTop = this.settings.alwaysOnTop;
-        this.showDockIcon = this.settings.showDockIcon;
-        this.preferedLangList = this.settings.preferedLanguageList;
-        this.languages = this.settings.languages; */
-
         // requests language list
         this.languagesList = this.translateService.getLanguagesList();
     }

@@ -5,6 +5,7 @@ import { MainComponent } from '@modules/translation/main/main.component';
 import { OfflineComponent } from '@modules/translation/offline/offline.component';
 import { SettingsComponent } from '@modules/settings/settings/settings.component';
 import { ApiGuardService as ApiGuard } from '@services/api-guard.service';
+import { LangResolver } from './services/lang.resolver';
 
 const ROUTE_CONFIG: Routes = [
     {
@@ -15,7 +16,8 @@ const ROUTE_CONFIG: Routes = [
     {
         path: 'home',
         component: MainComponent,
-        canActivate: [ApiGuard]
+        canActivate: [ApiGuard],
+        resolve: { languages: LangResolver }
     },
     {
         path: 'settings',

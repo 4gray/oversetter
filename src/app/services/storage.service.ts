@@ -24,10 +24,15 @@ export class StorageService {
 
         if (data !== null && data !== undefined) {
             settings = JSON.parse(data) as Settings;
-            settings.preferedLanguageList = settings.preferedLanguageList.map(item => new Language(item.key, item.value));
 
-            settings.fromLang = new Language(settings.fromLang.key, settings.fromLang.value);
-            settings.toLang = new Language(settings.toLang.key, settings.toLang.value);
+            settings.fromLang = {
+                key: settings.fromLang.key,
+                value: settings.fromLang.value
+            };
+            settings.toLang = {
+                key: settings.toLang.key,
+                value: settings.toLang.value
+            };
 
             return settings;
         } else {

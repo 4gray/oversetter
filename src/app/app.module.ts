@@ -21,6 +21,7 @@ import { LanguageSettingsComponent } from '@modules/settings/language-settings/l
 import { AboutComponent } from '@modules/settings/about/about.component';
 import { ApiGuardService } from './services/api-guard.service';
 import { SettingsService } from './services/settings.service';
+import { LangResolver } from './services/lang.resolver';
 
 @NgModule({
     imports: [
@@ -50,7 +51,8 @@ import { SettingsService } from './services/settings.service';
         StorageService,
         UiService,
         ApiGuardService,
-        SettingsService
+        SettingsService,
+        LangResolver
     ]
 })
 

@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 
 import { TranslateService } from '@services/translate.service';
@@ -33,7 +33,7 @@ export class MainComponent {
      * @type {Language[]}
      * @memberof MainComponent
      */
-    public languageListFrom: Observable<Language[]>;
+    public languageListFrom: Language[];
 
     /**
      * List of languages for "translate to" dropdown
@@ -41,7 +41,7 @@ export class MainComponent {
      * @type {Observable<Language[]>}
      * @memberof MainComponent
      */
-    public languageListTo: Observable<Language[]>;
+    public languageListTo: Language[];
 
     /**
      * Translate to the given language
@@ -121,7 +121,8 @@ export class MainComponent {
         private uiService: UiService,
         private router: Router,
         private electronService: ElectronService,
-        private ngZone: NgZone) {
+        private ngZone: NgZone,
+        private route: ActivatedRoute) {
 
         if (electronService.remote) {
             this.setElectronListeners();
@@ -130,7 +131,11 @@ export class MainComponent {
         this.fromLang = this.settingsService.getFromLang();
         this.toLang = this.settingsService.getToLang();
 
-        this.requestLanguageList();
+        this.languageListFrom = [
+            ...[{ key: 'ad', value: 'Auto-detect' }],
+            ...this.route.snapshot.data.languages
+        ];
+        this.languageListTo = [...this.route.snapshot.data.languages];
 
         this.keyUp.pipe(
             map((event: KeyboardEvent) => event.target['value']),
@@ -138,7 +143,7 @@ export class MainComponent {
             distinctUntilChanged(),
             flatMap(search => of(search).pipe(delay(500)))
         ).subscribe(
-            (text: string) => this.translate(text, this.fromLang.$key, this.toLang.$key)
+            (text: string) => this.handleTranslation(text, this.fromLang.key, this.toLang.key)
         );
     }
 
@@ -163,7 +168,7 @@ export class MainComponent {
                 this.router.navigate(['/home']);
                 const clipboardText = this.electronService.clipboard.readText();
                 this.word = clipboardText;
-                this.translate(this.word, this.fromLang.$key, this.toLang.$key);
+                this.handleTranslation(this.word, this.fromLang.key, this.toLang.key);
             });
         });
 
@@ -215,44 +220,65 @@ export class MainComponent {
         this.settingsService.setLanguage(langDirection, selectedLanguage);
 
         if (langDirection === 'toLang' && this.word !== '') {
-            this.translate(this.word, this.fromLang.$key, this.toLang.$key);
+            this.handleTranslation(this.word, this.fromLang.key, this.toLang.key);
         }
     }
 
     /**
-     * Translate text
+     * Auto-detect language
      *
-     * @param word string to translate
+     * @param {string} word string to translate
+     * @param {string} fromLang from language
+     * @param {string} toLang to language
+     * @memberof MainComponent
      */
-    public translate(word: string, fromLang: string, toLang: string): void {
+    detectLanguage(word: string, fromLang: string, toLang: string): void {
+        this.translateService
+            .detectLanguage(word, fromLang)
+            .subscribe(
+                (detectedLang: string) => this.handleTranslation(word, detectedLang, toLang),
+                error => console.error(`Error:  ${error}`)
+            );
+    }
+
+    /**
+     * Translates the given string
+     *
+     * @param {string} word string to translate
+     * @param {string} fromLang from language
+     * @param {string} toLang to language
+     * @memberof MainComponent
+     */
+    translate(word: string, fromLang: string, toLang: string): void {
+        this.translateService
+            .getTranslation(word, fromLang, toLang)
+            .subscribe(
+                (translation: Translation) => {
+                    this.translation = translation;
+                    this.translation.text += ' (' + fromLang + '->' + toLang + ')';
+                    this.wordFavorited = false;
+                },
+                error => console.error(`Error:  ${error}`),
+                () => console.log(`Translation: ${this.translation.text}`)
+            );
+    }
+
+    /**
+     * Handles translation
+     *
+     * @param {string} word string to translate
+     * @param {string} fromLang from language
+     * @param {string} toLang to language
+     * @memberof MainComponent
+     */
+    public handleTranslation(word: string, fromLang: string, toLang: string): void {
         const temp = word.replace(/\n/g, ' '); // check for new line characters
-        let detectedLanguage = '';
+
         if (!/^ *$/.test(temp)) {
             if (fromLang === 'ad') {
-                this.translateService
-                    .detectLanguage(word, fromLang, toLang)
-                    .subscribe(
-                        (language: string) => {
-                            this.translate(word, language, toLang);
-                            detectedLanguage = ' (' + language + ' -> ' + toLang + ')';
-                        },
-                        error => console.error(`Error:  ${error}`)
-                    );
+                this.detectLanguage(word, fromLang, toLang);
             } else {
-                if (this.fromLang.$key !== 'ad') {
-                    detectedLanguage = '';
-                }
-                this.translateService
-                    .getTranslation(word, fromLang, toLang)
-                    .subscribe(
-                        (translation: Translation) => {
-                            this.translation = translation;
-                            this.translation.$text += detectedLanguage;
-                            this.wordFavorited = false;
-                        },
-                        error => console.error(`Error:  ${error}`),
-                        () => console.log(`Translation: ${this.translation.$text}`)
-                    );
+                this.translate(word, fromLang, toLang);
             }
         } else {
             this.translation = null;
@@ -269,7 +295,7 @@ export class MainComponent {
 
         const dictItem: DictionaryItem = {
             text: this.word,
-            translation: this.translation.$text,
+            translation: this.translation.text,
             fromLang: this.fromLang,
             toLang: this.toLang
         };
@@ -277,22 +303,6 @@ export class MainComponent {
         this.wordFavorited = true;
         this.storageService.updateVocabulary(this.vocabulary);
     }
-
-    /**
-     * Get list with all available languages from the API
-     *
-     * @memberof MainComponent
-     */
-    requestLanguageList(): void {
-        this.languageListFrom = this.translateService.getLanguagesList().pipe(
-            map((result: Language[]) => {
-                result.unshift(new Language('ad', 'Auto-detect'));
-                return result;
-            }),
-        );
-        this.languageListTo = this.translateService.getLanguagesList();
-    }
-
 
     /**
      * Opens given URL in external browser

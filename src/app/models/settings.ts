@@ -16,8 +16,8 @@ export class Settings implements ISettings {
     apiKey = '';
     autolaunch = false;
     languages = 'all-languages';
-    fromLang = new Language('en', 'English');
-    toLang = new Language('ru', 'Russian');
+    fromLang = { key: 'en', value: 'English' };
+    toLang = { key: 'ru', value: 'Russian' };
     preferedLanguageList = [];
     showDockIcon = false;
 }
