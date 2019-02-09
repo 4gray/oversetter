@@ -20,7 +20,7 @@
         "build:all": "electron-builder -mwl"
     },
     "main": "dist/electron/main.js",
-    "private": true,
+    "private": false,
     "dependencies": {
         "@ng-select/ng-select": "^2.11.0",
         "auto-launch": "^5.0.5",
@@ -28,6 +28,7 @@
         "menubar": "^5.2.3",
         "ng-click-outside": "^4.0.0",
         "ngx-electron": "^1.0.4",
+        "ngx-take-until-destroy": "^5.4.0",
         "rxjs-compat": "^6.2.2",
         "semver": "^5.4.1",
         "superagent": "^3.8.2"

@@ -7,10 +7,19 @@ import 'rxjs/add/operator/catch';
 import { AppSettings } from '@models/appsettings';
 import { Translation } from '@models/translation';
 import { Language } from '@app/models/language';
+import { map, catchError } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class TranslateService {
 
+    /**
+     * URL of the Yandex API
+     *
+     * @memberof TranslateService
+     */
     SERVICE_URL = 'https://translate.yandex.net/api/v1.5/tr.json';
 
     /**
@@ -20,15 +29,25 @@ export class TranslateService {
      */
     constructor(private http: Http) { }
 
+    /**
+     * Auto-detects language of the given word/phrase
+     * @param word word or phrase to translate
+     * @param fromLang from language as code
+     * @param toLang to language as code
+     */
     public detectLanguage(word, fromLang, toLang) {
         const requestUrl = this.createRequest(word, fromLang);
         return this.http.get(requestUrl)
-            .map(response => response.json())
-            .map(response => {
-                console.log(`Detected language: ${response.lang}`);
-                return response.lang;
-            })
-            .catch(this.handleError);
+            .pipe(
+                map(response => response.json()),
+                map((response: any) => {
+                    console.log(`Detected language: ${response.lang}`);
+                    return response.lang;
+                }),
+                catchError(err => this.handleError(err))
+            );
+
+
     }
 
     /**
@@ -36,9 +55,11 @@ export class TranslateService {
      */
     public getLanguagesList(): Observable<Language[]> {
         return this.http.get(this.getLanguagesUrl())
-            .map(res => this.sortLanguages(res.json()['langs']))
-            // .map(res => res.json()['langs'])
-            .catch(this.handleError);
+            .pipe(
+                map(res => this.sortLanguages(res.json()['langs'])),
+                catchError(err => this.handleError(err))
+            );
+
     }
 
     /**
@@ -75,11 +96,14 @@ export class TranslateService {
     public getTranslation(word: string, fromLang: string, toLang: string): Observable<Translation> {
         const requestUrl = this.createRequest(word, fromLang, toLang);
         return this.http.get(requestUrl)
-            .map(response => response.json())
-            .map(response => {
-                return new Translation(response.code, response.lang, response.text);
-            })
-            .catch(this.handleError);
+            .pipe(
+                map(response => response.json()),
+                map(response => {
+                    return new Translation(response.code, response.lang, response.text);
+                }),
+                catchError(err => this.handleError(err))
+            );
+
     }
 
     /**
@@ -126,7 +150,7 @@ export class TranslateService {
      * Handle API errors
      * @param err error object
      */
-    private handleError(err) {
+    private handleError(err: any): Observable<any> {
         let errMessage: string;
         let result;
 
@@ -141,7 +165,7 @@ export class TranslateService {
         }
 
         console.error(errMessage);
-        return Observable.throw(result || 'Please check your network connection');
+        return throwError(result || 'Please check your network connection');
 
     }
 

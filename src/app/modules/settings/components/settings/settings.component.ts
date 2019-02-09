@@ -61,7 +61,7 @@ export class SettingsComponent {
         private router: Router,
         private electronService: ElectronService,
         private uiService: UiService,
-        private route: ActivatedRoute) {
+        route: ActivatedRoute) {
 
         route.queryParams.subscribe(param => {
             const tabName = param['tab'] || '';
@@ -126,13 +126,8 @@ export class SettingsComponent {
     public validateApiKey() {
         const l$ = this.translateService.getLanguagesList();
         l$.subscribe(
-            response => {
-                this.router.navigate(['/home']);
-                // let myNotification = new Notification('Oversetter', {
-                // 	body: 'Settings were saved'
-                // });
-            },
-            err => this.errorMessage = err
+            () => this.router.navigate(['/home']),
+            error => this.errorMessage = error
         );
     }
 

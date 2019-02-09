@@ -1,39 +1,16 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { DictionaryComponent } from '@modules/dictionary/dictionary/dictionary.component';
-import { MainComponent } from '@modules/translation/main/main.component';
-import { OfflineComponent } from '@modules/translation/offline/offline.component';
-import { SettingsComponent } from '@modules/settings/settings/settings.component';
+import { ModuleWithProviders } from '@angular/core';
+import {
+    RouterModule,
+    Routes
+} from '@angular/router';
 
 
-const ROUTE_CONFIG: Routes = [
+const APP_ROUTES: Routes = [
     {
         path: '',
-        redirectTo: 'home',
-        pathMatch: 'full'
-    },
-    {
-        path: 'home',
-        component: MainComponent
-    },
-    {
-        path: 'settings',
-        component: SettingsComponent
-    },
-    {
-        path: 'offline',
-        component: OfflineComponent
-    },
-    {
-        path: 'dictionary',
-        component: DictionaryComponent
+        loadChildren: './modules/translation/translation.module#TranslationModule'
     }
 ];
 
 
-@NgModule({
-    imports: [RouterModule.forRoot(ROUTE_CONFIG)],
-    exports: [RouterModule]
-})
-
-export class AppRoutingModule { }
+export const AppRoutingModule: ModuleWithProviders = RouterModule.forRoot(APP_ROUTES);

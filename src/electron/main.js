@@ -12,13 +12,11 @@ const semver = require('semver');
 const superagent = require('superagent');
 const path = require('path');
 const settings = require('electron-settings');
-const About = require('./about');
 const Dictionary = require('./dictionary');
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
 const currentVersion = app.getVersion();
-let aboutWindow = new About();
-let dictionary = new Dictionary();
+const dictionary = new Dictionary();
 
 const keyboardShortcuts = {
     open: 'CommandOrControl+Alt+T',
@@ -135,10 +133,6 @@ mb.on('ready', () => {
 
     ipcMain.on('openDictionary', () => {
         dictionary.showWindow();
-    });
-
-    ipcMain.on('openAbout', () => {
-        aboutWindow.showWindow();
     });
 
 });

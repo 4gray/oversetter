@@ -12,12 +12,14 @@
     height: 100vh;
     background: #ECECEC;
     border-right: 1px solid #d2d2d2;
+
     ul {
         color: #111;
         list-style: none;
         margin: 0;
         padding: 0;
     }
+
     li {
         padding: 0px 10px;
         cursor: pointer;
@@ -25,9 +27,11 @@
         overflow: hidden;
         line-height: 30px;
     }
+
     li:hover {
         background: #ccc;
     }
+
     .active {
         background-color: #d2d2d2;
         font-weight: bold;
@@ -41,6 +45,7 @@
     line-height: 45px;
     -webkit-app-region: drag;
     border-bottom: 1px solid #d2d2d2;
+
     .panel-line {
         height: 100%;
         width: 1px;
@@ -56,9 +61,11 @@
     padding: 10px;
     color: #111;
     background: #fff;
+
     #source-text {
         font-weight: bold;
     }
+
     #translated-text {
         margin-top: 10px;
     }

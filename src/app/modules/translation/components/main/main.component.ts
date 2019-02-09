@@ -1,4 +1,4 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 
@@ -9,16 +9,16 @@ import { DictionaryItem } from '@app/models/dictionary-item';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
 import { UiService } from '@app/services/ui.service';
-import { of, Subject } from 'rxjs';
-import { debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
-
+import { of, Subject, throwError } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, flatMap, map, catchError } from 'rxjs/operators';
+import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     templateUrl: 'main.component.html',
     styleUrls: ['main.component.scss']
 })
 
-export class MainComponent {
+export class MainComponent implements OnDestroy {
     /**
      * Translated word/phrase/sentence
      *
@@ -33,7 +33,8 @@ export class MainComponent {
      * @type {Language[]}
      * @memberof MainComponent
      */
-    public languageList: Language[] = [];
+    public languageListFrom: Language[] = [];
+    public languageListTo: Language[] = [];
 
     /**
      * Translate to the given language
@@ -68,7 +69,16 @@ export class MainComponent {
 
     public keyUp = new Subject<string>();
 
-
+    /**
+     * Creates an instance of MainComponent.
+     * @param {TranslateService} translateService
+     * @param {StorageService} storageService
+     * @param {UiService} uiService
+     * @param {Router} router
+     * @param {ElectronService} electronService
+     * @param {NgZone} ngZone
+     * @memberof MainComponent
+     */
     constructor(private translateService: TranslateService,
         private storageService: StorageService,
         private uiService: UiService,
@@ -86,40 +96,7 @@ export class MainComponent {
                 this.router.navigate(['/dictionary']);
             }
 
-            // translate content from clipboard
-            this.electronService.ipcRenderer.on('translate-clipboard', () => {
-                this.ngZone.run(() => {
-                    this.router.navigate(['/home']);
-                    const clipboardText = this.electronService.clipboard.readText();
-                    this.word = clipboardText;
-                    this.translate(this.word, this.fromLang.$key, this.toLang.$key);
-                });
-            });
-
-            // clear translate area
-            this.electronService.ipcRenderer.on('translate', () => {
-                this.ngZone.run(() => {
-                    this.router.navigate(['/home']);
-                    this.word = '';
-                    if (this.translation) {
-                        this.translation = null;
-                    }
-                });
-            });
-
-            // show update text if new version of the application is available
-            this.electronService.ipcRenderer.on('update-available', () => {
-                this.ngZone.run(() => {
-                    this.updateAvailable = true;
-                });
-            });
-
-            // show app settings
-            this.electronService.ipcRenderer.on('show-settings', () => {
-                this.ngZone.run(() => {
-                    this.router.navigate(['/settings']);
-                });
-            });
+            this.setIpcListeners();
 
             this.showArrow = this.uiService.showArrow;
         }
@@ -135,13 +112,54 @@ export class MainComponent {
 
 
         this.keyUp.pipe(
+            untilDestroyed(this),
             map((event: KeyboardEvent) => event.target['value']),
             debounceTime(250),
             distinctUntilChanged(),
-            flatMap(search => of(search).pipe(delay(500)))
+            flatMap(search => of(search).pipe(delay(500))),
+            catchError(err => throwError(err))
         ).subscribe(
             (text: string) => this.translate(text, this.fromLang.$key, this.toLang.$key)
         );
+    }
+
+    ngOnDestroy(): void { }
+
+    setIpcListeners(): void {
+        // translate content from clipboard
+        this.electronService.ipcRenderer.on('translate-clipboard', () => {
+            this.ngZone.run(() => {
+                this.router.navigate(['/home']);
+                const clipboardText = this.electronService.clipboard.readText();
+                this.word = clipboardText;
+                this.translate(this.word, this.fromLang.$key, this.toLang.$key);
+            });
+        });
+
+        // clear translate area
+        this.electronService.ipcRenderer.on('translate', () => {
+            this.ngZone.run(() => {
+                this.router.navigate(['/home']);
+                this.word = '';
+                if (this.translation) {
+                    this.translation = null;
+                }
+            });
+        });
+
+        // show update text if new version of the application is available
+        this.electronService.ipcRenderer.on('update-available', () => {
+            this.ngZone.run(() => {
+                this.updateAvailable = true;
+            });
+        });
+
+        // show app settings
+        this.electronService.ipcRenderer.on('show-settings', () => {
+            this.ngZone.run(() => {
+                this.router.navigate(['/settings']);
+            });
+        });
     }
 
     /**
@@ -181,6 +199,10 @@ export class MainComponent {
             if (fromLang === 'ad') {
                 this.translateService
                     .detectLanguage(word, fromLang, toLang)
+                    .pipe(
+                        untilDestroyed(this),
+                        catchError(err => throwError(err))
+                    )
                     .subscribe(
                         (language: string) => {
                             this.translate(word, language, toLang);
@@ -194,14 +216,16 @@ export class MainComponent {
                 }
                 this.translateService
                     .getTranslation(word, fromLang, toLang)
+                    .pipe(
+                        untilDestroyed(this),
+                        catchError(err => throwError(err))
+                    )
                     .subscribe(
                         (translation: Translation) => {
                             this.translation = translation;
                             this.translation.$text += this.detectedLanguage;
                             this.wordFavorited = false;
-                        },
-                        error => console.error(`Error:  ${error}`),
-                        () => console.log(`Translation: ${this.translation.$text}`)
+                        }
                     );
             }
         } else {
@@ -230,21 +254,31 @@ export class MainComponent {
      * @memberof MainComponent
      */
     requestLanguageList(): void {
-        this.translateService.getLanguagesList().subscribe(
-            (response: Language[]) => {
-                if (localStorage.getItem('languages') === 'select-languages') {
-                    // save fetched languages in localstorage
-                    this.languageList = JSON.parse(localStorage.getItem('preferedLanguageList'));
-                    this.languageList = this.languageList.map((item: any) => new Language(item.key, item.value));
-                } else {
-                    this.languageList = response;
-                }
+        this.translateService.getLanguagesList()
+            .pipe(
+                untilDestroyed(this),
+                catchError(err => throwError(err))
+            )
+            .subscribe(
+                (response: Language[]) => {
+                    if (localStorage.getItem('languages') === 'select-languages') {
+                        // save fetched languages in localstorage
+                        this.languageListFrom = JSON.parse(localStorage.getItem('preferedLanguageList'));
+                        this.languageListFrom = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
+                        this.languageListTo = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
+                    } else {
+                        this.languageListFrom = response;
 
-                this.languageList.unshift(new Language('ad', 'Auto-detect'));
-                AppSettings.$languageList = response;
-            },
-            error => console.error(error)
-        );
+                        // deep copy
+                        const temp = JSON.stringify(response);
+                        this.languageListTo = JSON.parse(temp);
+                        this.languageListTo = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
+                    }
+
+                    this.languageListFrom.unshift(new Language('ad', 'Auto-detect'));
+                    AppSettings.$languageList = response;
+                }
+            );
     }
 
 

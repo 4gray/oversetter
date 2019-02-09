@@ -28,10 +28,6 @@
     border-bottom: 1px solid #ccc;
 }
 
-.yandex-text {
-    float: left;
-}
-
 .update-text {
     float: right;
 }
@@ -47,7 +43,7 @@
     justify-content: flex-start;
 }
 
-#tabs>div {
+#tabs > div {
     cursor: pointer;
     padding: 0 5px 0 5px;
     width: 80px; // border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
@@ -55,7 +51,7 @@
     color: #666;
 }
 
-#tabs>div:first-child {
+#tabs > div:first-child {
     border-right: 1px solid #999;
 }
 
@@ -76,7 +72,7 @@
     background: #eee; // padding-top: 7px;
 }
 
-.settings-container>ul {
+.settings-container > ul {
     padding: 0px;
     margin: 0;
 }
@@ -124,4 +120,18 @@ kbd {
 
 .about-footer {
     margin-top: 10px;
+}
+
+.back-btn {
+    border: none;
+    background: none;
+    border-right: 1px solid #ccc;
+    text-align: center;
+    cursor: pointer;
+
+    i {
+        font-size: 29px;
+        color: #666;
+        line-height: 35px;
+    }
 }

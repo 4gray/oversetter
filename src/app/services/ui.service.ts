@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class UiService {
     showArrow = false;
 
