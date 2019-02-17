@@ -1,12 +1,16 @@
 {
     "name": "oversetter",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "license": "MIT",
     "author": {
         "name": "4gray",
         "email": "dev@artslab.info"
     },
-    "description": "Translation bar",
+    "description": "Translate text directly from your menubar.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/4gray/oversetter"
+    },
     "scripts": {
         "ng": "ng",
         "start": "ng serve",
@@ -16,8 +20,10 @@
         "e2e": "ng e2e",
         "run:electron": "electron ./dist/electron/main.js --disable-gpu",
         "dev": "ng build -w",
-        "build:linux": "electron-builder -l",
-        "build:all": "electron-builder -mwl"
+        "build:linux": "npm run build && electron-builder -l",
+        "build:mac": "npm run build && electron-builder -m",
+        "build:windows": "npm run build && electron-builder -w",
+        "build:all": "npm run build && electron-builder -mwl"
     },
     "main": "dist/electron/main.js",
     "private": false,

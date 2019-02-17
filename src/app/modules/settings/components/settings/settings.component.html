@@ -3,8 +3,6 @@
     fxFlexFill
     style="overflow: hidden;">
 
-    <!-- <div fxFlex="15px" class="arrow-up" *ngIf="showArrow"></div> -->
-
     <div
         id="tabs"
         fxFlex="40px"
@@ -202,43 +200,11 @@
         </div>
     </div>
 
-    <div
+    <app-about
+        (linkClicked)="openUrl($event)"
         fxLayout="column"
         *ngIf="selectedTabId==='about'"
-        style="height:100%">
-        <div
-            fxFlex
-            class="settings-container">
-            <div fxLayout="row">
-                <div fxFlex="160px">
-                    <img
-                        src="./assets/icon.png"
-                        class="about-icon">
-                </div>
-                <div fxFlex>
-                    <div class="about-title">Oversetter</div>
-                    <div class="about-version">{{version}}</div>
-                    <div class="about-description">
-                        Translate text directly from your menubar.
-                    </div>
-                    <div class="about-footer">
-                        2017 &copy; 4gray.
-                        <a
-                            href="#"
-                            (click)="openUrl('https://4gray.github.io/oversetter/')">
-                            Homepage
-                        </a>
-                        .
-                        <a
-                            href="#"
-                            (click)="openUrl('https://github.com/4gray/oversetter/issues')">
-                            Report a bug
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        style="height:100%"></app-about>
 
     <div
         fxFlex="40px"

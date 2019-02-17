@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import {
+    AboutComponent,
     SettingsComponent
 } from '.';
 import { SharedModule } from '@modules/shared/shared.module';
@@ -11,6 +12,7 @@ import { SettingsRoutes } from './settings.routing';
         SettingsRoutes
     ],
     declarations: [
+        AboutComponent,
         SettingsComponent
     ]
 })

@@ -1,0 +1,36 @@
+:host {
+    background: #ececec;
+}
+
+/* .about-container {
+    width: 300px;
+    background: #ececec;
+    height: 100%;
+    position: fixed;
+    padding: 10px;
+    text-align: center;
+} */
+
+.about-icon {
+    width: 128px;
+    height: 128px;
+    padding: 10px;
+    margin: auto;
+    display: block;
+}
+
+.about-title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.about-version {}
+
+.about-description {
+    margin-top: 10px;
+}
+
+.about-footer {
+    margin-top: 10px;
+}
