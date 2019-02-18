@@ -2,7 +2,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { DictionaryComponent } from '.';
 
 const routes: Routes = [
-    ,
     {
         path: 'dictionary',
         component: DictionaryComponent

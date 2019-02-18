@@ -49,12 +49,12 @@ const mb = menubar({
 
 mb.on('ready', () => {
 
-    mb.window.setIcon(path.join(__dirname, '../assets/icon.png'));
 
     if (process.env.NODE_ENV === 'dev')
         mb.window.openDevTools();
 
     if (process.platform === 'linux') {
+        mb.window.setIcon(path.join(__dirname, '../assets/icon.png'));
         mb.tray.setToolTip('Translate');
         mb.window.setResizable(false); // workaround for linux
     }
@@ -63,42 +63,42 @@ mb.on('ready', () => {
     const template = [{
         label: "Menu",
         submenu: [{
-            label: "Hide",
-            accelerator: "Esc",
-            click: () => mb.window.hide()
-        },
-        {
-            label: "Cut",
-            accelerator: "CmdOrCtrl+X",
-            role: "cut"
-        },
-        {
-            label: "Copy",
-            accelerator: "CmdOrCtrl+C",
-            role: "copy"
-        },
-        {
-            label: "Paste",
-            accelerator: "CmdOrCtrl+V",
-            role: "paste"
-        },
-        {
-            label: "Select All",
-            accelerator: "CmdOrCtrl+A",
-            role: "selectall"
-        },
-        {
-            label: 'Toggle Developer Tools',
-            accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-            click(item, focusedWindow) {
-                if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+                label: "Hide",
+                accelerator: "Esc",
+                click: () => mb.window.hide()
+            },
+            {
+                label: "Cut",
+                accelerator: "CmdOrCtrl+X",
+                role: "cut"
+            },
+            {
+                label: "Copy",
+                accelerator: "CmdOrCtrl+C",
+                role: "copy"
+            },
+            {
+                label: "Paste",
+                accelerator: "CmdOrCtrl+V",
+                role: "paste"
+            },
+            {
+                label: "Select All",
+                accelerator: "CmdOrCtrl+A",
+                role: "selectall"
+            },
+            {
+                label: 'Toggle Developer Tools',
+                accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                click(item, focusedWindow) {
+                    if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+                }
+            },
+            {
+                label: "Quit",
+                accelerator: "Command+Q",
+                click: () => app.quit()
             }
-        },
-        {
-            label: "Quit",
-            accelerator: "Command+Q",
-            click: () => app.quit()
-        }
         ]
     }];
 
@@ -142,36 +142,32 @@ mb.on('ready', () => {
  */
 mb.on('after-create-window', function () {
     const contextMenu = Menu.buildFromTemplate([{
-        label: 'About Oversetter',
-        click: () => aboutWindow.showWindow()
-    },
-    {
-        label: 'Open dictionary',
-        click: () => dictionary.showWindow()
-    },
-    {
-        label: 'Preferences',
-        click: () => {
-            mb.window.webContents.send('show-settings');
-            showApp();
+            label: 'Open dictionary',
+            click: () => dictionary.showWindow()
+        },
+        {
+            label: 'Preferences',
+            click: () => {
+                mb.window.webContents.send('show-settings');
+                showApp();
+            }
+        },
+        {
+            label: 'Restart App',
+            click: () => {
+                mb.app.quit();
+                mb.app.relaunch();
+            }
+        }, // TODO: add check for updates option
+        {
+            type: 'separator'
+        },
+        {
+            label: 'Quit',
+            click: () => {
+                mb.app.quit();
+            }
         }
-    },
-    {
-        label: 'Restart App',
-        click: () => {
-            mb.app.quit();
-            mb.app.relaunch();
-        }
-    }, // TODO: add check for updates option
-    {
-        type: 'separator'
-    },
-    {
-        label: 'Quit',
-        click: () => {
-            mb.app.quit();
-        }
-    }
     ]);
     mb.tray.on('right-click', () => {
         mb.tray.popUpContextMenu(contextMenu);

@@ -8,12 +8,14 @@ import { NgxElectronModule } from 'ngx-electron';
 import { SharedModule } from '@modules/shared/shared.module';
 import { HomeComponent } from './modules/translation';
 import { SettingsModule } from './modules/settings/settings.module';
+import { DictionaryModule } from './modules/dictionary/dictionary.module';
 
 @NgModule({
     imports: [
         AppRoutingModule,
         BrowserModule,
         ClickOutsideModule,
+        DictionaryModule,
         FormsModule,
         HttpClientModule,
         NgxElectronModule,
