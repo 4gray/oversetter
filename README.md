@@ -7,11 +7,7 @@
   <a href="https://github.com/4gray/oversetter/releases"><img src="https://img.shields.io/github/release/4gray/oversetter.svg?style=flat-square" alt="Release"></a>
   <a href="https://github.com/4gray/oversetter/releases"><img src="https://img.shields.io/github/downloads/4gray/oversetter/total.svg?style=flat-square" alt="Downloads" /></a>
   <a href="https://github.com/4gray/oversetter"><img src="https://img.shields.io/travis/4gray/oversetter.svg?style=flat-square" alt="Downloads" /></a>
-
-
 </p>
-
-
 
 
 Oversetter is an translation app, which allows you to translate content directly from your menu bar. Oversetter is open-source application based on [Angular](https://angular.io/) and [Electron](http://electron.atom.io/). It uses free API of [Yandex Translate](https://tech.yandex.com/translate/) for text translation. 
@@ -25,6 +21,11 @@ Oversetter is an translation app, which allows you to translate content directly
 # Download
 
 You can download the latest version of the application for [macOS](https://github.com/4gray/oversetter/releases), [Windows](https://github.com/4gray/oversetter/releases) and [Linux](https://github.com/4gray/oversetter/releases).
+
+Oversetter is also available as [snap](https://snapcraft.io/oversetter) package: 
+```
+sudo snap install oversetter
+```
 
 # How to use
 
