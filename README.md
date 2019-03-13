@@ -27,6 +27,8 @@ Oversetter is also available as [snap](https://snapcraft.io/oversetter) package:
 sudo snap install oversetter
 ```
 
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/oversetter)
+
 # How to use
 
 1. [Register](https://tech.yandex.com/translate/) free Yandex Translate API-Key (or use built-in dev-key for the first time).
