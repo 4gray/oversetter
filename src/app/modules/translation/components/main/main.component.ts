@@ -17,7 +17,6 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
     templateUrl: 'main.component.html',
     styleUrls: ['main.component.scss']
 })
-
 export class MainComponent implements OnDestroy {
     /**
      * Translated word/phrase/sentence
@@ -79,15 +78,15 @@ export class MainComponent implements OnDestroy {
      * @param {NgZone} ngZone
      * @memberof MainComponent
      */
-    constructor(private translateService: TranslateService,
+    constructor(
+        private translateService: TranslateService,
         private storageService: StorageService,
         private uiService: UiService,
         private router: Router,
         private electronService: ElectronService,
-        private ngZone: NgZone) {
-
+        private ngZone: NgZone
+    ) {
         if (electronService.remote) {
-
             const window = electronService.remote.getCurrentWindow();
 
             if (window['dialog'] === 'about') {
@@ -110,20 +109,18 @@ export class MainComponent implements OnDestroy {
             this.requestLanguageList();
         }
 
-
-        this.keyUp.pipe(
-            untilDestroyed(this),
-            map((event: KeyboardEvent) => event.target['value']),
-            debounceTime(250),
-            distinctUntilChanged(),
-            flatMap(search => of(search).pipe(delay(500))),
-            catchError(err => throwError(err))
-        ).subscribe(
-            (text: string) => this.translate(text, this.fromLang.$key, this.toLang.$key)
-        );
+        this.keyUp
+            .pipe(
+                map((event: any) => event.target['value']),
+                debounceTime(250),
+                distinctUntilChanged(),
+                flatMap(search => of(search).pipe(delay(500))),
+                catchError(err => throwError(err))
+            )
+            .subscribe((text: string) => this.translate(text, this.fromLang.$key, this.toLang.$key));
     }
 
-    ngOnDestroy(): void { }
+    ngOnDestroy(): void {}
 
     setIpcListeners(): void {
         // translate content from clipboard
@@ -220,13 +217,11 @@ export class MainComponent implements OnDestroy {
                         untilDestroyed(this),
                         catchError(err => throwError(err))
                     )
-                    .subscribe(
-                        (translation: Translation) => {
-                            this.translation = translation;
-                            this.translation.$text += this.detectedLanguage;
-                            this.wordFavorited = false;
-                        }
-                    );
+                    .subscribe((translation: Translation) => {
+                        this.translation = translation;
+                        this.translation.$text += this.detectedLanguage;
+                        this.wordFavorited = false;
+                    });
             }
         } else {
             this.translation = null;
@@ -254,33 +249,33 @@ export class MainComponent implements OnDestroy {
      * @memberof MainComponent
      */
     requestLanguageList(): void {
-        this.translateService.getLanguagesList()
+        this.translateService
+            .getLanguagesList()
             .pipe(
                 untilDestroyed(this),
                 catchError(err => throwError(err))
             )
-            .subscribe(
-                (response: Language[]) => {
-                    if (localStorage.getItem('languages') === 'select-languages') {
-                        // save fetched languages in localstorage
-                        this.languageListFrom = JSON.parse(localStorage.getItem('preferedLanguageList'));
-                        this.languageListFrom = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
-                        this.languageListTo = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
-                    } else {
-                        this.languageListFrom = response;
+            .subscribe((response: Language[]) => {
+                if (localStorage.getItem('languages') === 'select-languages') {
+                    // save fetched languages in localstorage
+                    this.languageListFrom = JSON.parse(localStorage.getItem('preferedLanguageList'));
+                    this.languageListFrom = this.languageListFrom.map(
+                        (item: any) => new Language(item.key, item.value)
+                    );
+                    this.languageListTo = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
+                } else {
+                    this.languageListFrom = response;
 
-                        // deep copy
-                        const temp = JSON.stringify(response);
-                        this.languageListTo = JSON.parse(temp);
-                        this.languageListTo = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
-                    }
-
-                    this.languageListFrom.unshift(new Language('ad', 'Auto-detect'));
-                    AppSettings.$languageList = response;
+                    // deep copy
+                    const temp = JSON.stringify(response);
+                    this.languageListTo = JSON.parse(temp);
+                    this.languageListTo = this.languageListFrom.map((item: any) => new Language(item.key, item.value));
                 }
-            );
-    }
 
+                this.languageListFrom.unshift(new Language('ad', 'Auto-detect'));
+                AppSettings.$languageList = response;
+            });
+    }
 
     /**
      * Open given URL in external browser
@@ -317,5 +312,4 @@ export class MainComponent implements OnDestroy {
     hideMenu() {
         this.showMoreMenu = false;
     }
-
 }
