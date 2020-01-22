@@ -1,11 +1,6 @@
 'use strict';
 
-const {
-    app,
-    Menu,
-    globalShortcut,
-    ipcMain
-} = require('electron');
+const { app, Menu, globalShortcut, ipcMain } = require('electron');
 const menubar = require('menubar');
 const AutoLaunch = require('auto-launch');
 const semver = require('semver');
@@ -44,63 +39,67 @@ const mb = menubar({
     showDockIcon: dockIcon,
     show: false,
     alwaysOnTop: alwaysOnTop,
-    'auto-hide-menu-bar': true
+    'auto-hide-menu-bar': true,
+    webPreferences: {
+        nodeIntegration: true,
+        backgroundThrottling: false
+    }
 });
 
 mb.on('ready', () => {
-
-
-    if (process.env.NODE_ENV === 'dev')
-        mb.window.openDevTools();
+    if (process.env.NODE_ENV === 'dev') mb.window.openDevTools();
 
     if (process.platform === 'linux') {
         mb.window.setIcon(path.join(__dirname, '../assets/icon.png'));
         mb.tray.setToolTip('Translate');
-        mb.window.setResizable(false); // workaround for linux
+        mb.window.resizable = false; // workaround for linux
     }
 
     // create the application's main menu // TODO: refactor
-    const template = [{
-        label: "Menu",
-        submenu: [{
-                label: "Hide",
-                accelerator: "Esc",
-                click: () => mb.window.hide()
-            },
-            {
-                label: "Cut",
-                accelerator: "CmdOrCtrl+X",
-                role: "cut"
-            },
-            {
-                label: "Copy",
-                accelerator: "CmdOrCtrl+C",
-                role: "copy"
-            },
-            {
-                label: "Paste",
-                accelerator: "CmdOrCtrl+V",
-                role: "paste"
-            },
-            {
-                label: "Select All",
-                accelerator: "CmdOrCtrl+A",
-                role: "selectall"
-            },
-            {
-                label: 'Toggle Developer Tools',
-                accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-                click(item, focusedWindow) {
-                    if (focusedWindow) focusedWindow.webContents.toggleDevTools()
+    const template = [
+        {
+            label: 'Menu',
+            submenu: [
+                {
+                    label: 'Hide',
+                    accelerator: 'Esc',
+                    click: () => mb.window.hide()
+                },
+                {
+                    label: 'Cut',
+                    accelerator: 'CmdOrCtrl+X',
+                    role: 'cut'
+                },
+                {
+                    label: 'Copy',
+                    accelerator: 'CmdOrCtrl+C',
+                    role: 'copy'
+                },
+                {
+                    label: 'Paste',
+                    accelerator: 'CmdOrCtrl+V',
+                    role: 'paste'
+                },
+                {
+                    label: 'Select All',
+                    accelerator: 'CmdOrCtrl+A',
+                    role: 'selectall'
+                },
+                {
+                    label: 'Toggle Developer Tools',
+                    accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                    click(item, focusedWindow) {
+                        if (focusedWindow) focusedWindow.webContents.toggleDevTools();
+                    }
+                },
+                {
+                    label: 'Quit',
+                    accelerator: 'Command+Q',
+                    click: () => app.quit()
                 }
-            },
-            {
-                label: "Quit",
-                accelerator: "Command+Q",
-                click: () => app.quit()
-            }
-        ]
-    }];
+            ]
+        }
+    ];
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
@@ -134,14 +133,14 @@ mb.on('ready', () => {
     ipcMain.on('openDictionary', () => {
         dictionary.showWindow();
     });
-
 });
 
 /**
  * Menu dialog on the right click
  */
-mb.on('after-create-window', function () {
-    const contextMenu = Menu.buildFromTemplate([{
+mb.on('after-create-window', function() {
+    const contextMenu = Menu.buildFromTemplate([
+        {
             label: 'Open dictionary',
             click: () => dictionary.showWindow()
         },
@@ -182,16 +181,12 @@ mb.on('after-show', () => {
 let appLauncher = new AutoLaunch({
     name: 'Oversetter',
     mac: {
-        useLaunchAgent: true,
+        useLaunchAgent: true
     }
 });
 
-
-if (autolaunch)
-    appLauncher.enable();
-else
-    appLauncher.disable();
-
+if (autolaunch) appLauncher.enable();
+else appLauncher.disable();
 
 app.on('will-quit', () => {
     // unregister all shortcuts
@@ -202,8 +197,7 @@ app.on('will-quit', () => {
  * Show application window
  */
 function showApp() {
-    if (mb.window.isVisible())
-        mb.hideWindow();
+    if (mb.window.isVisible()) mb.hideWindow();
     else {
         mb.showWindow();
         mb.window.focus();
@@ -226,22 +220,16 @@ function checkForUpdate() {
 }
 
 function getAlwaysOnTopValue() {
-    if (settings.has('alwaysOnTop'))
-        return settings.get('alwaysOnTop');
-    else
-        return false;
+    if (settings.has('alwaysOnTop')) return settings.get('alwaysOnTop');
+    else return false;
 }
 
 function getShowDockIconValue() {
-    if (settings.has('showDockIcon'))
-        return settings.get('showDockIcon');
-    else
-        return false
+    if (settings.has('showDockIcon')) return settings.get('showDockIcon');
+    else return false;
 }
 
 function getAutoLaunchValue() {
-    if (settings.has('autolaunch'))
-        return settings.get('autolaunch');
-    else
-        return false;
+    if (settings.has('autolaunch')) return settings.get('autolaunch');
+    else return false;
 }

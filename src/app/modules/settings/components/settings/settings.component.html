@@ -15,10 +15,7 @@
         </div>
     </div>
 
-    <div
-        fxLayout="column"
-        *ngIf="selectedTabId==='api'"
-        style="height:100%">
+    <ng-container *ngIf="selectedTabId==='api'">
         <div
             fxFlex
             id="settings-area">
@@ -41,12 +38,9 @@
             placeholder="Enter your API key here"
             type="text"
             [(ngModel)]="apiKey"></textarea>
-    </div>
+    </ng-container>
 
-    <div
-        fxLayout="column"
-        *ngIf="selectedTabId==='general'"
-        style="height:100%">
+    <ng-container *ngIf="selectedTabId==='general'">
         <div
             fxFlex
             class="settings-container">
@@ -120,11 +114,8 @@
                 New settings will only take effect after a restart!
             </div>
         </div>
-    </div>
-    <div
-        fxLayout="column"
-        *ngIf="selectedTabId==='languages'"
-        style="height:100%">
+    </ng-container>
+    <ng-container *ngIf="selectedTabId==='languages'">
         <div
             fxFlex
             class="settings-container">
@@ -198,13 +189,13 @@
                 </select>
             </div>
         </div>
-    </div>
+    </ng-container>
 
-    <app-about
-        (linkClicked)="openUrl($event)"
-        fxLayout="column"
-        *ngIf="selectedTabId==='about'"
-        style="height:100%"></app-about>
+    <ng-container *ngIf="selectedTabId==='about'">
+        <app-about
+            (linkClicked)="openUrl($event)"
+            style="height:100%"></app-about>
+    </ng-container>
 
     <div
         fxFlex="40px"
