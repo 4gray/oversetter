@@ -1,7 +1,7 @@
 'use strict';
 
-const { app, Menu, globalShortcut, ipcMain } = require('electron');
-const menubar = require('menubar');
+const { app, Menu, globalShortcut, ipcMain, Tray } = require('electron');
+const { menubar } = require('menubar');
 const AutoLaunch = require('auto-launch');
 const semver = require('semver');
 const superagent = require('superagent');
@@ -18,138 +18,31 @@ const keyboardShortcuts = {
     translateClipboard: 'CommandOrControl+Alt+R'
 };
 
+let mb;
 let appHeight = 315;
-let dockIcon = getShowDockIconValue();
-let alwaysOnTop = getAlwaysOnTopValue();
-let autolaunch = getAutoLaunchValue();
 
 if (process.platform !== 'darwin') {
     appHeight = 298;
 }
 
-const mb = menubar({
-    icon: path.join(__dirname, '/../assets/LightIconTemplate.png'),
-    index: 'file://' + __dirname + '/../index.html',
-    width: 500,
-    height: appHeight,
-    resizable: false,
-    preloadWindow: true,
-    transparent: true,
-    frame: false,
-    showDockIcon: dockIcon,
-    show: false,
-    alwaysOnTop: alwaysOnTop,
-    'auto-hide-menu-bar': true,
-    webPreferences: {
-        nodeIntegration: true,
-        backgroundThrottling: false
-    }
-});
-
-mb.on('ready', () => {
-    if (process.env.NODE_ENV === 'dev') mb.window.openDevTools();
-
-    if (process.platform === 'linux') {
-        mb.window.setIcon(path.join(__dirname, '../assets/icon.png'));
-        mb.tray.setToolTip('Translate');
-        mb.window.resizable = false; // workaround for linux
-    }
-
-    // create the application's main menu // TODO: refactor
-    const template = [
+function createContextMenu() {
+    return Menu.buildFromTemplate([
         {
-            label: 'Menu',
-            submenu: [
-                {
-                    label: 'Hide',
-                    accelerator: 'Esc',
-                    click: () => mb.window.hide()
-                },
-                {
-                    label: 'Cut',
-                    accelerator: 'CmdOrCtrl+X',
-                    role: 'cut'
-                },
-                {
-                    label: 'Copy',
-                    accelerator: 'CmdOrCtrl+C',
-                    role: 'copy'
-                },
-                {
-                    label: 'Paste',
-                    accelerator: 'CmdOrCtrl+V',
-                    role: 'paste'
-                },
-                {
-                    label: 'Select All',
-                    accelerator: 'CmdOrCtrl+A',
-                    role: 'selectall'
-                },
-                {
-                    label: 'Toggle Developer Tools',
-                    accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-                    click(item, focusedWindow) {
-                        if (focusedWindow) focusedWindow.webContents.toggleDevTools();
-                    }
-                },
-                {
-                    label: 'Quit',
-                    accelerator: 'Command+Q',
-                    click: () => app.quit()
-                }
-            ]
-        }
-    ];
-
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-
-    // register show window shortcut listener
-    globalShortcut.register(keyboardShortcuts.open, () => {
-        mb.window.webContents.send('translate');
-        showApp();
-    });
-
-    // register global shortcut for clipboard text translation
-    globalShortcut.register(keyboardShortcuts.translateClipboard, () => {
-        mb.window.webContents.send('translate-clipboard');
-        showApp();
-    });
-
-    ipcMain.on('autolaunch', (event, arg) => {
-        console.log('Autolaunch enabled: ' + arg);
-        settings.set('autolaunch', arg);
-    });
-
-    ipcMain.on('alwaysOnTop', (event, arg) => {
-        console.log('AlwaysOnTop enabled: ' + arg);
-        settings.set('alwaysOnTop', arg);
-    });
-
-    ipcMain.on('showDockIcon', (event, arg) => {
-        console.log('ShowDockIcon enabled: ' + arg);
-        settings.set('showDockIcon', arg);
-    });
-
-    ipcMain.on('openDictionary', () => {
-        dictionary.showWindow();
-    });
-});
-
-/**
- * Menu dialog on the right click
- */
-mb.on('after-create-window', function() {
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            label: 'Open dictionary',
-            click: () => dictionary.showWindow()
+            label: 'Translate',
+            type: 'radio',
+            click: () => showApp()
         },
+        { label: 'Dictionary', type: 'radio', click: () => dictionary.showWindow() },
         {
             label: 'Preferences',
+            type: 'radio',
             click: () => {
                 mb.window.webContents.send('show-settings');
                 showApp();
             }
+        },
+        {
+            type: 'separator'
         },
         {
             label: 'Restart App',
@@ -158,35 +51,159 @@ mb.on('after-create-window', function() {
                 mb.app.relaunch();
             }
         }, // TODO: add check for updates option
-        {
-            type: 'separator'
-        },
-        {
-            label: 'Quit',
-            click: () => {
-                mb.app.quit();
-            }
-        }
+        { label: 'Quit', type: 'radio', click: () => app.quit() }
     ]);
-    mb.tray.on('right-click', () => {
+}
+
+app.on('ready', () => {
+    const iconPath = path.join(__dirname, '/../assets/LightIconTemplate.png');
+    const contextMenu = createContextMenu();
+    const tray = new Tray(iconPath);
+
+    const getAlwaysOnTopValue = () => {
+        if (settings.has('alwaysOnTop')) return settings.get('alwaysOnTop') || false;
+    };
+
+    const getShowDockIconValue = () => {
+        if (settings.has('showDockIcon')) return settings.get('showDockIcon') || false;
+    };
+
+    const getAutoLaunchValue = () => {
+        if (settings.has('autolaunch')) return settings.get('autolaunch') || false;
+    };
+
+    let dockIcon = getShowDockIconValue();
+    let alwaysOnTop = getAlwaysOnTopValue();
+    let autolaunch = getAutoLaunchValue();
+
+    tray.setContextMenu(contextMenu);
+    mb = menubar({
+        tray,
+        icon: iconPath,
+        index: 'file://' + __dirname + '/../index.html',
+        browserWindow: {
+            width: 500,
+            height: appHeight,
+            alwaysOnTop: alwaysOnTop,
+            webPreferences: {
+                nodeIntegration: true,
+                backgroundThrottling: false
+            },
+            resizable: false
+        },
+        resizable: false,
+        preloadWindow: true,
+        transparent: true,
+        frame: false,
+        showDockIcon: dockIcon,
+        show: false,
+        'auto-hide-menu-bar': true
+    });
+
+    mb.on('ready', () => {
+        if (process.env.NODE_ENV === 'dev') mb.window.openDevTools();
+
+        // create the application's main menu // TODO: refactor
+        const template = [
+            {
+                label: 'Menu',
+                submenu: [
+                    {
+                        label: 'Hide',
+                        accelerator: 'Esc',
+                        click: () => mb.window.hide()
+                    },
+                    {
+                        label: 'Cut',
+                        accelerator: 'CmdOrCtrl+X',
+                        role: 'cut'
+                    },
+                    {
+                        label: 'Copy',
+                        accelerator: 'CmdOrCtrl+C',
+                        role: 'copy'
+                    },
+                    {
+                        label: 'Paste',
+                        accelerator: 'CmdOrCtrl+V',
+                        role: 'paste'
+                    },
+                    {
+                        label: 'Select All',
+                        accelerator: 'CmdOrCtrl+A',
+                        role: 'selectall'
+                    },
+                    {
+                        label: 'Toggle Developer Tools',
+                        accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                        click(item, focusedWindow) {
+                            if (focusedWindow) focusedWindow.webContents.toggleDevTools();
+                        }
+                    },
+                    {
+                        label: 'Quit',
+                        accelerator: 'Command+Q',
+                        click: () => app.quit()
+                    }
+                ]
+            }
+        ];
+
+        Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+
+        // register show window shortcut listener
+        globalShortcut.register(keyboardShortcuts.open, () => {
+            mb.window.webContents.send('translate');
+            showApp();
+        });
+
+        // register global shortcut for clipboard text translation
+        globalShortcut.register(keyboardShortcuts.translateClipboard, () => {
+            mb.window.webContents.send('translate-clipboard');
+            showApp();
+        });
+
+        ipcMain.on('autolaunch', (event, arg) => {
+            console.log('Autolaunch enabled: ' + arg);
+            settings.set('autolaunch', arg);
+        });
+
+        ipcMain.on('alwaysOnTop', (event, arg) => {
+            console.log('AlwaysOnTop enabled: ' + arg);
+            settings.set('alwaysOnTop', arg);
+        });
+
+        ipcMain.on('showDockIcon', (event, arg) => {
+            console.log('ShowDockIcon enabled: ' + arg);
+            settings.set('showDockIcon', arg);
+        });
+
+        ipcMain.on('openDictionary', () => {
+            dictionary.showWindow();
+        });
+    });
+
+    /**
+     * Opens context menu on trays right click
+     */
+    tray.on('right-click', () => {
         mb.tray.popUpContextMenu(contextMenu);
     });
-});
 
-mb.on('after-show', () => {
-    mb.window.focus();
-    checkForUpdate();
-});
+    mb.on('after-show', () => {
+        mb.window.focus();
+        checkForUpdate();
+    });
 
-let appLauncher = new AutoLaunch({
-    name: 'Oversetter',
-    mac: {
-        useLaunchAgent: true
-    }
-});
+    let appLauncher = new AutoLaunch({
+        name: 'Oversetter',
+        mac: {
+            useLaunchAgent: true
+        }
+    });
 
-if (autolaunch) appLauncher.enable();
-else appLauncher.disable();
+    autolaunch ? appLauncher.enable() : appLauncher.disable();
+});
 
 app.on('will-quit', () => {
     // unregister all shortcuts
@@ -217,19 +234,4 @@ function checkForUpdate() {
             console.log('New version is available!');
         }
     });
-}
-
-function getAlwaysOnTopValue() {
-    if (settings.has('alwaysOnTop')) return settings.get('alwaysOnTop');
-    else return false;
-}
-
-function getShowDockIconValue() {
-    if (settings.has('showDockIcon')) return settings.get('showDockIcon');
-    else return false;
-}
-
-function getAutoLaunchValue() {
-    if (settings.has('autolaunch')) return settings.get('autolaunch');
-    else return false;
 }
