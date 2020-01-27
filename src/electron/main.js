@@ -29,19 +29,16 @@ function createContextMenu() {
     return Menu.buildFromTemplate([
         {
             label: 'Translate',
-            type: 'radio',
             click: () => showApp()
         },
         {
             label: 'Dictionary',
-            type: 'radio',
             click: () => {
                 dictionary.showWindow();
             }
         },
         {
             label: 'Preferences',
-            type: 'radio',
             click: () => {
                 mb.window.webContents.send('show-settings');
                 showApp();
@@ -57,7 +54,7 @@ function createContextMenu() {
                 mb.app.relaunch();
             }
         }, // TODO: add check for updates option
-        { label: 'Quit', type: 'radio', click: () => app.quit() }
+        { label: 'Quit', click: () => app.quit() }
     ]);
 }
 
