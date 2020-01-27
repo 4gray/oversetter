@@ -8,9 +8,9 @@ const superagent = require('superagent');
 const path = require('path');
 const settings = require('electron-settings');
 const Dictionary = require('./dictionary');
+const currentVersion = require('../package.json').version;
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
-const currentVersion = app.getVersion();
 const dictionary = new Dictionary();
 
 const keyboardShortcuts = {
