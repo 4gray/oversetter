@@ -32,7 +32,13 @@ function createContextMenu() {
             type: 'radio',
             click: () => showApp()
         },
-        { label: 'Dictionary', type: 'radio', click: () => dictionary.showWindow() },
+        {
+            label: 'Dictionary',
+            type: 'radio',
+            click: () => {
+                dictionary.showWindow();
+            }
+        },
         {
             label: 'Preferences',
             type: 'radio',
@@ -76,21 +82,23 @@ app.on('ready', () => {
     let alwaysOnTop = getAlwaysOnTopValue();
     let autolaunch = getAutoLaunchValue();
 
+    const browserWindow = {
+        width: 500,
+        height: appHeight,
+        alwaysOnTop: alwaysOnTop,
+        webPreferences: {
+            nodeIntegration: true,
+            backgroundThrottling: false
+        },
+        resizable: false
+    };
+
     tray.setContextMenu(contextMenu);
     mb = menubar({
         tray,
         icon: iconPath,
         index: 'file://' + __dirname + '/../index.html',
-        browserWindow: {
-            width: 500,
-            height: appHeight,
-            alwaysOnTop: alwaysOnTop,
-            webPreferences: {
-                nodeIntegration: true,
-                backgroundThrottling: false
-            },
-            resizable: false
-        },
+        browserWindow,
         resizable: false,
         preloadWindow: true,
         transparent: true,
@@ -102,54 +110,6 @@ app.on('ready', () => {
 
     mb.on('ready', () => {
         if (process.env.NODE_ENV === 'dev') mb.window.openDevTools();
-
-        // create the application's main menu // TODO: refactor
-        const template = [
-            {
-                label: 'Menu',
-                submenu: [
-                    {
-                        label: 'Hide',
-                        accelerator: 'Esc',
-                        click: () => mb.window.hide()
-                    },
-                    {
-                        label: 'Cut',
-                        accelerator: 'CmdOrCtrl+X',
-                        role: 'cut'
-                    },
-                    {
-                        label: 'Copy',
-                        accelerator: 'CmdOrCtrl+C',
-                        role: 'copy'
-                    },
-                    {
-                        label: 'Paste',
-                        accelerator: 'CmdOrCtrl+V',
-                        role: 'paste'
-                    },
-                    {
-                        label: 'Select All',
-                        accelerator: 'CmdOrCtrl+A',
-                        role: 'selectall'
-                    },
-                    {
-                        label: 'Toggle Developer Tools',
-                        accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-                        click(item, focusedWindow) {
-                            if (focusedWindow) focusedWindow.webContents.toggleDevTools();
-                        }
-                    },
-                    {
-                        label: 'Quit',
-                        accelerator: 'Command+Q',
-                        click: () => app.quit()
-                    }
-                ]
-            }
-        ];
-
-        Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 
         // register show window shortcut listener
         globalShortcut.register(keyboardShortcuts.open, () => {

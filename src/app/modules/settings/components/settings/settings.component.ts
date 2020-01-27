@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
-import { UiService } from '@app/services/ui.service';
 import { Language } from '@app/models/language';
 
 @Component({
@@ -11,7 +10,6 @@ import { Language } from '@app/models/language';
     templateUrl: 'settings.component.html',
     styleUrls: ['settings.component.scss']
 })
-
 export class SettingsComponent {
     public apiKey: string;
     public errorMessage = '';
@@ -48,7 +46,7 @@ export class SettingsComponent {
      * Version of the application
      *
      * @type {string}
-     * @memberof AboutComponent
+     * @memberof SettingsComponent
      */
     public version: string;
 
@@ -57,12 +55,12 @@ export class SettingsComponent {
      * @param translateService translation service object
      * @param router router object
      */
-    constructor(private translateService: TranslateService,
+    constructor(
+        private translateService: TranslateService,
         private router: Router,
         private electronService: ElectronService,
-        private uiService: UiService,
-        route: ActivatedRoute) {
-
+        route: ActivatedRoute
+    ) {
         route.queryParams.subscribe(param => {
             const tabName = param['tab'] || '';
             if (tabName === 'about') {
@@ -72,19 +70,19 @@ export class SettingsComponent {
 
         this.apiKey = AppSettings.$apiKey;
         if (localStorage.getItem('autolaunch')) {
-            this.autolaunch = (localStorage.getItem('autolaunch') === 'true');
+            this.autolaunch = localStorage.getItem('autolaunch') === 'true';
         }
 
         if (localStorage.getItem('alwaysOnTop')) {
-            this.alwaysOnTop = (localStorage.getItem('alwaysOnTop') === 'true');
+            this.alwaysOnTop = localStorage.getItem('alwaysOnTop') === 'true';
         }
 
         if (localStorage.getItem('showDockIcon')) {
-            this.showDockIcon = (localStorage.getItem('showDockIcon') === 'true');
+            this.showDockIcon = localStorage.getItem('showDockIcon') === 'true';
         }
 
         if (localStorage.getItem('languages')) {
-            this.showDockIcon = (localStorage.getItem('languages') === 'true');
+            this.showDockIcon = localStorage.getItem('languages') === 'true';
         }
 
         if (localStorage.getItem('languages')) {
@@ -97,7 +95,6 @@ export class SettingsComponent {
         }
 
         this.langList = AppSettings.$languageList;
-        this.showArrow = this.uiService.showArrow;
 
         if (this.electronService.remote) {
             const window = this.electronService.remote.getCurrentWindow();
@@ -127,7 +124,7 @@ export class SettingsComponent {
         const l$ = this.translateService.getLanguagesList();
         l$.subscribe(
             () => this.router.navigate(['/home']),
-            error => this.errorMessage = error
+            error => (this.errorMessage = error)
         );
     }
 
@@ -143,7 +140,9 @@ export class SettingsComponent {
      * @param language string or array with language list as strings
      */
     public addLanguage(language) {
-        if (!language) { return; }
+        if (!language) {
+            return;
+        }
 
         if (language instanceof Array) {
             for (let i = 0; i < language.length; i++) {
@@ -163,7 +162,6 @@ export class SettingsComponent {
      * @param language selected one or multiple languages (array or string)
      */
     public removeLanguage(language) {
-
         let index;
 
         if (language instanceof Array) {
@@ -253,6 +251,4 @@ export class SettingsComponent {
     selectTab(tabId: string) {
         this.selectedTabId = tabId;
     }
-
-
 }

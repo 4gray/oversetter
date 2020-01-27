@@ -8,7 +8,6 @@ import { Translation } from '@models/translation';
 import { DictionaryItem } from '@app/models/dictionary-item';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
-import { UiService } from '@app/services/ui.service';
 import { of, Subject, throwError } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap, map, catchError } from 'rxjs/operators';
 import { untilDestroyed } from 'ngx-take-until-destroy';
@@ -72,7 +71,6 @@ export class MainComponent implements OnDestroy {
      * Creates an instance of MainComponent.
      * @param {TranslateService} translateService
      * @param {StorageService} storageService
-     * @param {UiService} uiService
      * @param {Router} router
      * @param {ElectronService} electronService
      * @param {NgZone} ngZone
@@ -81,23 +79,12 @@ export class MainComponent implements OnDestroy {
     constructor(
         private translateService: TranslateService,
         private storageService: StorageService,
-        private uiService: UiService,
         private router: Router,
         private electronService: ElectronService,
         private ngZone: NgZone
     ) {
         if (electronService.remote) {
-            const window = electronService.remote.getCurrentWindow();
-
-            if (window['dialog'] === 'about') {
-                this.router.navigate(['/about']);
-            } else if (window['dialog'] === 'dictionary') {
-                this.router.navigate(['/dictionary']);
-            }
-
             this.setIpcListeners();
-
-            this.showArrow = this.uiService.showArrow;
         }
 
         this.fromLang = this.storageService.getFromLanguage();
@@ -123,6 +110,12 @@ export class MainComponent implements OnDestroy {
     ngOnDestroy(): void {}
 
     setIpcListeners(): void {
+        this.electronService.ipcRenderer.on('open-dictionary', () => {
+            this.ngZone.run(() => {
+                this.router.navigate(['/dictionary']);
+            });
+        });
+
         // translate content from clipboard
         this.electronService.ipcRenderer.on('translate-clipboard', () => {
             this.ngZone.run(() => {
@@ -173,7 +166,7 @@ export class MainComponent implements OnDestroy {
     }
 
     /**
-     * Update option value in the localstorage
+     * Update option value in the local storage
      * @param langDirection name of the translation direction (toLang or fromlang)
      * @param value option value
      */

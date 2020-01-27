@@ -4,8 +4,9 @@ const Electron = require('electron');
 const path = require('path');
 
 class Dictionary {
+    window = null;
 
-    constructor() { }
+    constructor() {}
 
     showWindow() {
         // Prevent creating of new window
@@ -25,15 +26,22 @@ class Dictionary {
                 minHeight: 400,
                 minWidth: 500,
                 showDockIcon: true,
-                titleBarStyle: 'hiddenInset'
+                titleBarStyle: 'hiddenInset',
+                webPreferences: {
+                    nodeIntegration: true,
+                    backgroundThrottling: false
+                }
             });
 
-            this.window.dialog = 'dictionary';
+            this.window.setMenu(null);
         }
 
         // Load the template
         this.window.loadURL(`file:///${__dirname}/../index.html`);
-        this.window.once('ready-to-show', () => this.window.show());
+        this.window.once('ready-to-show', () => {
+            this.window.webContents.send('open-dictionary');
+            this.window.show();
+        });
     }
 }
 

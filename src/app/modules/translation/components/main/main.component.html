@@ -129,8 +129,12 @@
     <div
         fxFlex="40px"
         id="footer">
-        <div class="copyright">
-            <div class="yandex-text">
+        <div
+            class="copyright"
+            fxLayout="row">
+            <div
+                class="yandex-text"
+                fxFlex="50">
                 Powered by
                 <a
                     href="#"
@@ -140,9 +144,11 @@
             </div>
             <div
                 class="update-text"
+                fxFlex="50"
+                fxLayoutAlign="end center"
                 *ngIf="updateAvailable">
                 <a
-                    href
+                    href="#"
                     (click)="openUrl('https://github.com/4gray/oversetter/releases')">
                     New app version is available
                 </a>
