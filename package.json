@@ -1,6 +1,6 @@
 {
     "name": "oversetter",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "license": "MIT",
     "author": {
         "name": "4gray",
@@ -58,7 +58,7 @@
         "codelyzer": "^4.0.1",
         "core-js": "^2.4.1",
         "electron": "^7.1.9",
-        "electron-builder": "^20.26.0",
+        "electron-builder": "^22.3.2",
         "jasmine-core": "~2.8.0",
         "jasmine-spec-reporter": "~4.2.1",
         "karma": "~2.0.0",
