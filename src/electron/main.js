@@ -11,14 +11,13 @@ const Dictionary = require('./dictionary');
 const currentVersion = require('../package.json').version;
 
 const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/package.json';
-const dictionary = new Dictionary();
 
 const keyboardShortcuts = {
     open: 'CommandOrControl+Alt+T',
     translateClipboard: 'CommandOrControl+Alt+R'
 };
 
-let mb;
+let mb, dictionary;
 let appHeight = 315;
 
 if (process.platform !== 'darwin') {
@@ -34,7 +33,7 @@ function createContextMenu() {
         {
             label: 'Dictionary',
             click: () => {
-                dictionary.showWindow();
+                dictionary.openDictionary();
             }
         },
         {
@@ -62,6 +61,7 @@ app.on('ready', () => {
     const iconPath = path.join(__dirname, '/../assets/LightIconTemplate.png');
     const contextMenu = createContextMenu();
     const tray = new Tray(iconPath);
+    dictionary = new Dictionary();
 
     const getAlwaysOnTopValue = () => {
         if (settings.has('alwaysOnTop')) return settings.get('alwaysOnTop') || false;
