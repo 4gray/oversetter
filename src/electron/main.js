@@ -24,6 +24,9 @@ if (process.platform !== 'darwin') {
     appHeight = 298;
 }
 
+/**
+ * Creates tray menu
+ */
 function createContextMenu() {
     return Menu.buildFromTemplate([
         {
@@ -52,7 +55,7 @@ function createContextMenu() {
                 mb.app.quit();
                 mb.app.relaunch();
             }
-        }, // TODO: add check for updates option
+        },
         { label: 'Quit', click: () => app.quit() }
     ]);
 }
@@ -75,9 +78,9 @@ app.on('ready', () => {
         if (settings.has('autolaunch')) return settings.get('autolaunch') || false;
     };
 
-    let dockIcon = getShowDockIconValue();
-    let alwaysOnTop = getAlwaysOnTopValue();
-    let autolaunch = getAutoLaunchValue();
+    const dockIcon = getShowDockIconValue();
+    const alwaysOnTop = getAlwaysOnTopValue();
+    const autoLaunch = getAutoLaunchValue();
 
     const browserWindow = {
         width: 500,
@@ -121,7 +124,7 @@ app.on('ready', () => {
         });
 
         ipcMain.on('autolaunch', (event, arg) => {
-            console.log('Autolaunch enabled: ' + arg);
+            console.log('Auto launch enabled: ' + arg);
             settings.set('autolaunch', arg);
         });
 
@@ -152,20 +155,25 @@ app.on('ready', () => {
         checkForUpdate();
     });
 
-    let appLauncher = new AutoLaunch({
+    setAutoLaunch(autoLaunch);
+});
+
+/** Unregister all shortcuts on quit */
+app.on('will-quit', () => globalShortcut.unregisterAll());
+
+/**
+ * Set auto launch option
+ */
+function setAutoLaunch(autoLaunchValue) {
+    const appLauncher = new AutoLaunch({
         name: 'Oversetter',
         mac: {
             useLaunchAgent: true
         }
     });
 
-    autolaunch ? appLauncher.enable() : appLauncher.disable();
-});
-
-app.on('will-quit', () => {
-    // unregister all shortcuts
-    globalShortcut.unregisterAll();
-});
+    autoLaunchValue ? appLauncher.enable() : appLauncher.disable();
+}
 
 /**
  * Show application window
