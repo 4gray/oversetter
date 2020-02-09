@@ -1,0 +1,5 @@
+node_modules
+assets
+app-builds
+dist
+e2e
