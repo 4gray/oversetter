@@ -2,7 +2,6 @@
     fxLayout="column"
     fxFlexFill
     style="overflow: hidden;">
-
     <div
         id="tabs"
         fxFlex="40px"
@@ -14,187 +13,31 @@
             {{tab.title}}
         </div>
     </div>
-
-    <ng-container *ngIf="selectedTabId==='api'">
-        <div
-            fxFlex
-            id="settings-area">
-            To use this application you need to
-            <a
-                href="#"
-                (click)="openUrl('https://tech.yandex.com/translate/')">
-                register
-            </a>
-            free API-Key from Yandex
-            Translate.
-            For test you can use this dev-key:
-            <i>
-                trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf
-            </i>
-        </div>
-        <textarea
-            fxFlex
-            id="api-key"
-            placeholder="Enter your API key here"
-            type="text"
-            [(ngModel)]="apiKey"></textarea>
-    </ng-container>
-
-    <ng-container *ngIf="selectedTabId==='general'">
-        <div
-            fxFlex
-            class="settings-container">
-            <div class="settings-title">Application settings</div>
-            <ul>
-                <li class="checkbox-option">
-                    <label for="start-at-login">
-                        <input
-                            type="checkbox"
-                            id="start-at-login"
-                            value="Start at login"
-                            [(ngModel)]="autolaunch">
-                        Start
-                        at login
-                    </label>
-                </li>
-                <li class="checkbox-option">
-                    <label for="show-dock-icon">
-                        <input
-                            type="checkbox"
-                            id="show-dock-icon"
-                            value="Show dock icon"
-                            [(ngModel)]="showDockIcon">
-                        Show
-                        dock icon
-                    </label>
-                </li>
-                <li class="checkbox-option">
-                    <label for="always-on-top">
-                        <input
-                            type="checkbox"
-                            id="always-on-top"
-                            value="Stay always on the top"
-                            [(ngModel)]="alwaysOnTop">
-                        Always
-                        on top
-                    </label>
-                </li>
-            </ul>
-            <div class="settings-title">Shortcuts</div>
-            <ul>
-                <li class="text">
-                    Use
-                    <b>
-                        <kbd>⌘</kbd>
-                        /
-                        <kbd>Ctrl</kbd>
-                        +
-                        <kbd>Alt</kbd>
-                        +
-                        <kbd>T</kbd>
-                    </b>
-                    to show application window
-                </li>
-                <li class="text">
-                    Use
-                    <b>
-                        <kbd>⌘</kbd>
-                        /
-                        <kbd>Ctrl</kbd>
-                        +
-                        <kbd>Alt</kbd>
-                        +
-                        <kbd>R</kbd>
-                    </b>
-                    to translate text from clipboard
-                </li>
-            </ul>
-
-            <div class="settings-note">
-                New settings will only take effect after a restart!
-            </div>
-        </div>
-    </ng-container>
-    <ng-container *ngIf="selectedTabId==='languages'">
-        <div
-            fxFlex
-            class="settings-container">
-            <form>
-                <fieldset
-                    class="settings-checkboxes"
-                    ngModelGroup="languages">
-                    <input
-                        type="radio"
-                        id="all"
-                        name="languages"
-                        value="all-languages"
-                        checked
-                        [(ngModel)]="languages">
-                    <label for="all">Show all languages</label>
-                    <br>
-                    <input
-                        type="radio"
-                        id="short"
-                        name="languages"
-                        value="select-languages"
-                        [(ngModel)]="languages">
-                    <label for="short">Select languages from the list:</label>
-                </fieldset>
-            </form>
-
-            <div fxLayout="row">
-                <select
-                    ngFlex
-                    multiple
-                    id="all-languages-list"
-                    [(ngModel)]="selectedLang"
-                    [disabled]="languageState()">
-                    <option
-                        *ngFor="let lang of langList"
-                        [ngValue]="lang">
-                        {{lang.value}}
-                    </option>
-                </select>
-
-                <div
-                    ngFlex
-                    style="text-align:center;">
-                    <button
-                        class="btn"
-                        id="add-language"
-                        (click)="addLanguage(selectedLang)"
-                        [disabled]="languageState()">
-                        &gt;
-                    </button>
-                    <button
-                        div
-                        class="btn"
-                        id="remove-language"
-                        (click)="removeLanguage(langToRemove)">
-                        &lt;
-                    </button>
-                </div>
-
-                <select
-                    ngFlex
-                    multiple
-                    id="selected-languages-list"
-                    [(ngModel)]="langToRemove"
-                    [disabled]="languageState()">
-                    <option
-                        *ngFor="let prefLang of preferedLangList"
-                        [ngValue]="prefLang">
-                        {{prefLang.value}}
-                    </option>
-                </select>
-            </div>
-        </div>
-    </ng-container>
-
-    <ng-container *ngIf="selectedTabId==='about'">
-        <app-about
-            (linkClicked)="openUrl($event)"
-            style="height:100%"></app-about>
+    <ng-container [ngSwitch]="selectedTabId">
+        <ng-container *ngSwitchCase="'api'">
+            <app-api
+                fxFlex
+                [apiKey]="apiKey"
+                (keyChanged)="setApiKey($event)"></app-api>
+        </ng-container>
+        <ng-container *ngSwitchCase="'general'">
+            <app-general
+                fxFlex
+                [settings]="settings"></app-general>
+        </ng-container>
+        <ng-container *ngSwitchCase="'languages'">
+            <app-languages
+                fxFlex
+                [languageMode]="languageMode"
+                [languageList]="langList"
+                [preferredLangList]="preferredLangList"
+                (languageAdded)="addLanguage($event)"
+                (languageModeChanged)="setLanguageMode($event)"
+                (languageRemoved)="removeLanguage($event)"></app-languages>
+        </ng-container>
+        <ng-container *ngSwitchCase="'about'">
+            <app-about (linkClicked)="openUrl($event)"></app-about>
+        </ng-container>
     </ng-container>
 
     <div
@@ -210,14 +53,14 @@
                 class="back-btn"
                 [disabled]="apiKey === null"
                 (click)="validateApiKey()">
-                <i class="fa fa-angle-left"></i>
+                <span class="fa fa-angle-left"></span>
             </button>
             <button
                 fxFlex="75px"
                 [disabled]="!apiKey"
-                (click)="saveApiKey(apiKey, 'apiKey')"
+                (click)="saveSettings(apiKey, 'apiKey')"
                 class="save-settings-btn">
-                <i class="fa fa-save"></i>
+                <span class="fa fa-save"></span>
                 Save
             </button>
             <div
@@ -227,15 +70,15 @@
             </div>
             <div
                 fxFlex="20px"
-                id="close-btn"
+                class="close-btn"
                 (click)="closeApp()">
-                <i class="fa fa-power-off"></i>
+                <span class="fa fa-power-off"></span>
             </div>
             <div
                 fxFlex="20px"
-                id="close-btn"
+                class="close-btn"
                 (click)="openUrl('https://4gray.github.io/oversetter/')">
-                <i class="fa fa-github"></i>
+                <span class="fa fa-github"></span>
             </div>
         </div>
     </div>

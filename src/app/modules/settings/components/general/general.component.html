@@ -1,0 +1,69 @@
+<div class="settings-title">Application settings</div>
+<ul>
+    <li class="checkbox-option">
+        <label for="start-at-login">
+            <input
+                type="checkbox"
+                id="start-at-login"
+                value="Start at login"
+                [(ngModel)]="settings.autolaunch">
+            Start
+                        at login
+        </label>
+    </li>
+    <li class="checkbox-option">
+        <label for="show-dock-icon">
+            <input
+                type="checkbox"
+                id="show-dock-icon"
+                value="Show dock icon"
+                [(ngModel)]="settings.showDockIcon">
+            Show
+                        dock icon
+        </label>
+    </li>
+    <li class="checkbox-option">
+        <label for="always-on-top">
+            <input
+                type="checkbox"
+                id="always-on-top"
+                value="Stay always on the top"
+                [(ngModel)]="settings.alwaysOnTop">
+            Always
+                        on top
+        </label>
+    </li>
+</ul>
+<div class="settings-title">Shortcuts</div>
+<ul>
+    <li class="text">
+        Use
+        <b>
+            <kbd>⌘</kbd>
+            /
+            <kbd>Ctrl</kbd>
+            +
+            <kbd>Alt</kbd>
+            +
+            <kbd>T</kbd>
+        </b>
+        to show application window
+    </li>
+    <li class="text">
+        Use
+        <b>
+            <kbd>⌘</kbd>
+            /
+            <kbd>Ctrl</kbd>
+            +
+            <kbd>Alt</kbd>
+            +
+            <kbd>R</kbd>
+        </b>
+        to translate text from clipboard
+    </li>
+</ul>
+
+<div class="settings-note">
+    New settings will only take effect after a restart!
+</div>

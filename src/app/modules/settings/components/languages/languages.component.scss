@@ -1,0 +1,46 @@
+:host {
+    background: #ececec;
+}
+
+.language-controls {
+    text-align: center;
+}
+
+.settings-checkboxes {
+    border: 0;
+    padding: 0 10px;
+    margin: 0;
+}
+
+#all-languages-list,
+#selected-languages-list {
+    width: 220px;
+    height: 155px;
+    margin-left: 10px;
+    padding: 0px 5px;
+    outline: none;
+    border: 1px solid #ccc;
+}
+
+#add-language {
+    background: #ccc;
+    width: 40px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #555;
+    margin: 10px;
+}
+
+#remove-language {
+    background: #ccc;
+    width: 40px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+}

@@ -1,0 +1,73 @@
+<form>
+    <fieldset
+        class="settings-checkboxes"
+        ngModelGroup="languages">
+        <legend>Language mode:</legend>
+        <input
+            type="radio"
+            id="all"
+            name="languages"
+            value="all-languages"
+            (change)="languageModeChanged.emit('all-languages')"
+            checked
+            [(ngModel)]="languageMode">
+        <label for="all">Show all languages</label>
+        <br>
+        <input
+            type="radio"
+            id="short"
+            name="languages"
+            value="preferred-languages"
+            (change)="languageModeChanged.emit('preferred-languages')"
+            [(ngModel)]="languageMode">
+        <label for="short">
+            Show only preferred languages from the list:
+        </label>
+    </fieldset>
+</form>
+
+<div fxLayout="row">
+    <select
+        ngFlex
+        multiple
+        id="all-languages-list"
+        [(ngModel)]="selectedLanguage"
+        [disabled]="languageState()">
+        <option
+            *ngFor="let lang of languageList"
+            [ngValue]="lang">
+            {{lang.value}}
+        </option>
+    </select>
+
+    <div
+        ngFlex
+        id="language-controls">
+        <button
+            class="btn"
+            id="add-language"
+            (click)="languageAdded.emit(selectedLanguage)"
+            [disabled]="languageState()">
+            &gt;
+        </button>
+        <button
+            class="btn"
+            id="remove-language"
+            (click)="languageRemoved.emit(languageToRemove)">
+            &lt;
+        </button>
+    </div>
+
+    <select
+        ngFlex
+        multiple
+        id="selected-languages-list"
+        [(ngModel)]="languageToRemove"
+        [disabled]="languageState()">
+        <option
+            *ngFor="let prefLang of preferredLangList"
+            [ngValue]="prefLang">
+            {{prefLang.value}}
+        </option>
+    </select>
+</div>

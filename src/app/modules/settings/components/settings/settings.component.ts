@@ -1,52 +1,54 @@
-import { Component } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ElectronService } from 'ngx-electron';
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Language } from '@app/models/language';
 import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
-import { Language } from '@app/models/language';
+import { ElectronService } from 'ngx-electron';
+import { untilDestroyed } from 'ngx-take-until-destroy';
+import { LanguageMode } from '../languages/languages.component';
 
 @Component({
     providers: [TranslateService],
     templateUrl: 'settings.component.html',
-    styleUrls: ['settings.component.scss']
+    styleUrls: ['settings.component.scss'],
 })
-export class SettingsComponent {
-    public apiKey: string;
-    public errorMessage = '';
-    public autolaunch = false;
-    public alwaysOnTop = false;
-    public showDockIcon = false;
-    public langList = [];
-    public preferedLangList = [];
-    public languages = 'all-languages';
-    public selectedLang;
-    public langToRemove;
-    public tabs = [
+export class SettingsComponent implements OnDestroy {
+    apiKey: string;
+    errorMessage = '';
+
+    settings = {
+        autolaunch: false,
+        alwaysOnTop: false,
+        showDockIcon: false,
+    };
+
+    langList = [];
+    preferredLangList = [];
+    languageMode: LanguageMode = 'all-languages';
+    tabs = [
         {
             id: 'api',
-            title: 'API'
+            title: 'API',
         },
         {
             id: 'general',
-            title: 'General'
+            title: 'General',
         },
         {
             id: 'languages',
-            title: 'Languages'
+            title: 'Languages',
         },
         {
             id: 'about',
-            title: 'About'
-        }
+            title: 'About',
+        },
     ];
     public selectedTabId = 'api';
-    public showArrow = false;
 
     /**
      * Version of the application
      *
      * @type {string}
-     * @memberof SettingsComponent
      */
     public version: string;
 
@@ -61,39 +63,16 @@ export class SettingsComponent {
         private electronService: ElectronService,
         route: ActivatedRoute
     ) {
-        route.queryParams.subscribe(param => {
+        route.queryParams.pipe(untilDestroyed(this)).subscribe(param => {
             const tabName = param['tab'] || '';
             if (tabName === 'about') {
                 this.selectedTabId = 'about';
             }
         });
 
+        this.setSettings();
+
         this.apiKey = AppSettings.$apiKey;
-        if (localStorage.getItem('autolaunch')) {
-            this.autolaunch = localStorage.getItem('autolaunch') === 'true';
-        }
-
-        if (localStorage.getItem('alwaysOnTop')) {
-            this.alwaysOnTop = localStorage.getItem('alwaysOnTop') === 'true';
-        }
-
-        if (localStorage.getItem('showDockIcon')) {
-            this.showDockIcon = localStorage.getItem('showDockIcon') === 'true';
-        }
-
-        if (localStorage.getItem('languages')) {
-            this.showDockIcon = localStorage.getItem('languages') === 'true';
-        }
-
-        if (localStorage.getItem('languages')) {
-            this.languages = localStorage.getItem('languages');
-            this.preferedLangList = JSON.parse(localStorage.getItem('preferedLanguageList')) || [];
-            this.preferedLangList.map(item => new Language(item.key, item.value));
-        } else {
-            // set default
-            this.preferedLangList.push(new Language('en', 'English'));
-        }
-
         this.langList = AppSettings.$languageList;
 
         if (this.electronService.remote) {
@@ -103,132 +82,101 @@ export class SettingsComponent {
     }
 
     /**
-     * Save Yandex Translate API key to the localstorage
+     * Get settings from local storage and set them on application level
+     */
+    setSettings(): void {
+        if (localStorage.getItem('autolaunch')) {
+            this.settings.autolaunch = localStorage.getItem('autolaunch') === 'true';
+        }
+
+        if (localStorage.getItem('alwaysOnTop')) {
+            this.settings.alwaysOnTop = localStorage.getItem('alwaysOnTop') === 'true';
+        }
+
+        if (localStorage.getItem('showDockIcon')) {
+            this.settings.showDockIcon = localStorage.getItem('showDockIcon') === 'true';
+        }
+
+        if (localStorage.getItem('languageMode')) {
+            this.languageMode = localStorage.getItem('languageMode') as LanguageMode;
+            this.preferredLangList = JSON.parse(localStorage.getItem('preferredLanguageList')) || [];
+            this.preferredLangList.forEach(item => new Language(item.key, item.value));
+        } else {
+            // set default language
+            this.preferredLangList.push(new Language('en', 'English'));
+        }
+    }
+
+    /**
+     * Save Yandex Translate API key to the local Nfstorage
      * @param value option value ('apiKey')
      * @param option name of the option
      */
-    public saveApiKey(value: string, option: string) {
+    saveSettings(value: string, option: string): void {
         localStorage.setItem(option, value);
         AppSettings.$apiKey = value;
         this.validateApiKey();
-        this.setAutoLaunch(); // TODO: combine to one IPCrenderer-request
+        this.setAutoLaunch(); // TODO: combine to one IPC-Renderer-request
         this.setAlwaysOnTop();
         this.setShowDockIcon();
-        this.setPreferedLanguageList();
+        this.setPreferredLanguageList();
     }
 
     /**
      * Use getLangs API method to validate API key
      */
-    public validateApiKey() {
-        const l$ = this.translateService.getLanguagesList();
-        l$.subscribe(
-            () => this.router.navigate(['/home']),
-            error => (this.errorMessage = error)
-        );
+    validateApiKey(): void {
+        this.translateService
+            .getLanguagesList()
+            .pipe(untilDestroyed(this))
+            .subscribe(
+                () => this.router.navigate(['/home']),
+                error => (this.errorMessage = error)
+            );
     }
 
     /**
      * Close application
      */
-    public closeApp() {
+    closeApp(): void {
         this.electronService.remote.app.quit();
     }
 
     /**
-     * Add one or multiple language(-s) to the prefered language list
-     * @param language string or array with language list as strings
+     * Save list with preferred languages
      */
-    public addLanguage(language) {
-        if (!language) {
-            return;
-        }
-
-        if (language instanceof Array) {
-            for (let i = 0; i < language.length; i++) {
-                if (this.preferedLangList.filter(item => item.value === language[i].value).length === 0) {
-                    this.preferedLangList.push(language[i]);
-                }
-            }
-        } else {
-            if (this.preferedLangList.filter(item => item.value === language[0].value).length === 0) {
-                this.preferedLangList.push(language[0]);
-            }
-        }
-    }
-
-    /**
-     * Remove one or multiple selected language(-s) from prefered language list
-     * @param language selected one or multiple languages (array or string)
-     */
-    public removeLanguage(language) {
-        let index;
-
-        if (language instanceof Array) {
-            for (let i = 0; i < language.length; i++) {
-                index = this.preferedLangList.indexOf(language[i]);
-                if (index > -1) {
-                    this.preferedLangList.splice(index, 1);
-                }
-            }
-        } else {
-            index = this.preferedLangList.indexOf(language[0]);
-            if (index > -1) {
-                this.preferedLangList.splice(index, 1);
-            }
-        }
-    }
-
-    /**
-     * Get language state (show all languages or only selected set)
-     *
-     * @private
-     * @returns boolean value
-     * @memberof SettingsComponent
-     */
-    public languageState() {
-        if (this.languages === 'all-languages') {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Save list with prefered languages
-     */
-    private setPreferedLanguageList() {
-        localStorage.setItem('languages', String(this.languages));
-        localStorage.setItem('preferedLanguageList', JSON.stringify(this.preferedLangList));
+    private setPreferredLanguageList(): void {
+        localStorage.setItem('languageMode', String(this.languageMode));
+        localStorage.setItem('preferredLanguageList', JSON.stringify(this.preferredLangList));
     }
 
     /**
      * Save always as top option
      */
-    private setAlwaysOnTop() {
-        localStorage.setItem('alwaysOnTop', String(this.alwaysOnTop));
+    private setAlwaysOnTop(): void {
+        localStorage.setItem('alwaysOnTop', String(this.settings.alwaysOnTop));
         if (this.electronService.ipcRenderer) {
-            this.electronService.ipcRenderer.send('alwaysOnTop', this.alwaysOnTop); // TODO: implement in the main process
+            this.electronService.ipcRenderer.send('alwaysOnTop', this.settings.alwaysOnTop); // TODO: implement in the main process
         }
     }
 
     /**
      * Save show dock icon option
      */
-    private setShowDockIcon() {
-        localStorage.setItem('showDockIcon', String(this.showDockIcon));
+    private setShowDockIcon(): void {
+        localStorage.setItem('showDockIcon', String(this.settings.showDockIcon));
         if (this.electronService.ipcRenderer) {
-            this.electronService.ipcRenderer.send('showDockIcon', this.showDockIcon); // TODO: implement in the main process
+            this.electronService.ipcRenderer.send('showDockIcon', this.settings.showDockIcon); // TODO: implement in the main process
         }
     }
 
     /**
      * Save auto launch options
      */
-    private setAutoLaunch() {
-        localStorage.setItem('autolaunch', String(this.autolaunch));
+    private setAutoLaunch(): void {
+        localStorage.setItem('autolaunch', String(this.settings.autolaunch));
         if (this.electronService.ipcRenderer) {
-            this.electronService.ipcRenderer.send('autolaunch', this.autolaunch);
+            this.electronService.ipcRenderer.send('autolaunch', this.settings.autolaunch);
         }
     }
 
@@ -236,7 +184,6 @@ export class SettingsComponent {
      * Opens the given URL in external browser
      *
      * @param {string} url
-     * @memberof SettingsComponent
      */
     openUrl(url: string): void {
         this.electronService.shell.openExternal(url);
@@ -246,9 +193,70 @@ export class SettingsComponent {
      * Sets the given tab as selected
      *
      * @param {string} tabId tab id
-     * @memberof SettingsComponent
      */
-    selectTab(tabId: string) {
+    selectTab(tabId: string): void {
         this.selectedTabId = tabId;
     }
+
+    /**
+     * Add one or multiple language(-s) to the preferred language list
+     * @param language string or array with language list as strings
+     */
+    addLanguage(language): void {
+        if (!language) {
+            return;
+        }
+
+        if (language instanceof Array) {
+            for (let i = 0; i < language.length; i++) {
+                if (this.preferredLangList.filter(item => item.value === language[i].value).length === 0) {
+                    this.preferredLangList.push(language[i]);
+                }
+            }
+        } else {
+            if (this.preferredLangList.filter(item => item.value === language[0].value).length === 0) {
+                this.preferredLangList.push(language[0]);
+            }
+        }
+    }
+
+    /**
+     * Remove one or multiple selected language(-s) from preferred language list
+     * @param language selected one or multiple languages (array or string)
+     */
+    removeLanguage(language: any): void {
+        let index;
+
+        if (language instanceof Array) {
+            for (let i = 0; i < language.length; i++) {
+                index = this.preferredLangList.indexOf(language[i]);
+                if (index > -1) {
+                    this.preferredLangList.splice(index, 1);
+                }
+            }
+        } else {
+            index = this.preferredLangList.indexOf(language[0]);
+            if (index > -1) {
+                this.preferredLangList.splice(index, 1);
+            }
+        }
+    }
+
+    /**
+     * Sets provided API key
+     * @param apiKey API key
+     */
+    setApiKey(apiKey: string): void {
+        this.apiKey = apiKey;
+    }
+
+    /**
+     * Sets language mode
+     * @param languageMode selected language mode
+     */
+    setLanguageMode(languageMode: LanguageMode): void {
+        this.languageMode = languageMode;
+    }
+
+    ngOnDestroy(): void {}
 }

@@ -5,29 +5,6 @@
     width: 330px;
 }
 
-#api-key {
-    width: 100%;
-    height: 100px;
-    font-size: 12px;
-    resize: none;
-    margin: 0;
-    border-radius: 0.1px;
-}
-
-#settings-area {
-    width: 100%;
-    background: #eee;
-    overflow-y: auto;
-    font-size: 12px;
-    padding: 0 10px;
-    word-wrap: break-word;
-    height: 101px;
-    user-select: text;
-    -webkit-user-select: text;
-    padding-top: 8px;
-    border-bottom: 1px solid #ccc;
-}
-
 .update-text {
     float: right;
 }
@@ -46,7 +23,7 @@
 #tabs > div {
     cursor: pointer;
     padding: 0 5px 0 5px;
-    width: 80px; // border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
+    width: 80px;
     border-right: 1px solid #afafaf;
     color: #666;
 }
@@ -61,20 +38,6 @@
     font-weight: bold;
     border-bottom: 1px solid #eee;
     height: 40px;
-}
-
-.settings-tab-content {
-    background: #ececec;
-}
-
-.settings-container {
-    padding: 10px;
-    background: #eee; // padding-top: 7px;
-}
-
-.settings-container > ul {
-    padding: 0px;
-    margin: 0;
 }
 
 kbd {
@@ -94,9 +57,31 @@ kbd {
     text-align: center;
     cursor: pointer;
 
-    i {
+    span {
         font-size: 29px;
         color: #666;
         line-height: 35px;
     }
+}
+
+.close-btn {
+    color: #666;
+    font-style: italic;
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.save-settings-btn {
+    background: none;
+    border-radius: 2px;
+    border: none;
+    font-size: 14px;
+    padding-right: 10px;
+    border-right: 1px solid #ccc;
+    line-height: 30px;
+    outline: none;
+    float: left;
+    cursor: pointer;
+    color: #666;
 }

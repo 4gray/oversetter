@@ -1,13 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { environment } from 'environments/environment';
 
 @Component({
     selector: 'app-about',
     templateUrl: './about.component.html',
-    styleUrls: ['./about.component.scss']
+    styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
-
     /**
      * Emits to the parent component with clicked URL link
      *
@@ -30,8 +29,7 @@ export class AboutComponent implements OnInit {
      */
     DESCRIPTION = environment.DESCRIPTION;
 
-    constructor() { }
+    constructor() {}
 
-    ngOnInit(): void { }
-
+    ngOnInit(): void {}
 }

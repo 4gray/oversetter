@@ -14,7 +14,7 @@ import { untilDestroyed } from 'ngx-take-until-destroy';
 
 @Component({
     templateUrl: 'main.component.html',
-    styleUrls: ['main.component.scss']
+    styleUrls: ['main.component.scss'],
 })
 export class MainComponent implements OnDestroy {
     /**
@@ -109,6 +109,9 @@ export class MainComponent implements OnDestroy {
 
     ngOnDestroy(): void {}
 
+    /**
+     * Set listeners for events from main process
+     */
     setIpcListeners(): void {
         this.electronService.ipcRenderer.on('open-dictionary', () => {
             this.ngZone.run(() => {
@@ -157,7 +160,7 @@ export class MainComponent implements OnDestroy {
      *
      * @memberof MainComponent
      */
-    public changeTranslationDir() {
+    public changeTranslationDir(): void {
         const temp = this.fromLang;
         this.fromLang = this.toLang;
         this.toLang = temp;
@@ -167,10 +170,10 @@ export class MainComponent implements OnDestroy {
 
     /**
      * Update option value in the local storage
-     * @param langDirection name of the translation direction (toLang or fromlang)
+     * @param langDirection name of the translation direction (toLang or fromLang)
      * @param value option value
      */
-    public onLanguageChange(langDirection: string, value: Language) {
+    public onLanguageChange(langDirection: string, value: Language): void {
         localStorage.setItem(langDirection, JSON.stringify(value));
         // this[langDirection] = value;
         if (langDirection === 'toLang' && this.word !== '') {
@@ -183,7 +186,7 @@ export class MainComponent implements OnDestroy {
      *
      * @param word string to translate
      */
-    public translate(word: string, fromLang: string, toLang: string) {
+    public translate(word: string, fromLang: string, toLang: string): void {
         const temp = word.replace(/\n/g, ' '); // check for new line characters
         if (!/^ *$/.test(temp)) {
             if (fromLang === 'ad') {
@@ -249,9 +252,9 @@ export class MainComponent implements OnDestroy {
                 catchError(err => throwError(err))
             )
             .subscribe((response: Language[]) => {
-                if (localStorage.getItem('languages') === 'select-languages') {
-                    // save fetched languages in localstorage
-                    this.languageListFrom = JSON.parse(localStorage.getItem('preferedLanguageList'));
+                if (localStorage.getItem('languageMode') === 'preferred-languages') {
+                    // save fetched languages in local storage
+                    this.languageListFrom = JSON.parse(localStorage.getItem('preferredLanguageList'));
                     this.languageListFrom = this.languageListFrom.map(
                         (item: any) => new Language(item.key, item.value)
                     );
@@ -283,7 +286,7 @@ export class MainComponent implements OnDestroy {
      *
      * @memberof MainComponent
      */
-    showDictionary() {
+    showDictionary(): void {
         this.electronService.ipcRenderer.send('openDictionary');
         this.hideMenu();
     }
@@ -293,7 +296,7 @@ export class MainComponent implements OnDestroy {
      *
      * @memberof MainComponent
      */
-    closeApp() {
+    closeApp(): void {
         this.electronService.remote.app.quit();
     }
 
@@ -302,7 +305,7 @@ export class MainComponent implements OnDestroy {
      *
      * @memberof MainComponent
      */
-    hideMenu() {
+    hideMenu(): void {
         this.showMoreMenu = false;
     }
 }
