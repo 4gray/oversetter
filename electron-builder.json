@@ -15,28 +15,20 @@
         "!hooks/",
         "!.angular-cli.json",
         "!_config.yml",
-        "!karma.conf.js",
         "!tsconfig.json",
         "!tslint.json",
         "!src/"
     ],
     "win": {
         "icon": "assets",
-        "target": [
-            "portable"
-        ]
+        "target": ["portable"]
     },
     "mac": {
         "icon": "assets",
-        "target": [
-            "dmg"
-        ]
+        "target": ["dmg"]
     },
     "linux": {
         "icon": "assets",
-        "target": [
-            "AppImage",
-            "Snap"
-        ]
+        "target": ["AppImage", "Snap"]
     }
 }

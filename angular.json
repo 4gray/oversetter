@@ -63,19 +63,7 @@
                     "options": {
                         "browserTarget": "oversetter:build"
                     }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "src/test.ts",
-                        "karmaConfig": "./karma.conf.js",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "src/tsconfig.spec.json",
-                        "scripts": [],
-                        "styles": ["src/styles.scss"],
-                        "assets": ["src/assets", "src/favicon.ico", "src/electron"]
-                    }
-                },
+                },,
                 "lint": {
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
