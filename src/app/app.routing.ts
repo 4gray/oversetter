@@ -1,16 +1,11 @@
 import { ModuleWithProviders } from '@angular/core';
-import {
-    RouterModule,
-    Routes
-} from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 
 const APP_ROUTES: Routes = [
     {
         path: '',
-        loadChildren: './modules/translation/translation.module#TranslationModule'
-    }
+        loadChildren: () => import('./modules/translation/translation.module').then(m => m.TranslationModule),
+    },
 ];
-
 
 export const AppRoutingModule: ModuleWithProviders = RouterModule.forRoot(APP_ROUTES);
