@@ -12,8 +12,7 @@
     margin: 0;
 }
 
-#all-languages-list,
-#selected-languages-list {
+.languages-list {
     width: 220px;
     height: 155px;
     margin-left: 10px;
@@ -22,7 +21,7 @@
     border: 1px solid #ccc;
 }
 
-#add-language {
+.language-btn {
     background: #ccc;
     width: 40px;
     text-align: center;
@@ -30,17 +29,9 @@
     line-height: 40px;
     border-radius: 4px;
     cursor: pointer;
-    color: #555;
     margin: 10px;
 }
 
-#remove-language {
-    background: #ccc;
-    width: 40px;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 10px;
+.language-btn:disabled {
+    cursor: default;
 }

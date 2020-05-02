@@ -7,24 +7,38 @@ import { ElectronService } from 'ngx-electron';
 import { untilDestroyed } from 'ngx-take-until-destroy';
 import { LanguageMode } from '../languages/languages.component';
 
+/** Default Yandex Translate API key */
+const DEFAULT_API_KEY = 'trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf';
+
 @Component({
     providers: [TranslateService],
     templateUrl: 'settings.component.html',
     styleUrls: ['settings.component.scss'],
 })
 export class SettingsComponent implements OnDestroy {
+    /** Api key */
     apiKey: string;
+
+    /** Error message */
     errorMessage = '';
 
+    /** Applications default settings */
     settings = {
         autolaunch: false,
         alwaysOnTop: false,
         showDockIcon: false,
     };
 
+    /** Array with all languages */
     langList = [];
+
+    /** Array with preferred languages, selected from the settings */
     preferredLangList = [];
+
+    /** Pre-selected language mode */
     languageMode: LanguageMode = 'all-languages';
+
+    /** Settings tabs */
     tabs = [
         {
             id: 'api',
@@ -43,19 +57,19 @@ export class SettingsComponent implements OnDestroy {
             title: 'About',
         },
     ];
-    public selectedTabId = 'api';
+
+    /** Pre-selected settings tab */
+    selectedTabId = 'api';
+
+    /** Version of the application */
+    version: string;
 
     /**
-     * Version of the application
-     *
-     * @type {string}
-     */
-    public version: string;
-
-    /**
-     * Constructor function - set API key from the localstorage
+     * Constructor function - set API key from the local storage
      * @param translateService translation service object
      * @param router router object
+     * @param electronService electrons main process wrapper
+     * @param route angulars activated route module
      */
     constructor(
         private translateService: TranslateService,
@@ -64,15 +78,14 @@ export class SettingsComponent implements OnDestroy {
         route: ActivatedRoute
     ) {
         route.queryParams.pipe(untilDestroyed(this)).subscribe(param => {
-            const tabName = param['tab'] || '';
-            if (tabName === 'about') {
-                this.selectedTabId = 'about';
+            const tabName = param.tab || 'api';
+            if (tabName && tabName !== '') {
+                this.selectedTabId = tabName;
             }
         });
 
         this.setSettings();
-
-        this.apiKey = AppSettings.$apiKey;
+        this.setApiKey(AppSettings.$apiKey || DEFAULT_API_KEY);
         this.langList = AppSettings.$languageList;
 
         if (this.electronService.remote) {
@@ -108,7 +121,7 @@ export class SettingsComponent implements OnDestroy {
     }
 
     /**
-     * Save Yandex Translate API key to the local Nfstorage
+     * Save Yandex Translate API key to the local storage
      * @param value option value ('apiKey')
      * @param option name of the option
      */
@@ -200,44 +213,31 @@ export class SettingsComponent implements OnDestroy {
 
     /**
      * Add one or multiple language(-s) to the preferred language list
-     * @param language string or array with language list as strings
+     * @param languages string or array with language list as strings
      */
-    addLanguage(language): void {
-        if (!language) {
-            return;
-        }
-
-        if (language instanceof Array) {
-            for (let i = 0; i < language.length; i++) {
-                if (this.preferredLangList.filter(item => item.value === language[i].value).length === 0) {
-                    this.preferredLangList.push(language[i]);
+    addLanguage(languages: Language[]): void {
+        if (languages.length > 0) {
+            for (let i = 0; i < languages.length; i++) {
+                if (this.preferredLangList.filter(item => item.value === languages[i].$value).length === 0) {
+                    this.preferredLangList.push(languages[i]);
                 }
-            }
-        } else {
-            if (this.preferredLangList.filter(item => item.value === language[0].value).length === 0) {
-                this.preferredLangList.push(language[0]);
             }
         }
     }
 
     /**
      * Remove one or multiple selected language(-s) from preferred language list
-     * @param language selected one or multiple languages (array or string)
+     * @param languages selected one or multiple languages (array or string)
      */
-    removeLanguage(language: any): void {
+    removeLanguage(languages: Language[]): void {
         let index;
 
-        if (language instanceof Array) {
-            for (let i = 0; i < language.length; i++) {
-                index = this.preferredLangList.indexOf(language[i]);
+        if (languages.length > 0) {
+            for (let i = 0; i < languages.length; i++) {
+                index = this.preferredLangList.indexOf(languages[i]);
                 if (index > -1) {
                     this.preferredLangList.splice(index, 1);
                 }
-            }
-        } else {
-            index = this.preferredLangList.indexOf(language[0]);
-            if (index > -1) {
-                this.preferredLangList.splice(index, 1);
             }
         }
     }
@@ -258,5 +258,6 @@ export class SettingsComponent implements OnDestroy {
         this.languageMode = languageMode;
     }
 
+    /** Required for unsubscribe mechanism */
     ngOnDestroy(): void {}
 }

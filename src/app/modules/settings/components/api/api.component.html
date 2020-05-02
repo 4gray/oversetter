@@ -1,18 +1,10 @@
-<div
-    fxLayout="column"
-    fxFlexFill>
-    <div
-        fxFlex
-        id="settingsArea">
+<div fxLayout="column" fxFlexFill>
+    <div fxFlex id="settingsArea">
         To use this application you need to
-        <a
-            href="#"
-            (click)="openUrl('https://tech.yandex.com/translate/')">
+        <a href="#" (click)="openUrl('https://tech.yandex.com/translate/')">
             register
         </a>
-        free API-Key from Yandex
-            Translate.
-            For test you can use this dev-key:
+        free API-Key from Yandex Translate. For test you can use this dev-key:
         <em>
             trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf
         </em>
@@ -20,8 +12,10 @@
     <textarea
         fxFlex
         id="apiKeyArea"
+        #apiKeyArea
         placeholder="Enter your API key here"
         type="text"
-        [(ngModel)]="apiKey"
-        (change)="keyChanged.emit(apiKey)"></textarea>
+        [value]="apiKey"
+        (change)="keyChanged.emit(apiKeyArea.value)"
+    ></textarea>
 </div>

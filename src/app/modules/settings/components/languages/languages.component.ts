@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Language } from '@app/models/language';
 
 export type LanguageMode = 'all-languages' | 'preferred-languages';
 
@@ -6,6 +7,7 @@ export type LanguageMode = 'all-languages' | 'preferred-languages';
     selector: 'app-languages',
     templateUrl: './languages.component.html',
     styleUrls: ['./languages.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LanguagesComponent {
     /** Array with all available languages */
@@ -16,21 +18,14 @@ export class LanguagesComponent {
     @Input() preferredLangList = [];
 
     /** Emits if language was added to one of the lists */
-    @Output() languageAdded: EventEmitter<any> = new EventEmitter();
+    @Output() languageAdded: EventEmitter<Language[]> = new EventEmitter();
     /** Emits if language mode was changed */
     @Output() languageModeChanged: EventEmitter<LanguageMode> = new EventEmitter();
     /** Emits if language was removed from one of the lists */
-    @Output() languageRemoved: EventEmitter<any> = new EventEmitter();
+    @Output() languageRemoved: EventEmitter<Language[]> = new EventEmitter();
 
-    languageToRemove;
-    selectedLanguage;
-
-    /**
-     * Get language state (show all languages or only selected set)
-     *
-     * @returns boolean value
-     */
-    languageState(): boolean {
-        return this.languageMode === 'all-languages';
-    }
+    /** Selected languages to remove */
+    languagesToRemove = [];
+    /** Selected languages to add */
+    selectedLanguages = [];
 }

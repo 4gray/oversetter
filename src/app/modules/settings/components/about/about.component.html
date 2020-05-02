@@ -1,25 +1,18 @@
 <div fxLayout="row">
     <div fxFlex="160px">
-        <img
-            alt="Oversetter Logo"
-            src="./assets/icon.png"
-            class="about-icon">
+        <img alt="Oversetter Logo" src="./assets/icon.png" class="about-icon" />
     </div>
     <div fxFlex>
         <div class="about-title">Oversetter</div>
-        <div class="about-version">{{VERSION}}</div>
-        <div class="about-description">{{DESCRIPTION}}</div>
+        <div class="about-version">{{ VERSION }}</div>
+        <div class="about-description">{{ DESCRIPTION }}</div>
         <div class="about-footer">
-            2017-2019 &copy; 4gray.
-            <a
-                href="#"
-                (click)="linkClicked.emit('https://4gray.github.io/oversetter/')">
+            2017-2020 &copy; 4gray.
+            <a href="#" (click)="linkClicked.emit('https://4gray.github.io/oversetter/')">
                 Homepage
             </a>
             .
-            <a
-                href="#"
-                (click)="linkClicked.emit('https://github.com/4gray/oversetter/issues')">
+            <a href="#" (click)="linkClicked.emit('https://github.com/4gray/oversetter/issues')">
                 Report a bug
             </a>
         </div>

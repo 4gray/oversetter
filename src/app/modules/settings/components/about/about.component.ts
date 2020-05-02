@@ -1,35 +1,19 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { environment } from 'environments/environment';
 
 @Component({
     selector: 'app-about',
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AboutComponent implements OnInit {
-    /**
-     * Emits to the parent component with clicked URL link
-     *
-     * @type {EventEmitter<string>}
-     * @memberof AboutComponent
-     */
+export class AboutComponent {
+    /** Emits to the parent component with clicked URL link */
     @Output() linkClicked: EventEmitter<string> = new EventEmitter();
 
-    /**
-     * Current version of the application
-     *
-     * @memberof AboutComponent
-     */
+    /** Current version of the application */
     VERSION = environment.VERSION;
 
-    /**
-     * Description of the application
-     *
-     * @memberof AboutComponent
-     */
+    /** Description of the application */
     DESCRIPTION = environment.DESCRIPTION;
-
-    constructor() {}
-
-    ngOnInit(): void {}
 }

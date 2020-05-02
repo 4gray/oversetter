@@ -1,7 +1,5 @@
 <form>
-    <fieldset
-        class="settings-checkboxes"
-        ngModelGroup="languages">
+    <fieldset class="settings-checkboxes" ngModelGroup="languages">
         <legend>Language mode:</legend>
         <input
             type="radio"
@@ -10,16 +8,18 @@
             value="all-languages"
             (change)="languageModeChanged.emit('all-languages')"
             checked
-            [(ngModel)]="languageMode">
+            [(ngModel)]="languageMode"
+        />
         <label for="all">Show all languages</label>
-        <br>
+        <br />
         <input
             type="radio"
             id="short"
             name="languages"
             value="preferred-languages"
             (change)="languageModeChanged.emit('preferred-languages')"
-            [(ngModel)]="languageMode">
+            [(ngModel)]="languageMode"
+        />
         <label for="short">
             Show only preferred languages from the list:
         </label>
@@ -30,30 +30,28 @@
     <select
         ngFlex
         multiple
-        id="all-languages-list"
-        [(ngModel)]="selectedLanguage"
-        [disabled]="languageState()">
-        <option
-            *ngFor="let lang of languageList"
-            [ngValue]="lang">
-            {{lang.value}}
+        class="languages-list"
+        [(ngModel)]="selectedLanguages"
+        [disabled]="languageMode === 'all-languages'"
+    >
+        <option *ngFor="let lang of languageList" [ngValue]="lang">
+            {{ lang.value }}
         </option>
     </select>
 
-    <div
-        ngFlex
-        id="language-controls">
+    <div ngFlex id="language-controls">
         <button
-            class="btn"
-            id="add-language"
-            (click)="languageAdded.emit(selectedLanguage)"
-            [disabled]="languageState()">
+            class="btn language-btn"
+            (click)="languageAdded.emit(selectedLanguages)"
+            [disabled]="languageMode === 'all-languages'"
+        >
             &gt;
         </button>
         <button
-            class="btn"
-            id="remove-language"
-            (click)="languageRemoved.emit(languageToRemove)">
+            class="btn language-btn"
+            (click)="languageRemoved.emit(languagesToRemove)"
+            [disabled]="languageMode === 'all-languages'"
+        >
             &lt;
         </button>
     </div>
@@ -61,13 +59,12 @@
     <select
         ngFlex
         multiple
-        id="selected-languages-list"
-        [(ngModel)]="languageToRemove"
-        [disabled]="languageState()">
-        <option
-            *ngFor="let prefLang of preferredLangList"
-            [ngValue]="prefLang">
-            {{prefLang.value}}
+        class="languages-list"
+        [(ngModel)]="languagesToRemove"
+        [disabled]="languageMode === 'all-languages'"
+    >
+        <option *ngFor="let prefLang of preferredLangList" [ngValue]="prefLang">
+            {{ prefLang.value }}
         </option>
     </select>
 </div>

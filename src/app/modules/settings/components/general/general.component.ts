@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 export interface IGeneralSettings {
     autolaunch: string;
@@ -11,10 +11,9 @@ export interface IGeneralSettings {
     selector: 'app-general',
     templateUrl: './general.component.html',
     styleUrls: ['./general.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GeneralComponent {
-    /**
-     * General settings object
-     */
+    /** General settings object */
     @Input() settings: IGeneralSettings;
 }
