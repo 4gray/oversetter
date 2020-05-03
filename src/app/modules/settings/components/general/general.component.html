@@ -2,24 +2,14 @@
 <ul>
     <li class="checkbox-option">
         <label for="start-at-login">
-            <input
-                type="checkbox"
-                id="start-at-login"
-                value="Start at login"
-                [(ngModel)]="settings.autolaunch">
-            Start
-                        at login
+            <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="settings.autolaunch" />
+            Start at login
         </label>
     </li>
     <li class="checkbox-option">
         <label for="show-dock-icon">
-            <input
-                type="checkbox"
-                id="show-dock-icon"
-                value="Show dock icon"
-                [(ngModel)]="settings.showDockIcon">
-            Show
-                        dock icon
+            <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="settings.showDockIcon" />
+            Show dock icon
         </label>
     </li>
     <li class="checkbox-option">
@@ -28,9 +18,9 @@
                 type="checkbox"
                 id="always-on-top"
                 value="Stay always on the top"
-                [(ngModel)]="settings.alwaysOnTop">
-            Always
-                        on top
+                [(ngModel)]="settings.alwaysOnTop"
+            />
+            Always on top
         </label>
     </li>
 </ul>
@@ -63,6 +53,17 @@
         to translate text from clipboard
     </li>
 </ul>
+<div class="settings-title">Theme:</div>
+<ng-select
+    #themeSelector
+    [searchable]="false"
+    [clearable]="false"
+    [(ngModel)]="settings.theme"
+    [items]="availableThemes"
+    (change)="toggleTheme($event)"
+    placeholder="Select theme"
+>
+</ng-select>
 
 <div class="settings-note">
     New settings will only take effect after a restart!

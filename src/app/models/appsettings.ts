@@ -1,51 +1,21 @@
-/* interface Settings {
-    apiKey: string;
-    fromLang: string;
-    toLang: string;
-} */
-
 /**
  * Settings class contains getters and setters for all application options
  * It uses local storage as store for api key and last used translation directions
  */
 export class AppSettings {
-
-    /**
-     * API key for yandex translate service
-     *
-     * @private
-     * @static
-     * @memberof AppSettings
-     */
+    /** API key for yandex translate service */
     private static apiKey = localStorage.getItem('apiKey');
 
-    /**
-     * Language list
-     *
-     * @private
-     * @static
-     * @memberof AppSettings
-     */
+    /** Selected UI theme */
+    private static theme = localStorage.getItem('theme') || 'light';
+
+    /** Language list */
     private static languageList = [];
 
-    /**
-     * Tatget language
-     *
-     * @private
-     * @static
-     * @type {string}
-     * @memberof AppSettings
-     */
+    /** Target language */
     private static toLang: string;
 
-    /**
-     * Origin language
-     *
-     * @private
-     * @static
-     * @type {string}
-     * @memberof AppSettings
-     */
+    /** Origin language */
     private static fromLang: string;
 
     public static get $toLang(): string {
@@ -80,4 +50,7 @@ export class AppSettings {
         this.languageList = list;
     }
 
+    public static get $theme(): string {
+        return this.theme;
+    }
 }

@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-root',
-    templateUrl: 'home.component.html'
+    templateUrl: 'home.component.html',
 })
-
 export class HomeComponent {
     constructor(private router: Router) {
         window.addEventListener('offline', () => this.router.navigate(['/offline']));

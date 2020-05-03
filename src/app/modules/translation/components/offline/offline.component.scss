@@ -1,6 +1,6 @@
 #offline-container {
     height: 100%;
-    background: #ECECEC;
+    background: var(--background-tertiary);
     text-align: center;
 
     .title {
@@ -10,7 +10,7 @@
     }
 
     .offline-icon {
-        color: #bfbfbf;
+        color: var(--text-light);
         font-size: 70px;
         margin-top: 10px;
     }

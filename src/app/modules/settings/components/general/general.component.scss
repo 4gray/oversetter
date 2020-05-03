@@ -1,5 +1,5 @@
 :host {
-    background: #ececec;
+    background: var(--background-secondary);
 }
 
 .settings-note {
@@ -14,4 +14,12 @@
 
 .checkbox-option {
     padding: 2px;
+}
+
+.theme-btn {
+    background-color: var(--background-tertiary);
+    color: var(--text-default);
+    padding: 5px;
+    border: 1px solid var(--border-color-tertiary);
+    border-radius: 4px;
 }

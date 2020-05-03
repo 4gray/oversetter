@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Language } from '@app/models/language';
+import { ThemeService } from '@app/services/theme.service';
 import { AppSettings } from '@models/appsettings';
 import { TranslateService } from '@services/translate.service';
 import { ElectronService } from 'ngx-electron';
@@ -27,6 +28,7 @@ export class SettingsComponent implements OnDestroy {
         autolaunch: false,
         alwaysOnTop: false,
         showDockIcon: false,
+        theme: 'light',
     };
 
     /** Array with all languages */
@@ -75,7 +77,8 @@ export class SettingsComponent implements OnDestroy {
         private translateService: TranslateService,
         private router: Router,
         private electronService: ElectronService,
-        route: ActivatedRoute
+        route: ActivatedRoute,
+        private themeService: ThemeService
     ) {
         route.queryParams.pipe(untilDestroyed(this)).subscribe(param => {
             const tabName = param.tab || 'api';
@@ -110,6 +113,10 @@ export class SettingsComponent implements OnDestroy {
             this.settings.showDockIcon = localStorage.getItem('showDockIcon') === 'true';
         }
 
+        if (localStorage.getItem('theme')) {
+            this.settings.theme = localStorage.getItem('theme');
+        }
+
         if (localStorage.getItem('languageMode')) {
             this.languageMode = localStorage.getItem('languageMode') as LanguageMode;
             this.preferredLangList = JSON.parse(localStorage.getItem('preferredLanguageList')) || [];
@@ -133,6 +140,7 @@ export class SettingsComponent implements OnDestroy {
         this.setAlwaysOnTop();
         this.setShowDockIcon();
         this.setPreferredLanguageList();
+        this.setTheme();
     }
 
     /**
@@ -191,6 +199,14 @@ export class SettingsComponent implements OnDestroy {
         if (this.electronService.ipcRenderer) {
             this.electronService.ipcRenderer.send('autolaunch', this.settings.autolaunch);
         }
+    }
+
+    /**
+     * Save theme settings
+     */
+    private setTheme(): void {
+        localStorage.setItem('theme', this.settings.theme);
+        this.themeService.setActiveTheme(this.settings.theme);
     }
 
     /**

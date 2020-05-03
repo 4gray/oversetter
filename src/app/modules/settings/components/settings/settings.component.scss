@@ -1,5 +1,5 @@
 .settings-text-bottom {
-    color: red;
+    color: var(--error-default);
     padding-left: 10px;
     float: left;
     width: 330px;
@@ -14,7 +14,7 @@
     position: relative;
     line-height: 40px;
     text-align: center;
-    color: #444;
+    color: var(--text-default);
     margin-left: -10px;
     display: flex;
     justify-content: flex-start;
@@ -24,48 +24,48 @@
     cursor: pointer;
     padding: 0 5px 0 5px;
     width: 80px;
-    border-right: 1px solid #afafaf;
-    color: #666;
+    border-right: 1px solid var(--border-color-secondary);
+    color: var(--text-light);
 }
 
 #tabs > div:first-child {
-    border-right: 1px solid #999;
+    border-right: 1px solid var(--border-color-secondary);
 }
 
 .active-tab {
-    color: #111 !important;
-    background: #eee;
+    color: var(--text-dark) !important;
+    background: var(--background-secondary);
     font-weight: bold;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--background-secondary);
     height: 40px;
 }
 
 kbd {
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid var(--background-light);
     border-radius: 4px;
     padding: 0.1em 0.5em;
     margin: 0 0.2em;
-    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
-    background-color: #f7f7f7;
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px var(--background-default) inset;
+    background-color: var(--background-default);
 }
 
 .back-btn {
     border: none;
     background: none;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid var(--background-light);
     text-align: center;
     cursor: pointer;
 
     span {
         font-size: 29px;
-        color: #666;
+        color: var(--text-light);
         line-height: 35px;
     }
 }
 
 .close-btn {
-    color: #666;
+    color: var(--text-light);
     font-style: italic;
     font-size: 14px;
     margin-left: 10px;
@@ -78,10 +78,10 @@ kbd {
     border: none;
     font-size: 14px;
     padding-right: 10px;
-    border-right: 1px solid #ccc;
+    border-right: 1px solid var(--background-light);
     line-height: 30px;
     outline: none;
     float: left;
     cursor: pointer;
-    color: #666;
+    color: var(--text-light);
 }

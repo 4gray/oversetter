@@ -1,5 +1,5 @@
 :host {
-    background: #ececec;
+    background: var(--background-secondary);
 }
 
 #apiKeyArea {
@@ -9,11 +9,13 @@
     resize: none;
     margin: 0;
     border-radius: 0.1px;
+    background: var(--background-default);
+    color: var(--text-default);
 }
 
 #settingsArea {
     width: 100%;
-    background: #eee;
+    background: var(--background-secondary);
     overflow-y: auto;
     font-size: 12px;
     padding: 0 10px;
@@ -22,5 +24,6 @@
     user-select: text;
     -webkit-user-select: text;
     padding-top: 8px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--border-color-secondary);
+    color: var(--text-default);
 }

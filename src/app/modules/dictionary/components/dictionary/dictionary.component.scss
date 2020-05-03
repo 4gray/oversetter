@@ -1,20 +1,24 @@
+:host {
+    color: var(--text-default);
+}
+
 #dictionary-container {
     overflow: hidden;
 }
 
 .dictionary-title {
     padding-left: 10px;
-    border-right: 1px solid #d2d2d2;
+    border-right: 1px solid var(--background-secondary);
 }
 
 #vocabulary-list {
     overflow-y: scroll;
     height: 100vh;
-    background: #ECECEC;
-    border-right: 1px solid #d2d2d2;
+    background: var(--background-tertiary);
+    border-right: 1px solid var(--border-color-secondary);
+    color: var(--text-default);
 
     ul {
-        color: #111;
         list-style: none;
         margin: 0;
         padding: 0;
@@ -29,27 +33,27 @@
     }
 
     li:hover {
-        background: #ccc;
+        background: var(--border-color-secondary);
     }
 
     .active {
-        background-color: #d2d2d2;
+        background-color: var(--background-secondary);
         font-weight: bold;
     }
 }
 
 #vocabulary-panel {
-    background: #ececec;
-    border-bottom: 1px solid #d2d2d2;
+    background: var(--background-tertiary);
+    border-bottom: 1px solid var(--border-color-secondary);
     height: 45px;
     line-height: 45px;
     -webkit-app-region: drag;
-    border-bottom: 1px solid #d2d2d2;
+    border-bottom: 1px solid var(--border-color-secondary);
 
     .panel-line {
         height: 100%;
         width: 1px;
-        background: #d2d2d2;
+        background: var(--background-secondary);
         display: block;
         position: absolute;
         left: 200px;
@@ -59,8 +63,8 @@
 
 #vocabulary-translation {
     padding: 10px;
-    color: #111;
-    background: #fff;
+    color: var(--text-light);
+    background: var(--background-default);
 
     #source-text {
         font-weight: bold;
@@ -74,12 +78,21 @@
 .remove-phrase {
     text-align: right;
     font-size: 18px;
-    color: #666;
+    color: var(--text-default);
     padding-right: 10px;
+}
+
+.remove-phrase:hover {
+    cursor: pointer;
+    color: var(--text-dark);
 }
 
 .update-vocabulary {
     font-size: 18px;
-    color: #666;
+    color: var(--text-default);
     padding-left: 10px;
+}
+
+.update-vocabulary > .fa-refresh:hover {
+    color: var(--text-dark) !important;
 }

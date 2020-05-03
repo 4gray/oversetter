@@ -10,10 +10,10 @@
     max-height: 200px;
     overflow-y: scroll;
     padding-top: 0px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--background-light);
     border-radius: 3px;
 }
 
 .dropdown-content {
-    border: 1px solid #ccc;
+    border: 1px solid var(--background-light);
 }

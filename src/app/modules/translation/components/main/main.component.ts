@@ -2,15 +2,16 @@ import { Component, NgZone, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 
-import { AppSettings } from '@models/appsettings';
-import { TranslateService } from '@services/translate.service';
-import { Translation } from '@models/translation';
 import { DictionaryItem } from '@app/models/dictionary-item';
 import { Language } from '@app/models/language';
 import { StorageService } from '@app/services/storage.service';
-import { of, Subject, throwError } from 'rxjs';
-import { debounceTime, delay, distinctUntilChanged, flatMap, map, catchError } from 'rxjs/operators';
+import { ThemeService } from '@app/services/theme.service';
+import { AppSettings } from '@models/appsettings';
+import { Translation } from '@models/translation';
+import { TranslateService } from '@services/translate.service';
 import { untilDestroyed } from 'ngx-take-until-destroy';
+import { of, Subject, throwError } from 'rxjs';
+import { catchError, debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
 
 @Component({
     templateUrl: 'main.component.html',
@@ -81,7 +82,8 @@ export class MainComponent implements OnDestroy {
         private storageService: StorageService,
         private router: Router,
         private electronService: ElectronService,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private themeService: ThemeService
     ) {
         if (electronService.remote) {
             this.setIpcListeners();
@@ -95,6 +97,8 @@ export class MainComponent implements OnDestroy {
         } else {
             this.requestLanguageList();
         }
+
+        this.themeService.enableActiveTheme();
 
         this.keyUp
             .pipe(

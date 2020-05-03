@@ -1,5 +1,23 @@
 @import '~@ng-select/ng-select/themes/default.theme.css';
 
+:root {
+    --background-default: #ffffff;
+    --background-secondary: #eeeeee;
+    --background-tertiary: #ececec;
+    --background-light: #cccccc;
+    --background-dark: #000000;
+
+    --text-default: #444444;
+    --text-dark: #000000;
+    --text-light: #666666;
+
+    --error-default: #ef3e36;
+
+    --border-color-primary: #ededed;
+    --border-color-secondary: #cccccc;
+    --border-color-tertiary: #afafaf;
+}
+
 html,
 body {
     background: none !important;
@@ -11,10 +29,11 @@ body {
     font-size: 12px;
     height: 100%;
     overflow: hidden;
+    color: var(--text-default);
 }
 
 .container {
-    background: #fff;
+    background: var(--background-default);
     height: 100%;
 }
 
@@ -46,8 +65,8 @@ textarea {
 
 #footer {
     width: 100%;
-    background: #eceaed;
-    border-top: 1px solid #c9c4ca; // background-image: linear-gradient( #eceaed 0, #d1cfd2 100%);
+    background: var(--background-tertiary);
+    border-top: 1px solid var(--border-color-secondary);
     font-size: 11px;
 }
 
@@ -61,25 +80,9 @@ textarea {
     height: 0px;
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-bottom: 15px solid #ededed;
+    border-bottom: 15px solid var(--border-color-primary);
     margin-left: 235px;
     margin-bottom: -1px;
-}
-
-/* remove standard-styles */
-
-.options-panel select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: none;
-    width: 150px;
-    border-left: 1px solid #bbb;
-    border-right: 1px solid #bbb;
-    height: 40px;
-    padding: 2px 0px 2px 5px;
-    outline: none;
-    border-radius: 0;
-    border-image: linear-gradient(to top, #afafaf, rgba(0, 0, 0, 0)) 1 100%;
 }
 
 /* styling */
@@ -87,8 +90,8 @@ textarea {
 .options-panel {
     line-height: 28px;
     padding-right: 10px;
-    background-color: #ececec;
-    border-bottom: 1px solid #afafaf;
+    background-color: var(--background-tertiary);
+    border-bottom: 1px solid var(--border-color-tertiary);
     display: flex;
     justify-content: space-between;
 }
@@ -119,7 +122,7 @@ i.fa:hover,
 .save-settings-btn:hover,
 select#from-lang:hover,
 select#to-lang:hover {
-    color: #000;
+    color: var(--background-dark);
     cursor: pointer;
 }
 
@@ -152,8 +155,17 @@ ng-select {
     height: 28px;
 }
 
+.ng-dropdown-panel.ng-select-bottom {
+    color: var(--text-default) !important;
+    background-color: var(--background-default);
+    border-color: var(--border-color-tertiary);
+}
+
 .ng-select .ng-select-container {
     min-height: 28px;
+    color: var(--text-default) !important;
+    background-color: var(--background-default);
+    border-color: var(--border-color-tertiary);
 }
 
 .ng-select.ng-select-single .ng-select-container .ng-value-container .ng-input {
@@ -165,14 +177,37 @@ ng-select {
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+    background-color: var(--background-secondary);
+    color: var(--text-light);
     height: 25px;
     line-height: 25px;
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-    background-color: #efefef;
+    background-color: var(--border-color-secondary);
+    color: var(--text-light);
 }
 
 .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
-    background-color: #ddd;
+    background-color: var(--background-tertiary);
+    color: var(--text-light);
+}
+
+.ng-select.ng-select-opened.ng-select-bottom > .ng-select-container {
+    background-color: var(--background-default);
+    border-color: var(--border-color-tertiary);
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-input > input {
+    color: var(--text-default);
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
+    color: var(--text-light);
+}
+
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected,
+.ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected.ng-option-marked {
+    background-color: var(--border-color-secondary);
+    color: var(--text-dark);
 }

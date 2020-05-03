@@ -1,5 +1,5 @@
 :host {
-    background: #ececec;
+    background: var(--background-secondary);
 }
 
 .language-controls {
@@ -18,11 +18,14 @@
     margin-left: 10px;
     padding: 0px 5px;
     outline: none;
-    border: 1px solid #ccc;
+    border: 1px solid var(--background-light);
+    color: var(--text-default);
+    background-color: var(--background-light);
+    scrollbar-color: dark;
 }
 
 .language-btn {
-    background: #ccc;
+    background: var(--background-light);
     width: 40px;
     text-align: center;
     height: 40px;
@@ -30,6 +33,7 @@
     border-radius: 4px;
     cursor: pointer;
     margin: 10px;
+    color: var(--text-default);
 }
 
 .language-btn:disabled {
