@@ -8,8 +8,8 @@ import { StorageService } from '@app/services/storage.service';
 import { ThemeService } from '@app/services/theme.service';
 import { AppSettings } from '@models/appsettings';
 import { Translation } from '@models/translation';
+import { untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@services/translate.service';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { of, Subject, throwError } from 'rxjs';
 import { catchError, debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
 

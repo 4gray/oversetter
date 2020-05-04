@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Language } from '@app/models/language';
 import { ThemeService } from '@app/services/theme.service';
 import { AppSettings } from '@models/appsettings';
+import { untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@services/translate.service';
 import { ElectronService } from 'ngx-electron';
-import { untilDestroyed } from 'ngx-take-until-destroy';
 import { LanguageMode } from '../languages/languages.component';
 
 /** Default Yandex Translate API key */
