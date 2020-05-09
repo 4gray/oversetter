@@ -1,49 +1,24 @@
 import { Language } from '@app/models/language';
 
 export class DictionaryItem {
-    /**
-     * Text to translate
-     *
-     * @private
-     * @type {string}
-     * @memberof DictionaryItem
-     */
+    /** Text to translate */
     private text: string;
 
-    /**
-     * Transalted text
-     *
-     * @private
-     * @type {string}
-     * @memberof DictionaryItem
-     */
+    /** Translated text */
     private translation: string;
 
-    /**
-     * Origin text
-     *
-     * @private
-     * @type {Language}
-     * @memberof DictionaryItem
-     */
+    /** Origin text */
     private fromLang: Language;
 
-    /**
-     * Target language
-     *
-     * @private
-     * @type {Language}
-     * @memberof DictionaryItem
-     */
+    /** Target language */
     private toLang: Language;
 
     /**
      *Creates an instance of DictionaryItem.
-     * @param {string} text text to translate
-     * @param {string} translation translated text
-     * @param {Language} fromLang origin language
-     * @param {Language} toLang target language
-     * @memberof DictionaryItem
+     * @param text text to translate
+     * @param translation translated text
+     * @param fromLang origin language
+     * @param toLang target language
      */
     constructor(text: string, translation: string, fromLang: Language, toLang: Language) {
         this.text = text;
@@ -54,7 +29,6 @@ export class DictionaryItem {
 
     /**
      * Getter $text
-     * @return {string}
      */
     public get $text(): string {
         return this.text;
@@ -62,7 +36,6 @@ export class DictionaryItem {
 
     /**
      * Getter $translation
-     * @return {string}
      */
     public get $translation(): string {
         return this.translation;
@@ -70,7 +43,6 @@ export class DictionaryItem {
 
     /**
      * Getter $fromLang
-     * @return {Language}
      */
     public get $fromLang(): Language {
         return this.fromLang;
@@ -78,7 +50,6 @@ export class DictionaryItem {
 
     /**
      * Getter $toLang
-     * @return {Language}
      */
     public get $toLang(): Language {
         return this.toLang;
@@ -86,7 +57,7 @@ export class DictionaryItem {
 
     /**
      * Setter $text
-     * @param {string} value
+     * @param value
      */
     public set $text(value: string) {
         this.text = value;
@@ -94,7 +65,7 @@ export class DictionaryItem {
 
     /**
      * Setter $translation
-     * @param {string} value
+     * @param value
      */
     public set $translation(value: string) {
         this.translation = value;
@@ -102,7 +73,7 @@ export class DictionaryItem {
 
     /**
      * Setter $fromLang
-     * @param {Language} value
+     * @param value
      */
     public set $fromLang(value: Language) {
         this.fromLang = value;
@@ -110,10 +81,9 @@ export class DictionaryItem {
 
     /**
      * Setter $toLang
-     * @param {Language} value
+     * @param value
      */
     public set $toLang(value: Language) {
         this.toLang = value;
     }
-
 }

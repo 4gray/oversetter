@@ -1,5 +1,4 @@
 import { Component, EventEmitter } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { DictionaryItem } from '@app/models/dictionary-item';
 import { StorageService } from '@app/services/storage.service';
 
@@ -11,50 +10,34 @@ import { StorageService } from '@app/services/storage.service';
  */
 @Component({
     templateUrl: 'dictionary.component.html',
-    styleUrls: ['dictionary.component.scss']
+    styleUrls: ['dictionary.component.scss'],
 })
-
 export class DictionaryComponent {
-    /**
-     * Vocabulary array
-     *
-     * @memberof DictionaryComponent
-     */
-    public vocabulary: DictionaryItem[] = [];
-    /**
-     * Selected vocabulary
-     *
-     * @memberof DictionaryComponent
-     */
-    public selectedItem: DictionaryItem = null;
-    /**
-     * Highlighted row
-     *
-     * @memberof DictionaryComponent
-     */
+    /** Vocabulary array */
+    vocabulary: DictionaryItem[] = [];
+
+    /** Selected vocabulary */
+    selectedItem: DictionaryItem = null;
+
+    /** Highlighted row */
     public selectedRow;
 
     /**
      * Creates an instance of DictionaryComponent
-     * @param {ElectronService} electronService electron service
-     * @memberof DictionaryComponent
+     * @param electronService electron service
      */
-    constructor(private electronService: ElectronService, private storageService: StorageService) {
+    constructor(private storageService: StorageService) {
         this.vocabulary = storageService.getVocabulary();
 
         storageService.dictionaryChange.subscribe(changes => {
-            console.log('updated!');
             this.updateDictionary();
         });
-
     }
 
     /**
-     * Update dictionary from localstorage
-     *
-     * @memberof DictionaryComponent
+     * Update dictionary from local storage
      */
-    public updateDictionary() {
+    updateDictionary(): void {
         this.vocabulary = this.storageService.getVocabulary();
     }
 
@@ -63,17 +46,15 @@ export class DictionaryComponent {
      * @param item current item
      * @param index index of item
      */
-    public setSelectedItem(item: DictionaryItem, index: number) {
+    setSelectedItem(item: DictionaryItem, index: number): void {
         this.selectedItem = item;
         this.selectedRow = index;
     }
 
     /**
      * Remove provided item from the list by selected list index
-     *
-     * @memberof DictionaryComponent
      */
-    public removeItem() {
+    removeItem(): void {
         this.vocabulary.splice(this.selectedRow, 1);
         this.storageService.updateVocabulary(this.vocabulary);
         this.selectedItem = null;

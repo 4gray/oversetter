@@ -73,6 +73,7 @@ export class SettingsComponent {
      * @param router router object
      * @param electronService electrons main process wrapper
      * @param route angulars activated route module
+     * @param themeService applications theme service
      */
     constructor(
         private translateService: TranslateService,
@@ -213,7 +214,7 @@ export class SettingsComponent {
     /**
      * Opens the given URL in external browser
      *
-     * @param {string} url
+     * @param url url to open
      */
     openUrl(url: string): void {
         this.electronService.shell.openExternal(url);
@@ -222,7 +223,7 @@ export class SettingsComponent {
     /**
      * Sets the given tab as selected
      *
-     * @param {string} tabId tab id
+     * @param tabId tab id
      */
     selectTab(tabId: string): void {
         this.selectedTabId = tabId;

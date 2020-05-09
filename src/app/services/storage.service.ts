@@ -1,20 +1,17 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Language } from '@app/models/language';
+import { Injectable } from '@angular/core';
 import { DictionaryItem } from '@app/models/dictionary-item';
+import { Language } from '@app/models/language';
 import { Subject } from 'rxjs';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class StorageService {
-
+    /** Emits changes in the dictionary to the parent component */
     dictionaryChange: Subject<string> = new Subject<string>();
 
     /**
      * Returns origin language from the local storage
-     *
-     * @returns {Language}
-     * @memberof StorageService
      */
     getFromLanguage(): Language {
         const fromLang = JSON.parse(localStorage.getItem('fromLang'));
@@ -27,9 +24,6 @@ export class StorageService {
 
     /**
      * Returns target language from the local storage
-     *
-     * @returns {Language}
-     * @memberof StorageService
      */
     getToLanguage(): Language {
         const toLang = JSON.parse(localStorage.getItem('toLang'));
@@ -42,9 +36,6 @@ export class StorageService {
 
     /**
      * Returns vocabulary from local storage
-     *
-     * @returns {DictionaryItem[]}
-     * @memberof StorageService
      */
     getVocabulary(): DictionaryItem[] {
         let vocabulary = JSON.parse(localStorage.getItem('vocabulary')) || [];
@@ -58,12 +49,8 @@ export class StorageService {
 
     /**
      * Updates local storage value with vocabulary list
-     *
-     * @param {*} vocabulary
-     * @memberof StorageService
      */
-    updateVocabulary(vocabulary) {
+    updateVocabulary(vocabulary): void {
         localStorage.setItem('vocabulary', JSON.stringify(vocabulary));
     }
-
 }

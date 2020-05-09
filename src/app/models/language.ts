@@ -3,10 +3,9 @@ export class Language {
     private value: string;
 
     /**
-     *Creates an instance of Language.
-     * @param {string} key language key/code
-     * @param {string} value language label
-     * @memberof Language
+     * Creates an instance of Language.
+     * @param key language key/code
+     * @param value language label
      */
     constructor(key: string, value: string) {
         this.key = key;
@@ -15,7 +14,6 @@ export class Language {
 
     /**
      * Getter $key
-     * @return {string}
      */
     public get $key(): string {
         return this.key;
@@ -23,7 +21,6 @@ export class Language {
 
     /**
      * Getter $value
-     * @return {string}
      */
     public get $value(): string {
         return this.value;
@@ -31,7 +28,7 @@ export class Language {
 
     /**
      * Setter $key
-     * @param {string} value
+     * @param value
      */
     public set $key(value: string) {
         this.key = value;
@@ -39,10 +36,9 @@ export class Language {
 
     /**
      * Setter $value
-     * @param {string} value
+     * @param value
      */
     public set $value(value: string) {
         this.value = value;
     }
-
 }

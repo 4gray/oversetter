@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ThemeService } from '@app/services/theme.service';
 
+/** Settings interface */
 export interface IGeneralSettings {
     autolaunch: string;
     alwaysOnTop: string;
@@ -9,6 +10,9 @@ export interface IGeneralSettings {
     theme: string;
 }
 
+/**
+ * General settings component
+ */
 @Component({
     selector: 'app-general',
     templateUrl: './general.component.html',
@@ -22,8 +26,13 @@ export class GeneralComponent {
     /** Get all available themes */
     availableThemes = this.themeService.getAvailableThemes();
 
+    /** Creates an instance of GeneralComponent */
     constructor(private themeService: ThemeService) {}
 
+    /**
+     * Toggles theme of the application
+     * @param selected id of the selected theme
+     */
     toggleTheme(selected: string): void {
         this.themeService.setThemeById(selected);
     }

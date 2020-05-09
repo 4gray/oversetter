@@ -194,7 +194,7 @@ export class MainComponent {
         if (!/^ *$/.test(temp)) {
             if (fromLang === 'ad') {
                 this.translateService
-                    .detectLanguage(word, fromLang, toLang)
+                    .detectLanguage(word, fromLang)
                     .pipe(
                         untilDestroyed(this),
                         catchError(err => throwError(err))

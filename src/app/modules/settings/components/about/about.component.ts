@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { environment } from 'environments/environment';
 
+/**
+ * About component
+ */
 @Component({
     selector: 'app-about',
     templateUrl: './about.component.html',

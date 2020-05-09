@@ -3,6 +3,9 @@ import { Language } from '@app/models/language';
 
 export type LanguageMode = 'all-languages' | 'preferred-languages';
 
+/**
+ * Language settings component
+ */
 @Component({
     selector: 'app-languages',
     templateUrl: './languages.component.html',

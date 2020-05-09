@@ -2,13 +2,21 @@
 <ul>
     <li class="checkbox-option">
         <label for="start-at-login">
-            <input type="checkbox" id="start-at-login" value="Start at login" [(ngModel)]="settings.autolaunch" />
+            <input
+                type="checkbox"
+                id="start-at-login"
+                value="Start at login"
+                [(ngModel)]="settings.autolaunch">
             Start at login
         </label>
     </li>
     <li class="checkbox-option">
         <label for="show-dock-icon">
-            <input type="checkbox" id="show-dock-icon" value="Show dock icon" [(ngModel)]="settings.showDockIcon" />
+            <input
+                type="checkbox"
+                id="show-dock-icon"
+                value="Show dock icon"
+                [(ngModel)]="settings.showDockIcon">
             Show dock icon
         </label>
     </li>
@@ -18,8 +26,7 @@
                 type="checkbox"
                 id="always-on-top"
                 value="Stay always on the top"
-                [(ngModel)]="settings.alwaysOnTop"
-            />
+                [(ngModel)]="settings.alwaysOnTop">
             Always on top
         </label>
     </li>
@@ -28,7 +35,7 @@
 <ul>
     <li class="text">
         Use
-        <b>
+        <strong>
             <kbd>⌘</kbd>
             /
             <kbd>Ctrl</kbd>
@@ -36,12 +43,12 @@
             <kbd>Alt</kbd>
             +
             <kbd>T</kbd>
-        </b>
+        </strong>
         to show application window
     </li>
     <li class="text">
         Use
-        <b>
+        <strong>
             <kbd>⌘</kbd>
             /
             <kbd>Ctrl</kbd>
@@ -49,7 +56,7 @@
             <kbd>Alt</kbd>
             +
             <kbd>R</kbd>
-        </b>
+        </strong>
         to translate text from clipboard
     </li>
 </ul>
@@ -61,8 +68,7 @@
     [(ngModel)]="settings.theme"
     [items]="availableThemes"
     (change)="toggleTheme($event)"
-    placeholder="Select theme"
->
+    placeholder="Select theme">
 </ng-select>
 
 <div class="settings-note">
