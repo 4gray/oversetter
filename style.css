@@ -56,3 +56,18 @@ footer {
 footer p {
   margin-bottom: .25rem;
 }
+
+.icon-col {
+  max-width: 50px;
+  font-size: 32px;
+}
+
+.feature-row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.feature-description > .title {
+  font-weight: bold;
+}
