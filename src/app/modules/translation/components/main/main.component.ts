@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 
@@ -8,16 +8,17 @@ import { StorageService } from '@app/services/storage.service';
 import { ThemeService } from '@app/services/theme.service';
 import { AppSettings } from '@models/appsettings';
 import { Translation } from '@models/translation';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@services/translate.service';
 import { of, Subject, throwError } from 'rxjs';
 import { catchError, debounceTime, delay, distinctUntilChanged, flatMap, map } from 'rxjs/operators';
 
+@UntilDestroy()
 @Component({
     templateUrl: 'main.component.html',
     styleUrls: ['main.component.scss'],
 })
-export class MainComponent implements OnDestroy {
+export class MainComponent {
     /**
      * Translated word/phrase/sentence
      *
@@ -110,8 +111,6 @@ export class MainComponent implements OnDestroy {
             )
             .subscribe((text: string) => this.translate(text, this.fromLang.$key, this.toLang.$key));
     }
-
-    ngOnDestroy(): void {}
 
     /**
      * Set listeners for events from main process

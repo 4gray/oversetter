@@ -1,9 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Language } from '@app/models/language';
 import { ThemeService } from '@app/services/theme.service';
 import { AppSettings } from '@models/appsettings';
-import { untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { TranslateService } from '@services/translate.service';
 import { ElectronService } from 'ngx-electron';
 import { LanguageMode } from '../languages/languages.component';
@@ -11,12 +11,13 @@ import { LanguageMode } from '../languages/languages.component';
 /** Default Yandex Translate API key */
 const DEFAULT_API_KEY = 'trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf';
 
+@UntilDestroy()
 @Component({
     providers: [TranslateService],
     templateUrl: 'settings.component.html',
     styleUrls: ['settings.component.scss'],
 })
-export class SettingsComponent implements OnDestroy {
+export class SettingsComponent {
     /** Api key */
     apiKey: string;
 
@@ -273,7 +274,4 @@ export class SettingsComponent implements OnDestroy {
     setLanguageMode(languageMode: LanguageMode): void {
         this.languageMode = languageMode;
     }
-
-    /** Required for unsubscribe mechanism */
-    ngOnDestroy(): void {}
 }
