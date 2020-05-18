@@ -1,3 +1,7 @@
+.container {
+    overflow: hidden;
+}
+
 .settings-text-bottom {
     color: var(--error-default);
     padding-left: 10px;
@@ -38,16 +42,6 @@
     font-weight: bold;
     border-bottom: 1px solid var(--background-secondary);
     height: 40px;
-}
-
-kbd {
-    display: inline-block;
-    border: 1px solid var(--background-light);
-    border-radius: 4px;
-    padding: 0.1em 0.5em;
-    margin: 0 0.2em;
-    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px var(--background-default) inset;
-    background-color: var(--background-default);
 }
 
 .back-btn {

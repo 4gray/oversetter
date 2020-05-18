@@ -1,86 +1,48 @@
-<div
-    fxLayout="column"
-    fxFlexFill
-    style="overflow: hidden;">
-    <div
-        id="tabs"
-        fxFlex="40px"
-        class="options-panel">
-        <div
-            *ngFor="let tab of tabs"
-            (click)="selectTab(tab.id)"
-            [class.active-tab]="tab.id === selectedTabId">
-            {{tab.title}}
+<div fxLayout="column" fxFlexFill class="container" *ngIf="settings">
+    <div id="tabs" fxFlex="40px" class="options-panel">
+        <div *ngFor="let tab of tabs" (click)="selectTab(tab.id)" [class.active-tab]="tab.id === selectedTabId">
+            {{ tab.title }}
         </div>
     </div>
     <ng-container [ngSwitch]="selectedTabId">
         <ng-container *ngSwitchCase="'api'">
-            <app-api
-                fxFlex
-                [apiKey]="apiKey"
-                (keyChanged)="setApiKey($event)"></app-api>
+            <app-api fxFlex [apiKey]="apiKey" (keyChanged)="setApiKey($event)"></app-api>
         </ng-container>
         <ng-container *ngSwitchCase="'general'">
-            <app-general
-                fxFlex
-                [settings]="settings"></app-general>
+            <app-general fxFlex [settings]="settings" (optionChanged)="updateSettings($event)"></app-general>
         </ng-container>
         <ng-container *ngSwitchCase="'languages'">
             <app-languages
                 fxFlex
-                [languageMode]="languageMode"
-                [languageList]="langList"
-                [preferredLangList]="preferredLangList"
-                (languageAdded)="addLanguage($event)"
-                (languageModeChanged)="setLanguageMode($event)"
-                (languageRemoved)="removeLanguage($event)"></app-languages>
+                [languageMode]="settings.languageMode"
+                [languageList]="langList$ | async"
+                [preferredLangList]="settings.preferredLanguages"
+                (optionChanged)="updateSettings($event)"
+            ></app-languages>
         </ng-container>
         <ng-container *ngSwitchCase="'about'">
             <app-about (linkClicked)="openUrl($event)"></app-about>
         </ng-container>
     </ng-container>
 
-    <div
-        fxFlex="40px"
-        id="footer"
-        class="options-panel">
-        <div
-            fxLayout="row"
-            class="copyright"
-            fxFlexFill>
-            <button
-                fxFlex="30px"
-                class="back-btn"
-                [disabled]="apiKey === null"
-                (click)="validateApiKey()">
+    <div fxFlex="40px" id="footer" class="options-panel">
+        <div fxLayout="row" class="copyright" fxFlexFill>
+            <button fxFlex="30px" class="back-btn" [disabled]="apiKey === null" (click)="validateApiKey(apiKey)">
                 <span class="fa fa-angle-left"></span>
             </button>
-            <button
-                fxFlex="75px"
-                [disabled]="!apiKey"
-                (click)="saveSettings(apiKey, 'apiKey')"
-                class="save-settings-btn">
+            <button fxFlex="75px" [disabled]="!apiKey" (click)="saveSettings(apiKey)" class="save-settings-btn">
                 <span class="fa fa-save"></span>
                 Save
             </button>
-            <div
-                fxFlex
-                class="settings-text-bottom">
-                {{errorMessage}}
+            <div fxFlex class="settings-text-bottom">
+                {{ errorMessage }}
             </div>
-            <div
-                fxFlex="20px"
-                class="close-btn"
-                (click)="closeApp()">
+            <div fxFlex="20px" class="close-btn" (click)="closeApp()">
                 <span class="fa fa-power-off"></span>
             </div>
-            <div
-                fxFlex="20px"
-                class="close-btn"
-                (click)="openUrl('https://4gray.github.io/oversetter/')">
+            <div fxFlex="20px" class="close-btn" (click)="openUrl('https://4gray.github.io/oversetter/')">
                 <span class="fa fa-github"></span>
             </div>
         </div>
     </div>
-
 </div>

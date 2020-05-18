@@ -14,7 +14,7 @@ const packageJson = 'https://raw.githubusercontent.com/4gray/oversetter/master/p
 
 const keyboardShortcuts = {
     open: 'CommandOrControl+Alt+T',
-    translateClipboard: 'CommandOrControl+Alt+R'
+    translateClipboard: 'CommandOrControl+Alt+R',
 };
 
 let mb, dictionary;
@@ -31,32 +31,32 @@ function createContextMenu() {
     return Menu.buildFromTemplate([
         {
             label: 'Translate',
-            click: () => showApp()
+            click: () => showApp(),
         },
         {
             label: 'Dictionary',
             click: () => {
                 dictionary.openDictionary();
-            }
+            },
         },
         {
             label: 'Preferences',
             click: () => {
                 mb.window.webContents.send('show-settings');
                 showApp();
-            }
+            },
         },
         {
-            type: 'separator'
+            type: 'separator',
         },
         {
             label: 'Restart App',
             click: () => {
                 mb.app.quit();
                 mb.app.relaunch();
-            }
+            },
         },
-        { label: 'Quit', click: () => app.quit() }
+        { label: 'Quit', click: () => app.quit() },
     ]);
 }
 
@@ -88,9 +88,9 @@ app.on('ready', () => {
         alwaysOnTop: alwaysOnTop,
         webPreferences: {
             nodeIntegration: true,
-            backgroundThrottling: false
+            backgroundThrottling: false,
         },
-        resizable: false
+        resizable: false,
     };
 
     tray.setContextMenu(contextMenu);
@@ -105,7 +105,7 @@ app.on('ready', () => {
         frame: false,
         showDockIcon: dockIcon,
         show: false,
-        'auto-hide-menu-bar': true
+        'auto-hide-menu-bar': true,
     });
 
     mb.on('ready', () => {
@@ -123,19 +123,13 @@ app.on('ready', () => {
             showApp();
         });
 
-        ipcMain.on('autolaunch', (event, arg) => {
-            console.log('Auto launch enabled: ' + arg);
-            settings.set('autolaunch', arg);
-        });
-
-        ipcMain.on('alwaysOnTop', (event, arg) => {
-            console.log('AlwaysOnTop enabled: ' + arg);
-            settings.set('alwaysOnTop', arg);
-        });
-
-        ipcMain.on('showDockIcon', (event, arg) => {
-            console.log('ShowDockIcon enabled: ' + arg);
-            settings.set('showDockIcon', arg);
+        ipcMain.on('settings-update', (event, arg) => {
+            console.log('Auto launch enabled: ' + arg.autolaunch);
+            console.log('AlwaysOnTop enabled: ' + arg.alwaysOnTop);
+            console.log('ShowDockIcon enabled: ' + arg.showDockIcon);
+            settings.set('autolaunch', arg.autolaunch);
+            settings.set('alwaysOnTop', arg.alwaysOnTop);
+            settings.set('showDockIcon', arg.showDockIcon);
         });
 
         ipcMain.on('openDictionary', () => {
@@ -168,8 +162,8 @@ function setAutoLaunch(autoLaunchValue) {
     const appLauncher = new AutoLaunch({
         name: 'Oversetter',
         mac: {
-            useLaunchAgent: true
-        }
+            useLaunchAgent: true,
+        },
     });
 
     autoLaunchValue ? appLauncher.enable() : appLauncher.disable();

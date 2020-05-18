@@ -1,5 +1,6 @@
 :host {
     background: var(--background-secondary);
+    padding: 0 10px;
 }
 
 .settings-note {
@@ -8,7 +9,7 @@
 }
 
 .settings-title {
-    padding: 5px;
+    padding: 5px 0;
     font-weight: bold;
 }
 
@@ -16,10 +17,20 @@
     padding: 2px;
 }
 
-.theme-btn {
-    background-color: var(--background-tertiary);
-    color: var(--text-default);
-    padding: 5px;
-    border: 1px solid var(--border-color-tertiary);
+strong > kbd {
+    color: var(--text-default) !important;
+}
+
+kbd {
+    display: inline-block;
+    border: 1px solid var(--background-light);
     border-radius: 4px;
+    padding: 0.1em 0.5em;
+    margin: 0 0.2em;
+    box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px var(--background-default) inset;
+    background-color: var(--background-default);
+}
+
+ul#app-settings li {
+    display: inline;
 }

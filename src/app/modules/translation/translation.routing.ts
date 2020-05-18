@@ -1,8 +1,5 @@
-import { Routes, RouterModule } from '@angular/router';
-import {
-    MainComponent,
-    OfflineComponent
-} from '.';
+import { RouterModule, Routes } from '@angular/router';
+import { MainComponent, OfflineComponent } from '.';
 
 const routes: Routes = [
     {
@@ -11,14 +8,14 @@ const routes: Routes = [
         children: [
             {
                 path: 'offline',
-                component: OfflineComponent
+                component: OfflineComponent,
             },
             {
                 path: 'home',
-                component: MainComponent
-            }
-        ]
-    }
+                component: MainComponent,
+            },
+        ],
+    },
 ];
 
 export const TranslationRoutes = RouterModule.forChild(routes);

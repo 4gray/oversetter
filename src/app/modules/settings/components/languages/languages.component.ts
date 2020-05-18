@@ -20,15 +20,14 @@ export class LanguagesComponent {
     /** Array with selected languages */
     @Input() preferredLangList = [];
 
-    /** Emits if language was added to one of the lists */
-    @Output() languageAdded: EventEmitter<Language[]> = new EventEmitter();
-    /** Emits if language mode was changed */
-    @Output() languageModeChanged: EventEmitter<LanguageMode> = new EventEmitter();
-    /** Emits if language was removed from one of the lists */
-    @Output() languageRemoved: EventEmitter<Language[]> = new EventEmitter();
+    /** Emits if language settings were changed */
+    @Output() optionChanged: EventEmitter<{
+        languageMode: LanguageMode;
+        preferredLanguages: Language[];
+    }> = new EventEmitter();
 
-    /** Selected languages to remove */
-    languagesToRemove = [];
-    /** Selected languages to add */
-    selectedLanguages = [];
+    /** Compares language object to display selected only */
+    compareLangs(lang1: Language, lang2: Language): any {
+        return lang1 && lang2 ? lang1.key === lang2.key : lang1 === lang2;
+    }
 }

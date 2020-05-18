@@ -2,11 +2,23 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Language } from '@app/models/language';
 import { ThemeService } from '@app/services/theme.service';
-import { AppSettings } from '@models/appsettings';
+import * as ConfigActions from '@app/store/actions/config.actions';
+import * as fromConfig from '@app/store/reducers';
+import { ConfigState } from '@app/store/reducers/config.reducer';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { select, Store } from '@ngrx/store';
 import { TranslateService } from '@services/translate.service';
 import { ElectronService } from 'ngx-electron';
+import { Observable } from 'rxjs';
 import { LanguageMode } from '../languages/languages.component';
+
+/** Tab definition */
+interface Tab {
+    id: TabId;
+    title: string;
+}
+
+type TabId = 'api' | 'general' | 'languages' | 'about';
 
 /** Default Yandex Translate API key */
 const DEFAULT_API_KEY = 'trnsl.1.1.20160306T121040Z.ce3153278463656c.38be842aceb435f1c023544f5571eb64e2c01fdf';
@@ -25,15 +37,10 @@ export class SettingsComponent {
     errorMessage = '';
 
     /** Applications default settings */
-    settings = {
-        autolaunch: false,
-        alwaysOnTop: false,
-        showDockIcon: false,
-        theme: 'light',
-    };
+    settings: ConfigState;
 
     /** Array with all languages */
-    langList = [];
+    langList$: Observable<Language[]>;
 
     /** Array with preferred languages, selected from the settings */
     preferredLangList = [];
@@ -42,7 +49,7 @@ export class SettingsComponent {
     languageMode: LanguageMode = 'all-languages';
 
     /** Settings tabs */
-    tabs = [
+    tabs: Tab[] = [
         {
             id: 'api',
             title: 'API',
@@ -62,7 +69,7 @@ export class SettingsComponent {
     ];
 
     /** Pre-selected settings tab */
-    selectedTabId = 'api';
+    selectedTabId: TabId = 'api';
 
     /** Version of the application */
     version: string;
@@ -73,6 +80,7 @@ export class SettingsComponent {
      * @param router router object
      * @param electronService electrons main process wrapper
      * @param route angulars activated route module
+     * @param store ngrx store
      * @param themeService applications theme service
      */
     constructor(
@@ -80,6 +88,7 @@ export class SettingsComponent {
         private router: Router,
         private electronService: ElectronService,
         route: ActivatedRoute,
+        private store: Store,
         private themeService: ThemeService
     ) {
         route.queryParams.pipe(untilDestroyed(this)).subscribe(param => {
@@ -89,9 +98,13 @@ export class SettingsComponent {
             }
         });
 
-        this.setSettings();
-        this.setApiKey(AppSettings.$apiKey || DEFAULT_API_KEY);
-        this.langList = AppSettings.$languageList;
+        this.store.pipe(select(fromConfig.getConfig), untilDestroyed(this)).subscribe(config => {
+            this.settings = config;
+            this.apiKey = config.apiKey;
+        });
+
+        // TODO: cache
+        this.langList$ = this.translateService.getLanguagesList();
 
         if (this.electronService.remote) {
             const window = this.electronService.remote.getCurrentWindow();
@@ -100,115 +113,69 @@ export class SettingsComponent {
     }
 
     /**
-     * Get settings from local storage and set them on application level
+     * Update changed setting option
+     * @param updatedOption updated settings option
      */
-    setSettings(): void {
-        if (localStorage.getItem('autolaunch')) {
-            this.settings.autolaunch = localStorage.getItem('autolaunch') === 'true';
-        }
-
-        if (localStorage.getItem('alwaysOnTop')) {
-            this.settings.alwaysOnTop = localStorage.getItem('alwaysOnTop') === 'true';
-        }
-
-        if (localStorage.getItem('showDockIcon')) {
-            this.settings.showDockIcon = localStorage.getItem('showDockIcon') === 'true';
-        }
-
-        if (localStorage.getItem('theme')) {
-            this.settings.theme = localStorage.getItem('theme');
-        }
-
-        if (localStorage.getItem('languageMode')) {
-            this.languageMode = localStorage.getItem('languageMode') as LanguageMode;
-            this.preferredLangList = JSON.parse(localStorage.getItem('preferredLanguageList')) || [];
-            this.preferredLangList.forEach(item => new Language(item.key, item.value));
-        } else {
-            // set default language
-            this.preferredLangList.push(new Language('en', 'English'));
+    updateSettings(updatedOption: Partial<ConfigState>): void {
+        this.settings = {
+            ...this.settings,
+            ...updatedOption,
+        };
+        if (updatedOption.theme) {
+            // activate selected theme for preview
+            this.themeService.setThemeById(updatedOption.theme);
         }
     }
 
     /**
-     * Save Yandex Translate API key to the local storage
-     * @param value option value ('apiKey')
-     * @param option name of the option
+     * Sends application settings toi the application store
+     * @param apiKey yandex translate api key
      */
-    saveSettings(value: string, option: string): void {
-        localStorage.setItem(option, value);
-        AppSettings.$apiKey = value;
-        this.validateApiKey();
-        this.setAutoLaunch(); // TODO: combine to one IPC-Renderer-request
-        this.setAlwaysOnTop();
-        this.setShowDockIcon();
-        this.setPreferredLanguageList();
-        this.setTheme();
+    saveSettings(apiKey: string): void {
+        this.store.dispatch(
+            ConfigActions.updateConfig({
+                config: {
+                    ...this.settings,
+                },
+            })
+        );
+        // electron settings
+        this.setGeneralSettings();
+        this.validateApiKey(apiKey);
     }
 
     /**
      * Use getLangs API method to validate API key
+     * // TODO: separate endpoint for KEY validation with direct key input
      */
-    validateApiKey(): void {
+    validateApiKey(apiKey: string): void {
+        this.store.dispatch(ConfigActions.updateConfig({ config: { apiKey } }));
         this.translateService
             .getLanguagesList()
             .pipe(untilDestroyed(this))
             .subscribe(
-                () => this.router.navigate(['/home']),
+                () => {
+                    this.router.navigate(['/home']);
+                },
                 error => (this.errorMessage = error)
             );
     }
 
     /**
-     * Close application
+     * Closes the application
      */
     closeApp(): void {
         this.electronService.remote.app.quit();
     }
 
     /**
-     * Save list with preferred languages
+     * Sets general application settings (electron level)
      */
-    private setPreferredLanguageList(): void {
-        localStorage.setItem('languageMode', String(this.languageMode));
-        localStorage.setItem('preferredLanguageList', JSON.stringify(this.preferredLangList));
-    }
-
-    /**
-     * Save always as top option
-     */
-    private setAlwaysOnTop(): void {
-        localStorage.setItem('alwaysOnTop', String(this.settings.alwaysOnTop));
+    setGeneralSettings(): void {
+        this.store.dispatch(ConfigActions.updateConfig({ config: this.settings }));
         if (this.electronService.ipcRenderer) {
-            this.electronService.ipcRenderer.send('alwaysOnTop', this.settings.alwaysOnTop); // TODO: implement in the main process
+            this.electronService.ipcRenderer.send('settings-update', this.settings);
         }
-    }
-
-    /**
-     * Save show dock icon option
-     */
-    private setShowDockIcon(): void {
-        localStorage.setItem('showDockIcon', String(this.settings.showDockIcon));
-        if (this.electronService.ipcRenderer) {
-            this.electronService.ipcRenderer.send('showDockIcon', this.settings.showDockIcon); // TODO: implement in the main process
-        }
-    }
-
-    /**
-     * Save auto launch options
-     */
-    private setAutoLaunch(): void {
-        localStorage.setItem('autolaunch', String(this.settings.autolaunch));
-        if (this.electronService.ipcRenderer) {
-            this.electronService.ipcRenderer.send('autolaunch', this.settings.autolaunch);
-        }
-    }
-
-    /**
-     * Save theme settings
-     */
-    private setTheme(): void {
-        localStorage.setItem('theme', this.settings.theme);
-        this.themeService.setActiveTheme(this.settings.theme);
     }
 
     /**
@@ -225,39 +192,8 @@ export class SettingsComponent {
      *
      * @param tabId tab id
      */
-    selectTab(tabId: string): void {
-        this.selectedTabId = tabId;
-    }
-
-    /**
-     * Add one or multiple language(-s) to the preferred language list
-     * @param languages string or array with language list as strings
-     */
-    addLanguage(languages: Language[]): void {
-        if (languages.length > 0) {
-            for (let i = 0; i < languages.length; i++) {
-                if (this.preferredLangList.filter(item => item.value === languages[i].$value).length === 0) {
-                    this.preferredLangList.push(languages[i]);
-                }
-            }
-        }
-    }
-
-    /**
-     * Remove one or multiple selected language(-s) from preferred language list
-     * @param languages selected one or multiple languages (array or string)
-     */
-    removeLanguage(languages: Language[]): void {
-        let index;
-
-        if (languages.length > 0) {
-            for (let i = 0; i < languages.length; i++) {
-                index = this.preferredLangList.indexOf(languages[i]);
-                if (index > -1) {
-                    this.preferredLangList.splice(index, 1);
-                }
-            }
-        }
+    selectTab(tabId: TabId): void {
+        this.router.navigate(['/settings'], { queryParams: { tab: tabId } });
     }
 
     /**
@@ -266,13 +202,5 @@ export class SettingsComponent {
      */
     setApiKey(apiKey: string): void {
         this.apiKey = apiKey;
-    }
-
-    /**
-     * Sets language mode
-     * @param languageMode selected language mode
-     */
-    setLanguageMode(languageMode: LanguageMode): void {
-        this.languageMode = languageMode;
     }
 }

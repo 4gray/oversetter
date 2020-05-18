@@ -1,13 +1,13 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Language } from '@app/models/language';
+import * as fromConfig from '@app/store/reducers';
+import { Translation } from '@models/translation';
+import { select, Store } from '@ngrx/store';
+import { throwError } from 'rxjs';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
-
-import { Language } from '@app/models/language';
-import { AppSettings } from '@models/appsettings';
-import { Translation } from '@models/translation';
-import { throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
@@ -17,11 +17,18 @@ export class TranslateService {
     /** URL of the Yandex API */
     SERVICE_URL = 'https://translate.yandex.net/api/v1.5/tr.json';
 
+    /** Yandex Translate API key */
+    apiKey: string;
+
     /**
      * Creates an instance of TranslateService.
      * @param http angular http module
      */
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private store: Store) {
+        this.store.pipe(select(fromConfig.getConfig)).subscribe(config => {
+            this.apiKey = config.apiKey;
+        });
+    }
 
     /**
      * Auto-detects language of the given word/phrase
@@ -110,21 +117,21 @@ export class TranslateService {
      * Return URL for language request from Yandex Translate API
      */
     getLanguagesUrl(): string {
-        return this.SERVICE_URL + '/getLangs?key=' + AppSettings.$apiKey + '&ui=en';
+        return this.SERVICE_URL + '/getLangs?key=' + this.apiKey + '&ui=en';
     }
 
     /**
      * Return base part of URL for translation request
      */
     getTranslateUrl(): string {
-        return this.SERVICE_URL + '/translate?key=' + AppSettings.$apiKey;
+        return this.SERVICE_URL + '/translate?key=' + this.apiKey;
     }
 
     /**
      * Return URL for auto detect API endpoint
      */
     getAutoDetectLanguageUrl(): string {
-        return this.SERVICE_URL + '/detect?key=' + AppSettings.$apiKey;
+        return this.SERVICE_URL + '/detect?key=' + this.apiKey;
     }
 
     /**

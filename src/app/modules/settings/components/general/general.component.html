@@ -1,12 +1,14 @@
 <div class="settings-title">Application settings</div>
-<ul>
+<ul id="app-settings">
     <li class="checkbox-option">
         <label for="start-at-login">
             <input
                 type="checkbox"
                 id="start-at-login"
-                value="Start at login"
-                [(ngModel)]="settings.autolaunch">
+                title="Start at login"
+                [ngModel]="settings.autolaunch"
+                (change)="optionChanged.emit({ autolaunch: $event.currentTarget.checked })"
+            />
             Start at login
         </label>
     </li>
@@ -15,8 +17,10 @@
             <input
                 type="checkbox"
                 id="show-dock-icon"
-                value="Show dock icon"
-                [(ngModel)]="settings.showDockIcon">
+                title="Show dock icon"
+                [ngModel]="settings.showDockIcon"
+                (change)="optionChanged.emit({ showDockIcon: $event.currentTarget.checked })"
+            />
             Show dock icon
         </label>
     </li>
@@ -25,15 +29,20 @@
             <input
                 type="checkbox"
                 id="always-on-top"
-                value="Stay always on the top"
-                [(ngModel)]="settings.alwaysOnTop">
+                title="Stay always on the top"
+                [ngModel]="settings.alwaysOnTop"
+                (change)="optionChanged.emit({ alwaysOnTop: $event.currentTarget.checked })"
+            />
             Always on top
         </label>
     </li>
 </ul>
+<div class="settings-note">
+    New settings will only take effect after a restart!
+</div>
 <div class="settings-title">Shortcuts</div>
 <ul>
-    <li class="text">
+    <li>
         Use
         <strong>
             <kbd>⌘</kbd>
@@ -46,7 +55,7 @@
         </strong>
         to show application window
     </li>
-    <li class="text">
+    <li>
         Use
         <strong>
             <kbd>⌘</kbd>
@@ -60,17 +69,14 @@
         to translate text from clipboard
     </li>
 </ul>
-<div class="settings-title">Theme:</div>
+<span class="settings-title">Theme:</span>
 <ng-select
     #themeSelector
     [searchable]="false"
     [clearable]="false"
-    [(ngModel)]="settings.theme"
+    [ngModel]="settings.theme"
     [items]="availableThemes"
-    (change)="toggleTheme($event)"
-    placeholder="Select theme">
+    (change)="optionChanged.emit({ theme: $event })"
+    placeholder="Select theme"
+>
 </ng-select>
-
-<div class="settings-note">
-    New settings will only take effect after a restart!
-</div>

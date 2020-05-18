@@ -2,40 +2,28 @@
     background: var(--background-secondary);
 }
 
-.language-controls {
-    text-align: center;
-}
-
-.settings-checkboxes {
+.settings-title {
     border: 0;
     padding: 0 10px;
     margin: 0;
+    legend {
+        padding: 5px 0;
+        font-weight: bold;
+    }
 }
 
 .languages-list {
-    width: 220px;
-    height: 155px;
+    width: 350px;
+    height: 150px;
     margin-left: 10px;
     padding: 0px 5px;
     outline: none;
     border: 1px solid var(--background-light);
     color: var(--text-default);
-    background-color: var(--background-light);
+    background-color: var(--background-default);
     scrollbar-color: dark;
 }
 
-.language-btn {
-    background: var(--background-light);
-    width: 40px;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 10px;
-    color: var(--text-default);
-}
-
-.language-btn:disabled {
-    cursor: default;
+label {
+    display: block;
 }

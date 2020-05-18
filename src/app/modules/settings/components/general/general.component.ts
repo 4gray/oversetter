@@ -1,14 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ThemeService } from '@app/services/theme.service';
-
-/** Settings interface */
-export interface IGeneralSettings {
-    autolaunch: string;
-    alwaysOnTop: string;
-    showDockIcon: string;
-    languages: string;
-    theme: string;
-}
+import { ConfigState } from '@app/store/reducers/config.reducer';
 
 /**
  * General settings component
@@ -21,19 +13,14 @@ export interface IGeneralSettings {
 })
 export class GeneralComponent {
     /** General settings object */
-    @Input() settings: IGeneralSettings;
+    @Input() settings: ConfigState;
+
+    /** Emits an changed option to the parent component */
+    @Output() optionChanged: EventEmitter<Partial<ConfigState>> = new EventEmitter();
 
     /** Get all available themes */
     availableThemes = this.themeService.getAvailableThemes();
 
     /** Creates an instance of GeneralComponent */
     constructor(private themeService: ThemeService) {}
-
-    /**
-     * Toggles theme of the application
-     * @param selected id of the selected theme
-     */
-    toggleTheme(selected: string): void {
-        this.themeService.setThemeById(selected);
-    }
 }
