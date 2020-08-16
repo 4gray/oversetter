@@ -2,7 +2,6 @@
   <img src="https://4gray.github.io/oversetter/assets/icon.png" alt="App Icon" width="256">
 </p>
 
-
 <p align="center">
   <a href="https://github.com/4gray/oversetter/releases"><img src="https://img.shields.io/github/release/4gray/oversetter.svg?style=flat-square" alt="Release"></a>
   <a href="https://github.com/4gray/oversetter/releases"><img src="https://img.shields.io/github/downloads/4gray/oversetter/total.svg?style=flat-square" alt="Downloads" /></a>
@@ -10,12 +9,32 @@
 </p>
 
 
-Oversetter is an translation app, which allows you to translate content directly from your menu bar. Oversetter is open-source application based on [Angular](https://angular.io/) and [Electron](http://electron.atom.io/). It uses free API of [Yandex Translate](https://tech.yandex.com/translate/) for text translation. 
+Oversetter is an translation app, which allows you to translate content directly from your menu bar. Oversetter is an open-source project based on [Angular](https://angular.io/) and [Electron](http://electron.atom.io/). It uses free API of [Yandex Translate](https://tech.yandex.com/translate/) for text translation. 
 
-# Screenshot
+## Features
+
+* **93 languages** - Thanks to Yandex Translate API
+* **Built-in dictionary** - Save words and phrases for later
+* **Themes support** - Includes dark and light theme
+* **Cross-platform support** - Available for MacOs, Linux and Windows
+* **Fast and easy access** - Open Oversetter directly from the system tray
+* **Offline mode** - Save and learn vocabulary also in offline mode
+
+# Screenshots
 
 <p align="center">
   <img src="https://4gray.github.io/oversetter/assets/screenshot-1.png" alt="App Preview">
+  <br />Light theme
+</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/1503032/90333120-4bb52180-dfc3-11ea-8d7f-3545ae548001.png" alt="Dark theme">
+  <br />Dark theme
+</p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/1503032/90333123-4c4db800-dfc3-11ea-90c8-123a86d15069.png" alt="Dictionary">
+  <br />Dictionary
 </p>
 
 # Download
@@ -37,7 +56,7 @@ sudo snap install oversetter
 ```
 npm install
 npm run build
-npm run electron
+npm run run:electron
 ```
 
 ### Development
@@ -46,21 +65,23 @@ npm run build-dev
 ```
 and
 ```
-NODE_ENV=dev npm run electron
+NODE_ENV=dev npm run run:electron
 ```
 
 # App Packaging
 
 ```
-npm run package:osx
-npm run package:win32
-npm run package:linux
+npm run build:mac
+npm run build:linux
+npm run build:windows
+npm run build:all
 ```
 or
 ```
 npm run package:all
 ```
-# ToDo: Up next
+
+# ToDo: Next steps
 
 See [Projects](https://github.com/4gray/oversetter/projects/1)-tab.
 Feel free to contribute!
